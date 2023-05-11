@@ -19,6 +19,21 @@
 *.tar.gz
 *.rar
 
+# Ignore folders
+.idea/*
+**/.idea/*
+
+#Nuget packages folder
+packages/
+*.iml
+*.dll
+*/target/*
+**/target/**
+/pgadmin/**
+/postgres/**
+
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
