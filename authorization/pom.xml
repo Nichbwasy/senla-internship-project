@@ -6,6 +6,7 @@
         <artifactId>senla-internship-project-</artifactId>
         <groupId>com.senla</groupId>
         <version>1.0-SNAPSHOT</version>
+
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,5 +23,20 @@
     </modules>
     <packaging>pom</packaging>
 
+    <dependencies>
+        <!-- SPRING BOOT -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+        <!-- VALIDATION -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

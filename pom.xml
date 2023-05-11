@@ -18,7 +18,20 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+
+        <common-hibernate-version>6.1.6.Final</common-hibernate-version>
+        <spring-boot-starter-version>3.0.6</spring-boot-starter-version>
+        <spring-version>6.0.5</spring-version>
     </properties>
 
+    <dependencies>
+        <!-- LOMBOK -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
