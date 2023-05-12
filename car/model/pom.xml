@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>${hibernate-version}</version>
+            <version>${common-hibernate-version}</version>
         </dependency>
     </dependencies>
 

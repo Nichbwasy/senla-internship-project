@@ -22,11 +22,6 @@
     </modules>
     <packaging>pom</packaging>
 
-    <properties>
-        <hibernate-version>6.1.6.Final</hibernate-version>
-        <postgresql-version>42.5.1</postgresql-version>
-    </properties>
-
     <dependencies>
         <!-- SPRING -->
         <dependency>
