@@ -23,6 +23,7 @@
         <common-mupstruct-version>1.5.2.Final</common-mupstruct-version>
         <common-postgresql-version>42.5.1</common-postgresql-version>
         <spring-boot-starter-version>3.0.6</spring-boot-starter-version>
+        <common-jakarta-servlet-api-varsion>6.0.0</common-jakarta-servlet-api-varsion>
         <spring-version>6.0.5</spring-version>
     </properties>
 

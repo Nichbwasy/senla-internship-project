@@ -1,4 +1,4 @@
-package com.senla.common.security.validators;
+package com.senla.common.reflections.validators;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

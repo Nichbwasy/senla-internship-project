@@ -26,10 +26,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${security.access.token.secret}")
-    private String accessTokenSecret;
-    @Value("${security.refresh.token.secret}")
-    private String refreshTokenSecret;
     @Value("${security.access.token.lifetime}")
     private Integer ACCESS_TOKEN_LIFETIME;
     @Value("${security.refresh.token.lifetime}")
@@ -37,7 +33,10 @@ public class JwtTokenProvider {
     private static SecretKey ACCESS_TOKEN_SECRET;
     private static SecretKey REFRESH_TOKEN_SECRET;
 
-    public JwtTokenProvider()
+    public JwtTokenProvider(
+            @Value("${security.access.token.secret}") String accessTokenSecret,
+            @Value("${security.refresh.token.secret}") String refreshTokenSecret
+    )
     {
         log.info("Initializing the JWT token provider...");
         ACCESS_TOKEN_SECRET = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessTokenSecret));

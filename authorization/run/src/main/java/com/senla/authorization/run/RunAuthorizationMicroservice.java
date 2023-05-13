@@ -23,10 +23,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class RunAuthorizationMicroservice {
 
     public static void main(String[] args) {
-        ApplicationContext applicationContext = SpringApplication.run(RunAuthorizationMicroservice.class);
-        String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
-        RoleMapper roleMapper = applicationContext.getBean(RoleMapper.class);
-        System.out.println();
+        SpringApplication.run(RunAuthorizationMicroservice.class);
     }
 
 }
