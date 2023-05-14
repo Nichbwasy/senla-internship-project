@@ -25,10 +25,10 @@ public class AuthorizationWebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .addFilterBefore(commonJwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(commonJwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests( request -> request
+                .and().authorizeHttpRequests( request -> request
                         .requestMatchers("/authorization", "/authorization/register")
                             .permitAll()
                         .requestMatchers("/authorization/authorities", "/authorization/authorities/**")

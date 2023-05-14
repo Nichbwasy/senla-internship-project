@@ -8,7 +8,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "userrefreshtoken")
 public class UserRefreshToken {
 
     @Id
@@ -16,6 +16,7 @@ public class UserRefreshToken {
     private Long id;
 
     @NotNull(message = "User is mandatory!")
+    @JoinColumn(name = "userdata_id", referencedColumnName = "id")
     @OneToOne(targetEntity = UserData.class, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
