@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd"
+        logicalFilePath="liquibase">
+
+    <changeSet id="homework-2-authorization-authorities-table" author="Vadim Yarosh">
+        <createTable tableName="authority">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-roles-table" author="Vadim Yarosh">
+        <createTable tableName="role">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-users-table" author="Vadim Yarosh">
+        <createTable tableName="userdata">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-roles_authorities-table" author="Vadim Yarosh">
+        <createTable tableName="role_authority">
+            <column name="role_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="authority_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-users_roles-table" author="Vadim Yarosh">
+        <createTable tableName="role_user">
+            <column name="role_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-add-user-refresh-token-table" author="Vadim Yarosh">
+        <createTable tableName="userrefreshtoken">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="userData_id" type="bigint">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="refresh_token" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="userrefreshtoken"
+                                 baseColumnNames="userData_id"
+                                 constraintName="userrefreshtoken_userdata_id_fkey"
+                                 referencedTableName="userdata"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+        <createIndex tableName="userrefreshtoken" indexName="userrefreshtoken_userData_id">
+            <column name="userData_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-add-tables-references" author="Vadim Yarosh">
+        <sqlFile encoding="utf8" path="./sql/07.rental-add-tables-references.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-add-some-dml" author="Vadim Yarosh">
+        <sqlFile encoding="utf8" path="./sql/08.add-some-dml.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-add-indexes" author="Vadim Yarosh">
+        <sqlFile encoding="utf8" path="./sql/09.authorization-add-indexes.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="homework-2-authorization-add-triggers" author="Vadim Yarosh">
+        <sqlFile encoding="utf8" path="./sql/10.authorization-add-triggers.sql" splitStatements="false" relativeToChangelogFile="true"/>
+    </changeSet>
+    
+</databaseChangeLog> 

@@ -13,6 +13,13 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <!-- LIQUIBASE -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.22.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.senla.rental</groupId>
             <artifactId>dto</artifactId>

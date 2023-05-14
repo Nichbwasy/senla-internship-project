@@ -48,7 +48,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         if (!userDataRepository.existsByLogin(dto.getLogin())) {
             log.warn("Unable authorize user '{}'! User doesn't registered!", dto.getLogin());
             throw new UserNotRegisteredException(
-                    String.format("Unable authorize user '{}'! User doesn't registered!", dto.getLogin())
+                    String.format("Unable authorize user '%s'! User doesn't registered!", dto.getLogin())
             );
         }
 
