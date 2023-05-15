@@ -19,6 +19,7 @@
         <module>controller</module>
         <module>dto</module>
         <module>run</module>
+        <module>client</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -44,12 +45,6 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>3.0.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.senla.common</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
