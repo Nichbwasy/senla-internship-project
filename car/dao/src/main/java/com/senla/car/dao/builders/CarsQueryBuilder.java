@@ -1,7 +1,7 @@
 package com.senla.car.dao.builders;
 
 import com.senla.car.dto.controllers.CarsCatalogFilterForm;
-import com.senla.car.model.Car;
+import com.senla.car.model.*;
 import jakarta.persistence.criteria.*;
 
 import java.util.ArrayList;

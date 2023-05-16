@@ -20,6 +20,7 @@
         <module>controller</module>
         <module>dto</module>
         <module>run</module>
+        <module>client</module>
     </modules>
     <packaging>pom</packaging>
 
