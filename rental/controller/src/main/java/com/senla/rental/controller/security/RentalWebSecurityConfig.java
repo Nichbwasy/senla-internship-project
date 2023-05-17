@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class RentalWebSecurityConfig {
 
     private final JwtTokenSecurityCommonFilter commonJwtFilter = new JwtTokenSecurityCommonFilter(new String[] {
-            "/authorization", "/authorization/register"
+
     });
 
     @Bean
@@ -36,15 +36,15 @@ public class RentalWebSecurityConfig {
                                 "/requests", "/requests/**",
                                 "/car/refunds/compensations/**", "/requests/**",
                                 "/requests/rejections/**", "/requests/statuses/**")
-                        .hasAuthority(UserRoles.ADMIN)
-                            .requestMatchers(
+                            .hasAuthority(UserRoles.ADMIN)
+                        .requestMatchers(
                                 "/catalog", "/catalog/request", "/catalog/request/**",
                                 "/profile", "/profile/**")
-                        .hasAuthority(UserRoles.USER)
-                            .requestMatchers(HttpMethod.GET, "/car/refunds",
+                            .hasAuthority(UserRoles.USER)
+                        .requestMatchers(HttpMethod.GET, "/car/refunds",
                                 "/car/refunds/compensations", "/requests/rejections")
-                        .hasAuthority(UserRoles.USER)
-                            .anyRequest().authenticated()
+                            .hasAuthority(UserRoles.USER)
+                        .anyRequest().authenticated()
                 ).build();
     }
 }
