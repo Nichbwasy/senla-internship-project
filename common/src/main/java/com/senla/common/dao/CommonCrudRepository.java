@@ -1,12 +1,12 @@
 package com.senla.common.dao;
 
 import com.senla.common.dao.model.ModelEntity;
-import com.senla.common.exception.repository.DeleteStatementRepositoryException;
-import com.senla.common.exception.repository.InsertStatementRepositoryException;
-import com.senla.common.exception.repository.UpdateStatementRepositoryException;
+import com.senla.common.exception.repository.*;
 import com.senla.common.reflections.GenericUtils;
 import jakarta.persistence.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +32,11 @@ public abstract class CommonCrudRepository<T extends ModelEntity<I>, I> implemen
     @Override
     @Transactional
     public T insert(T t) {
+        if (t == null) {
+            log.error("Unable insert a new statement! Entity can't be null!");
+            throw new InsertStatementRepositoryException("Unable insert a new statement! Entity can't be null!");
+        }
+
         try {
             entityManager.persist(t);
             entityManager.flush();
@@ -54,6 +59,11 @@ public abstract class CommonCrudRepository<T extends ModelEntity<I>, I> implemen
     @Override
     @Transactional
     public T update(T t) {
+        if (t == null) {
+            log.error("Unable update statement! Entity can't be null!");
+            throw new UpdateStatementRepositoryException("Unable update statement! Entity can't be null!");
+        }
+
         try {
             entityManager.merge(t);
             entityManager.flush();
@@ -76,6 +86,11 @@ public abstract class CommonCrudRepository<T extends ModelEntity<I>, I> implemen
     @Override
     @Transactional
     public I delete(I id) {
+        if (id == null) {
+            log.error("Unable delete statement! Id can't be null!");
+            throw new DeleteStatementRepositoryException("Unable delete statement! Id can't be null!");
+        }
+
         try {
             entityManager.remove(select(id));
             entityManager.flush();
@@ -93,6 +108,11 @@ public abstract class CommonCrudRepository<T extends ModelEntity<I>, I> implemen
 
     @Override
     public T select(I id) {
+        if (id == null) {
+            log.error("Unable select statement! Id can't be null!");
+            throw new SelectStatementRepositoryException("Unable select statement! Id can't be null!");
+        }
+
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
@@ -121,29 +141,38 @@ public abstract class CommonCrudRepository<T extends ModelEntity<I>, I> implemen
             criteriaQuery.select(root);
             return entityManager.createQuery(criteriaQuery).getResultList();
         } catch (NoResultException e) {
+            log.warn("Entities not found! {}", e.getMessage());
             throw new com.senla.common.exception.repository.EntityNotFoundException(
-                    String.format("Entity with id '%s' not found! %s", e.getMessage())
+                    String.format("Entities not found! %s", e.getMessage())
             );
         } catch (Exception e) {
+            log.error("Entities select exception! {}", e.getMessage());
             throw new com.senla.common.exception.repository.EntityNotFoundException(
-                    String.format("Unable find entity with id '%s'! %s", e.getMessage())
+                    String.format("Entities select exception! %s", e.getMessage())
             );
         }
     }
 
     @Override
     public Boolean existById(I id) {
+        if (id == null) {
+            log.error("Unable find statement! Id can't be null!");
+            throw new ExistStatementRepositoryException("Unable find statement! Id can't be null!");
+        }
+
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
             Root<T> root = criteriaQuery.from(type);
 
-            criteriaQuery.select(root);
+            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), id));
             return entityManager.createQuery(criteriaQuery).getResultList().size() > 0;
         } catch (Exception e) {
+            log.error("Exception while checking entity with id '{}'! {}", id, e.getMessage());
             throw new com.senla.common.exception.repository.EntityNotFoundException(
-                    String.format("Exception while checking entity with id '%s'! %s", e.getMessage())
+                    String.format("Exception while checking entity with id '%s'! %s", id, e.getMessage())
             );
         }
     }
+
 }

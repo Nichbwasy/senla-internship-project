@@ -40,6 +40,20 @@
             <artifactId>spring-beans</artifactId>
             <version>${spring-version}</version>
         </dependency>
+        <!-- SPRING TEST -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- JUNIT -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
         <!-- VALIDATION -->
         <dependency>
             <groupId>jakarta.validation</groupId>
