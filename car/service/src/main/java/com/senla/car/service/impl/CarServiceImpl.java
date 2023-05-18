@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CarServiceImpl implements CarService {
 
-    @Value("${cars.catalog.page.size}")
+    @Value("${cars.catalog.page.size:4}")
     private Integer PAGE_SIZE;
 
     @Autowired

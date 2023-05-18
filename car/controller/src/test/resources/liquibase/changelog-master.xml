@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd"
+        logicalFilePath="liquibase">
+
+    <changeSet id="homework-2-car-colors-table" author="Vadim Yarosh">
+        <createTable tableName="color">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-car-types-table" author="Vadim Yarosh">
+        <createTable tableName="type">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-car-conditions-table" author="Vadim Yarosh">
+        <createTable tableName="condition">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-car-statuses-table" author="Vadim Yarosh">
+        <createTable tableName="status">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-car-registrations-table" author="Vadim Yarosh">
+        <createTable tableName="registration">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="number" type="varchar(32)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="model" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="releaseYear" type="integer">
+                <constraints nullable="false" checkConstraint="releaseYear > 1900"/>
+            </column>
+            <column name="color_id" type="bigint" defaultValue="null">
+                <constraints/>
+            </column>
+            <column name="body_number" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_id" type="bigint" defaultValue="null">
+                <constraints/>
+            </column>
+            <column name="allowed_max_mass" type="integer">
+                <constraints nullable="false" checkConstraint="allowed_max_mass > 0"/>
+            </column>
+            <column name="unladen_mass" type="integer">
+                <constraints nullable="false" checkConstraint="unladen_mass > 0"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-car-cars-table" author="Vadim Yarosh">
+        <createTable tableName="car">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="description" type="varchar(2000)">
+                <constraints/>
+            </column>
+            <column name="mileage" type="double precision" defaultValue="0">
+                <constraints checkConstraint="mileage >= 0"/>
+            </column>
+            <column name="registration_id" type="bigint">
+                <constraints referencedTableName="car.registration"/>
+            </column>
+            <column name="condition_id" type="bigint" defaultValue="null">
+                <constraints/>
+            </column>
+            <column name="status_id" type="bigint" defaultValue="null">
+                <constraints/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-car-add-tables-references" author="Vadim Yarosh">
+        <sqlFile encoding="utf8" path="./sql/08.car-add-tables-references.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="homework-2-car-add-indexes" author="Vadim Yarosh">
+        <sqlFile encoding="utf8" path="./sql/10.car-add-indexes.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog> 
