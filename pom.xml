@@ -24,6 +24,7 @@
         <common-postgresql-version>42.5.1</common-postgresql-version>
         <spring-boot-starter-version>3.0.6</spring-boot-starter-version>
         <common-jakarta-servlet-api-varsion>6.0.0</common-jakarta-servlet-api-varsion>
+        <common-mokito-version>5.1.1</common-mokito-version>
         <spring-version>6.0.5</spring-version>
     </properties>
 
