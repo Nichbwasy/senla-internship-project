@@ -39,6 +39,18 @@ public class RentalControllerAdviceExceptionHandler extends ResponseEntityExcept
         return new ResponseEntity<>(responseBody, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(value = {EntityNotFoundException.class,
+            jakarta.persistence.EntityNotFoundException.class,
+            javax.persistence.EntityNotFoundException.class})
+    protected ResponseEntity<Object> entityNotFoundException(Exception e, WebRequest request) {
+        Map<String, Object> responseBody = new LinkedHashMap<>();
+
+        responseBody.put("message", String.format("Entity not found exception! %s", e.getMessage()));
+        responseBody.put("time", System.currentTimeMillis());
+        log.error("Entity not found exception! {}", e.getMessage());
+        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = SecurityCommonException.class)
     protected ResponseEntity<Object> webSecurityException(Exception e, WebRequest request) {
         Map<String, Object> responseBody = new LinkedHashMap<>();
@@ -47,16 +59,6 @@ public class RentalControllerAdviceExceptionHandler extends ResponseEntityExcept
         responseBody.put("time", System.currentTimeMillis());
         log.error("Web security exception! {}", e.getMessage());
         return new ResponseEntity<>(responseBody, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(value = {EntityNotFoundException.class})
-    protected ResponseEntity<Object> notFoundException(Exception e, WebRequest request) {
-        Map<String, Object> responseBody = new LinkedHashMap<>();
-
-        responseBody.put("message", String.format("Entity not found exception! %s", e.getMessage()));
-        responseBody.put("time", System.currentTimeMillis());
-        log.error("Entity not found exception! {}", e.getMessage());
-        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {CommonRepositoryException.class})

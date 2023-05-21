@@ -5,6 +5,7 @@ import com.senla.common.exception.security.SecurityCommonException;
 import com.senla.common.exception.security.jwt.JwtTokenException;
 import com.senla.common.exception.security.jwt.JwtTokenNotFoundException;
 import com.senla.common.exception.security.jwt.JwtTokenValidationException;
+import jakarta.persistence.EntityExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,10 @@ public class AuthorizationControllerAdviceExceptionHandler extends ResponseEntit
         return new ResponseEntity<>(responseBody, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
+    @ExceptionHandler(value = {
+            EntityNotFoundException.class,
+            jakarta.persistence.EntityNotFoundException.class,
+            EntityExistsException.class})
     protected ResponseEntity<Object> notFoundException(Exception e, WebRequest request) {
         Map<String, Object> responseBody = new LinkedHashMap<>();
 

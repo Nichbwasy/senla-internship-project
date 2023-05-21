@@ -1,10 +1,10 @@
-package controller;
+package com.senla.rental.controller;
 
-import com.senla.car.controller.StatusesController;
+import com.senla.car.controller.CarsController;
 import com.senla.car.controller.advice.CarsControllerAdviceExceptionHandler;
-import com.senla.car.dto.StatusDto;
+import com.senla.car.dto.CarDto;
 import com.senla.common.json.JsonMapper;
-import controller.configs.CarControllersTestsConfiguration;
+import com.senla.rental.controller.configs.CarControllersTestsConfiguration;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,123 +22,122 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringJUnitConfig(CarControllersTestsConfiguration.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class StatusesControllerTests {
+public class CarsControllerTests {
 
     private MockMvc mockMvc;
 
     @Autowired
-    private StatusesController statusesController;
+    private CarsController carsController;
 
     @BeforeAll
     public void init() {
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(statusesController)
+                .standaloneSetup(carsController)
                 .setControllerAdvice(new CarsControllerAdviceExceptionHandler())
                 .build();
     }
 
     @Test
-    public void addStatusTest() throws Exception {
-        StatusDto statusDto = new StatusDto(null, "STATUS1");
+    public void addCarTest() throws Exception {
+        CarDto carDto = new CarDto(null, "Desc1", 11000D, null, null, null);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/statuses")
-                .flashAttr("statusDto", statusDto))
+        mockMvc.perform(MockMvcRequestBuilders.post("/cars")
+                .flashAttr("carDto", carDto))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(statusDto.getName()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(carDto.getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mileage").value(carDto.getMileage()));
     }
 
     @Test
-    public void addAlreadyExistedStatusTest() throws Exception {
-        StatusDto statusDto = new StatusDto(null, "STATUS2");
-        statusesController.addStatus(statusDto);
+    public void addAlreadyExistedCarTest() throws Exception {
+        CarDto carDto = new CarDto(null, "Desc2", 12000D, null, null, null);
+        carsController.addCar(carDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/statuses")
-                .flashAttr("statusDto", statusDto))
+        mockMvc.perform(MockMvcRequestBuilders.post("/cars")
+                .flashAttr("carDto", carDto))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void getStatusTest() throws Exception {
-        StatusDto statusDto = new StatusDto(null, "STATUS3");
-        statusDto = statusesController.addStatus(statusDto).getBody();
+    public void getCarTest() throws Exception {
+        CarDto carDto = new CarDto(null, "Desc3", 13000D, null, null, null);
+        carDto = carsController.addCar(carDto).getBody();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/statuses/" + statusDto.getId())
-                .flashAttr("statusDto", statusDto))
+        mockMvc.perform(MockMvcRequestBuilders.get("/cars/" + carDto.getId())
+                .flashAttr("carDto", carDto))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value(statusDto));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value(carDto));
     }
 
     @Test
-    public void getNotExistedStatusTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/statuses/0"))
+    public void getNotExistedCarTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/cars/0"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void updateStatusTest() throws Exception {
-        StatusDto statusDto = new StatusDto(null, "STATUS4");
-        StatusDto oldStatusDto = statusesController.addStatus(statusDto).getBody();
-        statusDto = new StatusDto(oldStatusDto.getId(), "NEW_STATUS4");
+    public void updateCarTest() throws Exception {
+        CarDto carDto = new CarDto(null, "Desc4", 14000D, null, null, null);
+        CarDto oldStatusDto = carsController.addCar(carDto).getBody();
+        carDto = new CarDto(oldStatusDto.getId(), "Desc444", 14444D, null, null, null);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/statuses")
+        mockMvc.perform(MockMvcRequestBuilders.put("/cars")
                         .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonMapper.objectToJson(statusDto)))
+                .content(JsonMapper.objectToJson(carDto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value(statusDto));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value(carDto));
     }
 
     @Test
-    public void updateNotExistedStatusTest() throws Exception {
-        StatusDto statusDto = new StatusDto(0L, "STATUS0");
+    public void updateNotExistedCarTest() throws Exception {
+        CarDto carDto = new CarDto(0L, "Desc0", 10000D,  null, null, null);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/statuses")
+        mockMvc.perform(MockMvcRequestBuilders.put("/cars")
                         .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonMapper.objectToJson(statusDto)))
+                .content(JsonMapper.objectToJson(carDto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void deleteTypeStatus() throws Exception {
-        StatusDto statusDto = new StatusDto(null, "STATUS5");
-        statusDto = statusesController.addStatus(statusDto).getBody();
+    public void deleteCarStatus() throws Exception {
+        CarDto carDto = new CarDto(null, "Desc5", 15000D, null, null, null);
+        carDto = carsController.addCar(carDto).getBody();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/statuses/" + statusDto.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/cars/" + carDto.getId()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value(statusDto.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value(carDto.getId()));
     }
 
     @Test
-    public void deleteNotExistedStatusTest() throws Exception {
-        StatusDto statusDto = new StatusDto(0L, "STATUS0");
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/statuses/" + statusDto.getId()))
+    public void deleteNotExistedCarTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/cars/0"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void getAllStatusesTest() throws Exception {
-        StatusDto statusDto1 = new StatusDto(null, "STATUS6");
-        StatusDto statusDto2 = new StatusDto(null, "STATUS7");
-        statusesController.addStatus(statusDto1);
-        statusesController.addStatus(statusDto2);
+    public void getAllCarsTest() throws Exception {
+        CarDto carDto1 = new CarDto(null, "Desc6", 16000D, null, null, null);
+        CarDto carDto2 = new CarDto(null, "Desc7", 17000D, null, null, null);
+        carsController.addCar(carDto1);
+        carsController.addCar(carDto2);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/statuses"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/cars"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -147,5 +146,4 @@ public class StatusesControllerTests {
                         Matchers.greaterThanOrEqualTo(2)))
                 .andReturn();
     }
-    
 }

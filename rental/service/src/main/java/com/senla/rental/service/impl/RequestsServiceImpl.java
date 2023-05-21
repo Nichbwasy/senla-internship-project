@@ -121,7 +121,8 @@ public class RequestsServiceImpl implements RequestsService {
 
     private void checkRequestAlreadyRejected(Request request) {
         if (request.getRequestStatus().getName().equals(RequestStatuses.CANCELED) ||
-                request.getRequestStatus().getName().equals(RequestStatuses.CLOSED)) {
+                request.getRequestStatus().getName().equals(RequestStatuses.CLOSED) ||
+                request.getRequestStatus().getName().equals(RequestStatuses.DENIED)) {
             log.info("Request '{}' closed or canceled!", request.getId());
             throw new RequestAlreadyCanceledRequestException(
                     String.format("Request '%s' closed or canceled!", request.getId())

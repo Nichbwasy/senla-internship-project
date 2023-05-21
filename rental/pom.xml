@@ -30,6 +30,20 @@
             <artifactId>spring-boot-starter</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- SPRING TESTS -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot-starter-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- JUNIT -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
         <!-- VALIDATION -->
         <dependency>
             <groupId>jakarta.validation</groupId>

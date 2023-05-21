@@ -155,8 +155,7 @@ public class CarsRefundsServiceImpl implements CarsRefundsService {
         return user;
     }
 
-    private void checkRefundRecordExist(Request request, CarDto car, UserDataDto user) {
-        if (carRefundRepository.existsByCarIdAndUserIdAndStartUsingTimeAndEndUsingTime(
+    private void checkRefundRecordExist(Request request, CarDto car, UserDataDto user) {if (carRefundRepository.existsByCarIdAndUserIdAndStartUsingTimeAndEndUsingTime(
                 car.getId(),
                 user.getId(),
                 request.getStartTime(),

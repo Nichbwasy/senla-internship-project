@@ -1,6 +1,8 @@
 package com.senla.authorization.service.exceptions.services.authorization;
 
-public class AuthorizationException extends RuntimeException {
+import com.senla.authorization.service.exceptions.services.AuthorizationServicesException;
+
+public class AuthorizationException extends AuthorizationServicesException {
     public AuthorizationException() {
     }
 

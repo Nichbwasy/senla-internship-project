@@ -3,8 +3,10 @@ package com.senla.authorization.service.impl;
 import com.senla.authorization.dao.AuthorityRepository;
 import com.senla.authorization.dao.RoleRepository;
 import com.senla.authorization.dto.RoleDto;
+import com.senla.authorization.model.Authority;
 import com.senla.authorization.model.Role;
 import com.senla.authorization.service.RoleService;
+import com.senla.authorization.service.exceptions.services.roles.RoleNotFoundException;
 import com.senla.authorization.service.mappers.RoleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,20 +79,20 @@ public class RoleServiceImpl implements RoleService {
     public List<Long> addAuthoritiesToRole(Long roleId, List<Long> authoritiesIds) {
         log.info("Trying to add list of authorities '{}' to the role with id '{}'...", authoritiesIds, roleId);
         List<Long> addedAuthorities = new ArrayList<>();
-        if (roleRepository.existsById(roleId)) {
-            Role role = roleRepository.getReferenceById(roleId);
-            authoritiesIds.forEach(aId -> {
-                if (authorityRepository.existsById(aId)) {
-                    role.getAuthorities().add(authorityRepository.getReferenceById(aId));
-                    addedAuthorities.add(aId);
-                    log.info("Authority '{}' has been added to the role '{}'.", aId, roleId);
-                } else {
-                    log.warn("Unable to find authority with id '{}'!", aId);
-                }
-            });
-        } else {
-            log.warn("Unable to find role with id '{}'!", roleId);
-        }
+
+        checkRoleExistence(roleId);
+
+        Role role = roleRepository.getReferenceById(roleId);
+        authoritiesIds.forEach(aId -> {
+            if (authorityRepository.existsById(aId)) {
+                role.getAuthorities().add(authorityRepository.getReferenceById(aId));
+                addedAuthorities.add(aId);
+                log.info("Authority '{}' has been added to the role '{}'.", aId, roleId);
+            } else {
+                log.warn("Unable to find authority with id '{}'!", aId);
+            }
+        });
+
         return addedAuthorities;
     }
 
@@ -96,23 +100,36 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     public List<Long> removeAuthoritiesFromRole(Long roleId, List<Long> authoritiesIds) {
         log.info("Trying to remove list of authorities '{}' from the role with id '{}'...", authoritiesIds, roleId);
-        List<Long> removedAuthorities = new ArrayList<>();
-        if (roleRepository.existsById(roleId)) {
-            Role role = roleRepository.getReferenceById(roleId);
-            role.getAuthorities()
-                    .removeIf(a -> {
-                        if (authoritiesIds.stream().anyMatch(id -> a.getId().equals(id))) {
-                            removedAuthorities.add(a.getId());
-                            log.info("Authority with id '{}' has been removed.", a.getId());
-                            return true;
-                        }
-                        log.warn("Authority with id '{}' doesn't belong to the role '{}'!", a.getId(), roleId);
-                        return false;
-                    });
-        } else {
+        List<Long> removedAuthoritiesIds = new ArrayList<>();
+
+        checkRoleExistence(roleId);
+
+        Role role = roleRepository.getReferenceById(roleId);
+
+        ArrayList<Authority> authorities = new ArrayList<>(role.getAuthorities());
+
+        authorities.removeIf(auth -> {
+            if (authoritiesIds.stream().anyMatch(aId -> auth.getId().equals(aId))) {
+                log.info("Authority '{}' has been removed from role '{}'.", auth.getId(), roleId);
+                removedAuthoritiesIds.add(auth.getId());
+                return true;
+            } else {
+                log.warn("Can't remove the authority '{}'. Authority doesn't belong ti=o the role '{}'!", auth.getId(), roleId);
+                return false;
+            }
+        });
+
+        role.setAuthorities(authorities);
+        return removedAuthoritiesIds;
+    }
+
+    private void checkRoleExistence(Long roleId) {
+        if (!roleRepository.existsById(roleId)) {
             log.warn("Unable to find role with id '{}'!", roleId);
+            throw new RoleNotFoundException(
+                    String.format("Unable to find role with id '%s'!", roleId)
+            );
         }
-        return removedAuthorities;
     }
 
     @Override

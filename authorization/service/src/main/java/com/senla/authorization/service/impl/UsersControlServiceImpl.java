@@ -3,8 +3,10 @@ package com.senla.authorization.service.impl;
 import com.senla.authorization.dao.RoleRepository;
 import com.senla.authorization.dao.UserDataRepository;
 import com.senla.authorization.dto.UserDataDto;
+import com.senla.authorization.model.Role;
 import com.senla.authorization.model.UserData;
 import com.senla.authorization.service.UsersControlService;
+import com.senla.authorization.service.exceptions.services.users.UserNotFoundException;
 import com.senla.authorization.service.mappers.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,20 +52,20 @@ public class UsersControlServiceImpl implements UsersControlService {
     public List<Long> addRolesToUser(Long userId, List<Long> rolesIds) {
         log.info("Trying to add roles '{}' to the user '{}'...", rolesIds, userId);
         List<Long> addedRoles = new ArrayList<>();
-        if (userDataRepository.existsById(userId)) {
-            UserData user = userDataRepository.findById(userId).get();
-            rolesIds.forEach(rId -> {
-                if (roleRepository.existsById(rId)) {
-                    user.getRoles().add(roleRepository.findById(rId).get());
-                    addedRoles.add(rId);
-                    log.info("Role with id '{}' has been added to the user '{}'.", rId, userId);
-                } else {
-                    log.warn("Unable find role with id '{}'!", rId);
-                }
-            });
-        } else {
-            log.info("Unable find user with id '{}'!", userId);
-        }
+
+        checkIfUserExists(userId);
+
+        UserData user = userDataRepository.getReferenceById(userId);
+        rolesIds.forEach(rId -> {
+            if (roleRepository.existsById(rId)) {
+                user.getRoles().add(roleRepository.getReferenceById(rId));
+                addedRoles.add(rId);
+                log.info("Role with id '{}' has been added to the user '{}'.", rId, userId);
+            } else {
+                log.warn("Unable find role with id '{}'!", rId);
+            }
+        });
+
         return addedRoles;
     }
 
@@ -72,20 +74,32 @@ public class UsersControlServiceImpl implements UsersControlService {
     public List<Long> removeRolesFromUser(Long userId, List<Long> rolesIds) {
         log.info("Trying to remove roles '{}' from the user '{}'...", rolesIds, userId);
         List<Long> removedRoles = new ArrayList<>();
-        if (userDataRepository.existsById(userId)) {
-            UserData user = userDataRepository.getReferenceById(userId);
-            user.getRoles().removeIf(r -> {
-               if (rolesIds.stream().anyMatch(rId -> r.getId().equals(rId))) {
-                   log.info("Role with id '{}' has been removed from the user '{}'", r.getId(), userId);
-                   removedRoles.add(r.getId());
-                   return true;
-               }
-               log.warn("Role with id '{}' doesn't belong to the user '{}'!", r.getId(), userId);
-               return false;
-            });
-        } else {
-            log.info("Unable find user with id '{}'!", userId);
-        }
+
+        checkIfUserExists(userId);
+
+        UserData user = userDataRepository.getReferenceById(userId);
+
+        ArrayList<Role> roles = new ArrayList<>(user.getRoles());
+
+        roles.removeIf(r -> {
+            if (rolesIds.stream().anyMatch(rId -> r.getId().equals(rId))) {
+                log.info("Role with id '{}' has been removed from the user '{}'", r.getId(), userId);
+                removedRoles.add(r.getId());
+                return true;
+            }
+            log.warn("Role with id '{}' doesn't belong to the user '{}'!", r.getId(), userId);
+            return false;
+        });
+
+        user.setRoles(roles);
         return removedRoles;
     }
+
+    private void checkIfUserExists(Long userId) {
+        if(!userDataRepository.existsById(userId)) {
+            log.info("Unable find user with id '{}'!", userId);
+            throw new UserNotFoundException(String.format("Unable find user with id '%s'!", userId));
+        }
+    }
+
 }

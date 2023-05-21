@@ -19,6 +19,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- H2 DATABASE -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.senla.authorization</groupId>

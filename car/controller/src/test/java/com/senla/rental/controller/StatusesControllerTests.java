@@ -1,10 +1,10 @@
-package controller;
+package com.senla.rental.controller;
 
-import com.senla.car.controller.ColorsController;
+import com.senla.car.controller.StatusesController;
 import com.senla.car.controller.advice.CarsControllerAdviceExceptionHandler;
-import com.senla.car.dto.ColorDto;
+import com.senla.car.dto.StatusDto;
 import com.senla.common.json.JsonMapper;
-import controller.configs.CarControllersTestsConfiguration;
+import com.senla.rental.controller.configs.CarControllersTestsConfiguration;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,123 +22,123 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringJUnitConfig(CarControllersTestsConfiguration.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class ColorsControllerTests {
+public class StatusesControllerTests {
 
     private MockMvc mockMvc;
 
     @Autowired
-    private ColorsController colorsController;
+    private StatusesController statusesController;
 
     @BeforeAll
     public void init() {
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(colorsController)
+                .standaloneSetup(statusesController)
                 .setControllerAdvice(new CarsControllerAdviceExceptionHandler())
                 .build();
     }
 
     @Test
-    public void addColorTest() throws Exception {
-        ColorDto colorDto = new ColorDto(null, "COLOR1");
+    public void addStatusTest() throws Exception {
+        StatusDto statusDto = new StatusDto(null, "STATUS1");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/colors")
-                .flashAttr("colorDto", colorDto))
+        mockMvc.perform(MockMvcRequestBuilders.post("/statuses")
+                .flashAttr("statusDto", statusDto))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(colorDto.getName()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(statusDto.getName()));
     }
 
     @Test
-    public void addColorAlreadyExistedTypeTest() throws Exception {
-        ColorDto colorDto = new ColorDto(null, "COLOR2");
-        colorDto = colorsController.addColor(colorDto).getBody();
+    public void addAlreadyExistedStatusTest() throws Exception {
+        StatusDto statusDto = new StatusDto(null, "STATUS2");
+        statusesController.addStatus(statusDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/colors")
-                .flashAttr("colorDto", colorDto))
+        mockMvc.perform(MockMvcRequestBuilders.post("/statuses")
+                .flashAttr("statusDto", statusDto))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void getColorTest() throws Exception {
-        ColorDto colorDto = new ColorDto(null, "COLOR3");
-        colorDto = colorsController.addColor(colorDto).getBody();
+    public void getStatusTest() throws Exception {
+        StatusDto statusDto = new StatusDto(null, "STATUS3");
+        statusDto = statusesController.addStatus(statusDto).getBody();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/colors/" + colorDto.getId())
-                .flashAttr("colorDto", colorDto))
+        mockMvc.perform(MockMvcRequestBuilders.get("/statuses/" + statusDto.getId())
+                .flashAttr("statusDto", statusDto))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value(colorDto));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value(statusDto));
     }
 
     @Test
-    public void getNotExistedColorTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/colors/0"))
+    public void getNotExistedStatusTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/statuses/0"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void updateColorTest() throws Exception {
-        ColorDto colorDto = new ColorDto(null, "COLOR4");
-        ColorDto oldStatusDto = colorsController.addColor(colorDto).getBody();
-        colorDto = new ColorDto(oldStatusDto.getId(), "NEW_COLOR4");
+    public void updateStatusTest() throws Exception {
+        StatusDto statusDto = new StatusDto(null, "STATUS4");
+        StatusDto oldStatusDto = statusesController.addStatus(statusDto).getBody();
+        statusDto = new StatusDto(oldStatusDto.getId(), "NEW_STATUS4");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/colors")
+        mockMvc.perform(MockMvcRequestBuilders.put("/statuses")
                         .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonMapper.objectToJson(colorDto)))
+                .content(JsonMapper.objectToJson(statusDto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value(colorDto));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value(statusDto));
     }
 
     @Test
-    public void updateNotExistedColorTest() throws Exception {
-        ColorDto colorDto = new ColorDto(0L, "COLOR0");
+    public void updateNotExistedStatusTest() throws Exception {
+        StatusDto statusDto = new StatusDto(0L, "STATUS0");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/colors")
+        mockMvc.perform(MockMvcRequestBuilders.put("/statuses")
                         .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonMapper.objectToJson(colorDto)))
+                .content(JsonMapper.objectToJson(statusDto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void deleteColorStatus() throws Exception {
-        ColorDto colorDto = new ColorDto(null, "COLOR5");
-        colorDto = colorsController.addColor(colorDto).getBody();
+    public void deleteTypeStatus() throws Exception {
+        StatusDto statusDto = new StatusDto(null, "STATUS5");
+        statusDto = statusesController.addStatus(statusDto).getBody();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/colors/" + colorDto.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/statuses/" + statusDto.getId()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value(colorDto.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value(statusDto.getId()));
     }
 
     @Test
-    public void deleteNotExistedColorTest() throws Exception {
-        ColorDto colorDto = new ColorDto(0L, "COLOR0");
+    public void deleteNotExistedStatusTest() throws Exception {
+        StatusDto statusDto = new StatusDto(0L, "STATUS0");
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/colors/" + colorDto.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/statuses/" + statusDto.getId()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void getAllColorsTest() throws Exception {
-        ColorDto statusDto1 = new ColorDto(null, "COLOR6");
-        ColorDto statusDto2 = new ColorDto(null, "COLOR7");
-        colorsController.addColor(statusDto1);
-        colorsController.addColor(statusDto2);
+    public void getAllStatusesTest() throws Exception {
+        StatusDto statusDto1 = new StatusDto(null, "STATUS6");
+        StatusDto statusDto2 = new StatusDto(null, "STATUS7");
+        statusesController.addStatus(statusDto1);
+        statusesController.addStatus(statusDto2);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/colors"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/statuses"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))

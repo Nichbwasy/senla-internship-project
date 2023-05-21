@@ -23,7 +23,7 @@ public class UserRefreshToken {
     private UserData userData;
 
     @NotNull(message = "Role name is mandatory!")
-    @Size(min = 3, max = 64, message = "Role name must contains from 3 to 64 characters!")
+    @Size(min = 3, max = 1000, message = "Role name must contains from 3 to 64 characters!")
     @Column(name = "refresh_token", length = 1000, nullable = false)
     private String refreshToken;
 

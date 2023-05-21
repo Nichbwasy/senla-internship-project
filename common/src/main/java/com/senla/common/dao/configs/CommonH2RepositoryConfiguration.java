@@ -1,10 +1,8 @@
-package controller.configs;
+package com.senla.common.dao.configs;
 
-import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -20,13 +18,8 @@ import java.util.Properties;
 @Slf4j
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {
-        "com.senla.car.dao",
-        "com.senla.car.service",
-        "com.senla.car.controller",
-        "com.senla.common.dao"
-})
-public class CarControllersTestsConfiguration {
+public class CommonH2RepositoryConfiguration {
+
     @Autowired
     private DataSource dataSource;
     private final String databaseDriver = "org.h2.Driver";
@@ -44,15 +37,6 @@ public class CarControllersTestsConfiguration {
     private final String dialect = "org.hibernate.dialect.H2Dialect";
 
     private final String showSql = "true";
-
-    @Bean
-    public SpringLiquibase springLiquibase() {
-        SpringLiquibase springLiquibase = new SpringLiquibase();
-        springLiquibase.setChangeLog("classpath:liquibase/changelog-master.xml");
-        springLiquibase.setDataSource(dataSource);
-        return springLiquibase;
-    }
-
 
     @Bean
     @Primary
@@ -95,4 +79,6 @@ public class CarControllersTestsConfiguration {
         jpaProperties.put("hibernate.show_sql", showSql);
         return jpaProperties;
     }
+
+
 }

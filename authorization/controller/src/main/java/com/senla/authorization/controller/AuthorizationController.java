@@ -17,7 +17,7 @@ public class AuthorizationController {
     private AuthorizationService authorizationService;
 
     @GetMapping
-    private ResponseEntity<String> logInUser() {
+    private ResponseEntity<String> logPage() {
         log.info("Trying to show log in page...");
         return ResponseEntity.ok().body("Hello, this is login page!");
     }

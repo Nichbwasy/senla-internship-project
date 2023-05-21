@@ -1,6 +1,8 @@
 package com.senla.authorization.service.exceptions.services.registration;
 
-public class RegistrationServiceException extends RuntimeException {
+import com.senla.authorization.service.exceptions.services.AuthorizationServicesException;
+
+public class RegistrationServiceException extends AuthorizationServicesException {
     public RegistrationServiceException() {
     }
 

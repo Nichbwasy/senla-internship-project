@@ -1,10 +1,10 @@
-package controller;
+package com.senla.rental.controller;
 
 import com.senla.car.controller.RegistrationsController;
 import com.senla.car.controller.advice.CarsControllerAdviceExceptionHandler;
 import com.senla.car.dto.RegistrationDto;
 import com.senla.common.json.JsonMapper;
-import controller.configs.CarControllersTestsConfiguration;
+import com.senla.rental.controller.configs.CarControllersTestsConfiguration;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
