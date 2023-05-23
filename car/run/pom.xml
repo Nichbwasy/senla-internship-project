@@ -53,7 +53,7 @@
     </dependencies>
 
     <build>
-        <finalName>CarMicroservice</finalName>
+        <finalName>car-run</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -71,7 +71,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>3.3.1</version>
                     <configuration>
-                        <warName>CarMicroservice</warName>
+                        <warName>car-run</warName>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
                     </configuration>
                 </plugin>

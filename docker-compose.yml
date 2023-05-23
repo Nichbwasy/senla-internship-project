@@ -26,4 +26,60 @@ services:
     ports:
       - 5050:80
     links:
-      - car-rental-postgres-db
+      - database-postgres
+
+  authorization-microservice:
+    container_name: authorization-microservice
+    depends_on:
+      - database-postgres
+    build:
+      context: ./authorization
+      dockerfile: Dockerfile
+    ports:
+      - '8081:8080'
+    restart: no
+    environment:
+      DATABASE_URL: jdbc:postgresql://database-postgres/car-rental?currentSchema=authorizations
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: root
+      MICROSERVICE_NAME: AUTHORIZATION_MICROSERVICE
+      AUTHORIZATION_MICROSERVICE_URL: http://authorization-microservice:8081
+
+  car-microservice:
+    container_name: car-microservice
+    depends_on:
+      - database-postgres
+    image: tomcat:10.1.7-jdk17
+    restart: no
+    volumes:
+      - ./car/run/target/car-run.war:/usr/local/tomcat/webapps/car-run.war
+    ports:
+      - '8082:8080'
+    environment:
+      DATABASE_URL: jdbc:postgresql://database-postgres/car-rental?currentSchema=car
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: root
+      MICROSERVICE_NAME: CAR_MICROSERVICE
+      AUTHORIZATION_MICROSERVICE_URL: http://authorization-microservice:8080/car-run
+      CARS_CATALOG_PAGE_SIZE: 4
+
+  rental-microservice:
+    container_name: rental-microservice
+    depends_on:
+      - database-postgres
+    build:
+      context: ./rental
+      dockerfile: Dockerfile
+    ports:
+      - '8083:8080'
+    restart: no
+    environment:
+      DATABASE_URL: jdbc:postgresql://database-postgres/car-rental?currentSchema=rental
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: root
+      MICROSERVICE_NAME: RENTAL_MICROSERVICE
+      AUTHORIZATION_MICROSERVICE_URL: http://authorization-microservice:8081
+      CAR_MICROSERVICE_URL: http://car-microservice:8082/car-run
+      PROFILE_ADMIN_REQUESTS_PAGE_SIZE: 5
+      PROFILE_ADMIN_REFUNDS_PAGE_SIZE: 5
+      PROFILE_USER_REFUNDS_PAGE_SIZE: 5

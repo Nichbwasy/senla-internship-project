@@ -29,7 +29,7 @@ public class Registration implements ModelEntity<Long>  {
 
     @NotNull(message = "Registration model name is mandatory!")
     @Min(value = 1900, message = "Registration year can't be lesser then 1900!")
-    @Column(name = "releaseYear", nullable = false)
+    @Column(name = "release_year", nullable = false)
     private Integer releaseYear;
 
     @NotNull(message = "Registration body number is mandatory!")

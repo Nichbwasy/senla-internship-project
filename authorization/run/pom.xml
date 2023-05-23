@@ -53,10 +53,23 @@
     </dependencies>
 
     <build>
+        <finalName>authorization-run</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.senla.authorization.run.RunAuthorizationMicroservice</mainClass>
+                    <finalName>authorization-run</finalName>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

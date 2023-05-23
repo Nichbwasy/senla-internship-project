@@ -7,15 +7,18 @@
         logicalFilePath="liquibase">
 
     <changeSet id="homework-2-car-colors-table" author="Vadim Yarosh">
-        <createTable tableName="car.color">
+        <createTable tableName="color">
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="homework-2-car-types-table" author="Vadim Yarosh">
-        <createTable tableName="car.type">
+        <createTable tableName="type">
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
@@ -26,7 +29,7 @@
     </changeSet>
 
     <changeSet id="homework-2-car-conditions-table" author="Vadim Yarosh">
-        <createTable tableName="car.condition">
+        <createTable tableName="condition">
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
@@ -37,7 +40,7 @@
     </changeSet>
 
     <changeSet id="homework-2-car-statuses-table" author="Vadim Yarosh">
-        <createTable tableName="car.status">
+        <createTable tableName="status">
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
@@ -48,7 +51,7 @@
     </changeSet>
 
     <changeSet id="homework-2-car-registrations-table" author="Vadim Yarosh">
-        <createTable tableName="car.registration">
+        <createTable tableName="registration">
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
@@ -58,8 +61,8 @@
             <column name="model" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="releaseYear" type="integer">
-                <constraints nullable="false" checkConstraint="releaseYear > 1900"/>
+            <column name="release_year" type="integer">
+                <constraints nullable="false" checkConstraint="release_year > 1900"/>
             </column>
             <column name="color_id" type="bigint">
                 <constraints nullable="false"/>
@@ -80,7 +83,7 @@
     </changeSet>
 
     <changeSet id="homework-2-car-cars-table" author="Vadim Yarosh">
-        <createTable tableName="car.car">
+        <createTable tableName="car">
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>

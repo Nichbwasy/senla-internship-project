@@ -13,12 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "com.senla.authorization.service",
         "com.senla.authorization.controller"
 })
-@EnableJpaRepositories(basePackages = {
-        "com.senla.authorization.dao"
-})
-@EntityScan(basePackages = {
-        "com.senla.authorization.model"
-})
+@EnableJpaRepositories(basePackages = {"com.senla.authorization.dao"})
+@EntityScan(basePackages = {"com.senla.authorization.model"})
 public class RunAuthorizationMicroservice {
 
     public static void main(String[] args) {
