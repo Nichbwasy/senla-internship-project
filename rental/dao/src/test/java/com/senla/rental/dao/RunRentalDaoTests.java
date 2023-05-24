@@ -1,4 +1,4 @@
-package com.senla.authorization.dao;
+package com.senla.rental.dao;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories
 @ComponentScan(basePackages = {
-        "com.senla.authorization.dao",
-        "com.senla.authorization.model"
+        "com.senla.rental.model",
+        "com.senla.rental.dao"
 })
-@EntityScan(basePackages = {"com.senla.authorization.model"})
-public class RunAuthorizationDAOTests {
+@EntityScan(basePackages = {"com.senla.rental.model"})
+public class RunRentalDaoTests {
     public static void main(String[] args) {
-        SpringApplication.run(RunAuthorizationDAOTests.class);
+        SpringApplication.run(RunRentalDaoTests.class);
     }
 }

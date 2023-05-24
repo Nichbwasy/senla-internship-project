@@ -11,6 +11,14 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "graph.request.fetches",
+            attributeNodes = {
+                @NamedAttributeNode("requestRejection"),
+                @NamedAttributeNode("requestStatus")
+            }
+        )
+})
 public class Request {
 
     @Id
