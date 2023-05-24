@@ -8,11 +8,40 @@
     <artifactId>senla-internship-project-</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>authorization</module>
+        <module>car</module>
+        <module>rental</module>
+        <module>common</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+
+        <common-hibernate-version>6.1.6.Final</common-hibernate-version>
+        <common-mupstruct-version>1.5.2.Final</common-mupstruct-version>
+        <common-postgresql-version>42.5.1</common-postgresql-version>
+        <spring-boot-starter-version>3.0.6</spring-boot-starter-version>
+        <common-jakarta-servlet-api-varsion>6.0.0</common-jakarta-servlet-api-varsion>
+        <common-mokito-version>5.1.1</common-mokito-version>
+        <spring-version>6.0.5</spring-version>
     </properties>
 
+    <dependencies>
+        <!-- LOMBOK -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+        </dependency>
+        <!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
