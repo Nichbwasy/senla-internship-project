@@ -1,5 +1,6 @@
 package com.senla.rental.dao;
 
+import com.senla.rental.dao.projections.RequestIdsOnly;
 import com.senla.rental.model.Request;
 import com.senla.rental.model.RequestRejection;
 import com.senla.rental.model.RequestStatus;
@@ -49,6 +50,32 @@ public class RequestRepositoryTests {
 
         Assertions.assertEquals(2, result.size());
         result.forEach(r -> Assertions.assertEquals(2L, r.getUserId()));
+    }
+
+    @Test
+    public void findAllByStartTimeBetweenProjectionTest() {
+        requestRepository.save(new Request(null, 3L, 3L, new Timestamp(10), new Timestamp(11), null, null));
+        requestRepository.save(new Request(null, 3L, 3L, new Timestamp(14), new Timestamp(15), null, null));
+        requestRepository.save(new Request(null, 3L, 3L, new Timestamp(15), new Timestamp(16), null, null));
+        requestRepository.save(new Request(null, 3L, 3L, new Timestamp(18), new Timestamp(19), null, null));
+
+        List<RequestIdsOnly> result = requestRepository.findAllByStartTimeBetween(new Timestamp(11), new Timestamp(17));
+        result.forEach(e -> System.out.println(String.format("Id: %s, Car id: %s, User id: %s", e.getId(), e.getCarId(), e.getUserId())));
+
+        Assertions.assertEquals(2, result.size());
+    }
+
+    @Test
+    public void findAllByStartTimeBetweenProjectionWithNativeQueryTest() {
+        requestRepository.save(new Request(null, 4L, 4L, new Timestamp(20), new Timestamp(21), null, null));
+        requestRepository.save(new Request(null, 4L, 4L, new Timestamp(24), new Timestamp(25), null, null));
+        requestRepository.save(new Request(null, 4L, 4L, new Timestamp(25), new Timestamp(26), null, null));
+        requestRepository.save(new Request(null, 4L, 4L, new Timestamp(28), new Timestamp(29), null, null));
+
+        List<RequestIdsOnly> result = requestRepository.findAllByStartTimeBetweenNativeQuery(new Timestamp(21), new Timestamp(27));
+        result.forEach(e -> System.out.println(String.format("Id: %s, Car id: %s, User id: %s", e.getId(), e.getCarId(), e.getUserId())));
+
+        Assertions.assertEquals(2, result.size());
     }
 
 }
