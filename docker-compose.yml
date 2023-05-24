@@ -36,7 +36,7 @@ services:
       context: ./authorization
       dockerfile: Dockerfile
     ports:
-      - '8081:8080'
+      - 8081:8080
     restart: no
     environment:
       DATABASE_URL: jdbc:postgresql://database-postgres/car-rental?currentSchema=authorizations
@@ -54,7 +54,7 @@ services:
     volumes:
       - ./car/run/target/car-run.war:/usr/local/tomcat/webapps/car-run.war
     ports:
-      - '8082:8080'
+      - 8082:8080
     environment:
       DATABASE_URL: jdbc:postgresql://database-postgres/car-rental?currentSchema=car
       DATABASE_USERNAME: postgres
@@ -71,7 +71,7 @@ services:
       context: ./rental
       dockerfile: Dockerfile
     ports:
-      - '8083:8080'
+      - 8083:8080
     restart: no
     environment:
       DATABASE_URL: jdbc:postgresql://database-postgres/car-rental?currentSchema=rental
