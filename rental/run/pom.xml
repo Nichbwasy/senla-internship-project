@@ -66,6 +66,9 @@
                 <configuration>
                     <mainClass>com.senla.rental.run.RunRentalApplication</mainClass>
                     <finalName>rental-run</finalName>
+                    <compilerArguments>
+                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+                    </compilerArguments>
                 </configuration>
 
                 <executions>
