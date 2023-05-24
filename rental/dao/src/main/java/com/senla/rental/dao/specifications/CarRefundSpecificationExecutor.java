@@ -8,7 +8,10 @@ import java.sql.Timestamp;
 
 public class CarRefundSpecificationExecutor {
 
-    public static Specification<CarRefund> alreadyRefunded(Long carId, Long userId, Timestamp startTime, Timestamp endTime) {
+    public static Specification<CarRefund> alreadyRefunded(Long carId,
+                                                           Long userId,
+                                                           Timestamp startTime,
+                                                           Timestamp endTime) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(
                         criteriaBuilder.equal(root.get(CarRefund_.carId), carId),
