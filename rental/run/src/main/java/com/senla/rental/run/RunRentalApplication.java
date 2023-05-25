@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "com.senla.rental.dao",
         "com.senla.rental.service",
         "com.senla.rental.controller",
+        "com.senla.rental.run",
         "com.senla.authorization.client",
         "com.senla.car.client"
 })

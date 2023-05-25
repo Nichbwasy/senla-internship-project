@@ -1,4 +1,4 @@
-package com.senla.car.common.run.config;
+package com.senla.car.run.config;
 
 import com.senla.common.constants.UserRoles;
 import com.senla.common.security.filters.JwtTokenSecurityCommonFilter;
@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class CarWebSecurityConfig {
 
     private final JwtTokenSecurityCommonFilter jwtTokenFilter = new JwtTokenSecurityCommonFilter(new String[] {
-
+            "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
     });
 
     @Bean
@@ -25,6 +25,8 @@ public class CarWebSecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests( (request) -> request
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico")
+                            .permitAll()
                         .anyRequest().hasAnyAuthority(UserRoles.ADMIN, UserRoles.MICROSERVICE)
                 ).build();
     }

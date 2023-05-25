@@ -1,8 +1,8 @@
-package com.senla.car.common.run.initializers;
+package com.senla.car.run.initializers;
 
-import com.senla.car.common.run.config.CarApplicationConfiguration;
-import com.senla.car.common.run.config.CarWebMvcConfig;
-import com.senla.car.common.run.config.CarWebSecurityConfig;
+import com.senla.car.run.config.CarApplicationConfiguration;
+import com.senla.car.run.config.CarWebMvcConfig;
+import com.senla.car.run.config.CarWebSecurityConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 

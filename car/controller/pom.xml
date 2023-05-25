@@ -56,6 +56,13 @@
             <version>3.10.3</version>
             <scope>test</scope>
         </dependency>
+        <!-- SWAGGER -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.senla.car</groupId>
@@ -70,11 +77,6 @@
         <dependency>
             <groupId>com.senla.car</groupId>
             <artifactId>model</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.senla.car</groupId>
-            <artifactId>dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
