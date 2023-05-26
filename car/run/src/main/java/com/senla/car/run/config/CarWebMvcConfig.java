@@ -2,9 +2,10 @@ package com.senla.car.run.config;
 
 import com.senla.car.run.converters.OrderTypeStringToEnumConverter;
 import com.senla.car.run.converters.OrderingFieldNameStringToEnumConverter;
+import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -16,13 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         "org.springdoc",
         "com.senla.car.controller"
 })
-@Import({org.springdoc.core.SpringDocConfiguration.class,
-        org.springdoc.webmvc.core.SpringDocWebMvcConfiguration.class,
-        org.springdoc.webmvc.ui.SwaggerConfig.class,
-        org.springdoc.core.SwaggerUiConfigProperties.class,
-        org.springdoc.core.SwaggerUiOAuthProperties.class,
-        org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration.class})
-
 public class CarWebMvcConfig implements WebMvcConfigurer {
 
     @Override
@@ -34,6 +28,16 @@ public class CarWebMvcConfig implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+    
+    // Swagger
+
+    @Bean
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("springshop-public")
+                .pathsToMatch("/**")
+                .build();
     }
 
 }

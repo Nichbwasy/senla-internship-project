@@ -1,6 +1,5 @@
 package com.senla.car.run.composnents;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -14,17 +13,22 @@ import java.util.Map;
 @Component
 public class EndpointsLogger {
 
+    // TODO: Fix SLF4J (compiler doesn't see 'log')
     @EventListener
     public void endpointsLog(ContextRefreshedEvent contextRefreshedEvent) {
         ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
-        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext
-                .getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
+        try {
+            RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext
+                    .getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
 
-        Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
+            Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 
-        System.out.println(("\n\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[ MAPPED ENDPOINTS ]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"));
-        map.forEach((key, value) -> System.out.println(String.format("Mapping: %s | Controller endpoint: %s", key, value)));
-        System.out.println(("\n\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"));
+            System.out.println(("\n\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[ MAPPED ENDPOINTS ]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"));
+            map.forEach((key, value) -> System.out.println(String.format("Mapping: %s | Controller endpoint: %s", key, value)));
+            System.out.println(("\n\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"));
+        } catch (Exception e) {
+            System.out.println(String.format("Exception while loading the bean 'requestMappingHandlerMapping'! %s...", e.getMessage() ));
+        }
 
     }
 }

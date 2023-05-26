@@ -3,6 +3,7 @@ package com.senla.car.run.initializers;
 import com.senla.car.run.config.CarApplicationConfiguration;
 import com.senla.car.run.config.CarWebMvcConfig;
 import com.senla.car.run.config.CarWebSecurityConfig;
+import org.springdoc.core.configuration.SpringDocConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
@@ -11,15 +12,16 @@ public class CustomWebApplicationInitializer extends AbstractAnnotationConfigDis
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] {
-                CarApplicationConfiguration.class,
-                CarWebSecurityConfig.class
+                CarApplicationConfiguration.class
         };
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[] {
-                CarWebMvcConfig.class
+                SpringDocConfiguration.class,
+                CarWebMvcConfig.class,
+                CarWebSecurityConfig.class
         };
     }
 
@@ -33,6 +35,7 @@ public class CustomWebApplicationInitializer extends AbstractAnnotationConfigDis
                 "/registrations", "/registrations/**",
                 "/statuses", "/statuses/**",
                 "/types", "/types/**",
+                "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
         };
     }
 

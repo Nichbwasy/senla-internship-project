@@ -37,22 +37,4 @@ public class CarApplicationConfiguration {
         return springLiquibase;
     }
 
-    @Bean(name = "mvcHandlerMappingIntrospector")
-    public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
-        return new HandlerMappingIntrospector();
-    }
-
-    //------------------------------------------- swagger???
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-            return new PropertySourcesPlaceholderConfigurer();
-    }
-
-    @Bean
-    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
-        RequestMappingHandlerMapping mapping = new RequestMappingHandlerMapping();
-        // add properties here
-        return mapping;
-    }
-
 }
