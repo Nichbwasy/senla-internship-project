@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class RentalWebSecurityConfig {
 
     private final JwtTokenSecurityCommonFilter commonJwtFilter = new JwtTokenSecurityCommonFilter(new String[] {
-
+            "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
     });
 
     @Bean
@@ -30,6 +30,8 @@ public class RentalWebSecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests( request -> request
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico")
+                            .permitAll()
                         .requestMatchers(
                                 "/profile/admin", "/profile/admin/**", "/profile/admin/requests","/profile/admin/requests/**",
                                 "/blacklist/**", "/car/refunds/**",

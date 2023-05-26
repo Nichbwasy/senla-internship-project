@@ -19,7 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class AuthorizationWebSecurityConfig {
     private final JwtTokenSecurityCommonFilter commonJwtFilter = new JwtTokenSecurityCommonFilter(new String[] {
-            "/authorization", "/authorization/register"
+            "/authorization", "/authorization/register",
+            "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
     });
 
     @Bean
@@ -27,9 +28,11 @@ public class AuthorizationWebSecurityConfig {
         return httpSecurity
                 .addFilterBefore(commonJwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
+                .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests( request -> request
-                        .requestMatchers("/authorization", "/authorization/register")
+                        .requestMatchers("/authorization", "/authorization/register",
+                                "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico")
                             .permitAll()
                         .requestMatchers("/authorization/authorities", "/authorization/authorities/**")
                             .hasAnyAuthority(RolesAuthorities.AUTHORIZATION_AUTHORITIES_ACCESS, UserRoles.ADMIN)
