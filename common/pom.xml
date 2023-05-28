@@ -36,6 +36,13 @@
             <artifactId>spring-orm</artifactId>
             <version>${spring-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.19</version>
+        </dependency>
+
+
         <!-- SERVLET API -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
