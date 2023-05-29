@@ -3,6 +3,7 @@ package com.senla.authorization.controller;
 import com.senla.authorization.dto.registrations.JwtTokensResponseDto;
 import com.senla.authorization.dto.registrations.LogInUserDto;
 import com.senla.authorization.service.AuthorizationService;
+import com.senla.common.aspects.annotations.LogMethodExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class AuthorizationController {
     private AuthorizationService authorizationService;
 
     @GetMapping
+    @LogMethodExecution
     private ResponseEntity<String> logPage() {
         log.info("Trying to show log in page...");
         return ResponseEntity.ok().body("Hello, this is login page!");

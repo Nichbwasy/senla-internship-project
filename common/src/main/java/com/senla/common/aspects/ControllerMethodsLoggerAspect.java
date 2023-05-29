@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +19,13 @@ import java.util.Date;
 @Aspect
 @Component
 public class ControllerMethodsLoggerAspect {
+    @Pointcut("@annotation(com.senla.common.aspects.annotations.LogMethodExecution)")
+    public void methodsWithLogMethodExecutionAnnotation() {}
 
-    @Around("execution(* com.senla.*..controller..*(..))")
+    @Pointcut("execution(* *(..))")
+    public void anyMethod() {}
+
+    @Around("anyMethod() && methodsWithLogMethodExecutionAnnotation()")
     public void around(ProceedingJoinPoint pjp) throws Throwable {
         StringBuilder stringBuilder = new StringBuilder();
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
