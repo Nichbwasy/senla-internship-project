@@ -31,6 +31,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private JwtTokenProvider jwtTokenProvider;
 
     @Override
+    @Transactional
     public JwtTokensResponseDto logInUser(LogInUserDto dto) {
         UserData user = checkAuthorizationForm(dto);
 

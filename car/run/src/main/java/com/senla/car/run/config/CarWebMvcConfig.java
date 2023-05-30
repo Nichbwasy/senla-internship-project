@@ -15,7 +15,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @ComponentScan(basePackages = {
         "org.springdoc",
-        "com.senla.car.controller"
+        "com.senla.common.aspects",
+        "com.senla.car.controller",
+        "com.senla.common.security"
 })
 public class CarWebMvcConfig implements WebMvcConfigurer {
 

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.sql.DataSource;
-
+    //TODO: Context doesn't see aspect!
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
@@ -19,7 +19,9 @@ import javax.sql.DataSource;
         "com.senla.car.dao",
         "com.senla.car.service",
         "com.senla.car.run",
-        "com.senla.authorization.client"
+        "com.senla.authorization.client",
+        "com.senla.common.aspects",
+        "com.senla.common.security"
         }, excludeFilters = {
         @ComponentScan.Filter(type= FilterType.ANNOTATION, value= EnableWebMvc.class)
 })

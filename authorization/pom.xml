@@ -32,6 +32,18 @@
             <artifactId>spring-boot-starter</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- SPRING BOOT STARTER WEB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+        <!-- SPRING AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
         <!-- SPRING TESTS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

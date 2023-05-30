@@ -12,8 +12,8 @@ import com.senla.authorization.service.exceptions.jwt.JwtTokenUserNotFoundExcept
 import com.senla.common.exception.security.jwt.JwtTokenValidationException;
 import com.senla.common.security.dto.AccessRefreshTokensDto;
 import com.senla.common.security.utils.JwtTokenUtils;
-import com.senla.common.reflections.validators.JwtTokenValidator;
-import com.senla.common.reflections.validators.TokenStatus;
+import com.senla.common.security.validators.JwtTokenValidator;
+import com.senla.common.security.validators.TokenStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

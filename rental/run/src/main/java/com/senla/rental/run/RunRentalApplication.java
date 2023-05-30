@@ -8,11 +8,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-        "com.senla.rental.model",
-        "com.senla.rental.dao",
-        "com.senla.rental.service",
-        "com.senla.rental.controller",
-        "com.senla.rental.run",
+        "com.senla.rental",
+        "com.senla.common.aspects",
+        "com.senla.common.security",
         "com.senla.authorization.client",
         "com.senla.car.client"
 })

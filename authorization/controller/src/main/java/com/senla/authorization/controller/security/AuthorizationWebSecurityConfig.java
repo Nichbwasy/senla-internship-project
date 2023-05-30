@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class AuthorizationWebSecurityConfig {
     private final JwtTokenSecurityCommonFilter commonJwtFilter = new JwtTokenSecurityCommonFilter(new String[] {
             "/authorization", "/authorization/register",
