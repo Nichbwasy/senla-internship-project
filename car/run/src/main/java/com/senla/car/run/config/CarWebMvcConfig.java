@@ -6,6 +6,7 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -15,8 +16,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @ComponentScan(basePackages = {
         "org.springdoc",
-        "com.senla.car.controller"
+        "com.senla.common.aspects",
+        "com.senla.car.controller",
+        "com.senla.common.security"
 })
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class CarWebMvcConfig implements WebMvcConfigurer {
 
     @Override

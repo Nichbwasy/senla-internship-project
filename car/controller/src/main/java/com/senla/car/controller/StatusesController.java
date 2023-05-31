@@ -2,6 +2,7 @@ package com.senla.car.controller;
 
 import com.senla.car.dto.StatusDto;
 import com.senla.car.service.StatusesService;
+import com.senla.common.annotations.LogMethodExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/statuses")
 public class StatusesController {
 

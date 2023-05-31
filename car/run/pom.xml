@@ -21,6 +21,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.senla.authorization</groupId>
+            <artifactId>client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.senla.car</groupId>
             <artifactId>controller</artifactId>
             <version>1.0-SNAPSHOT</version>

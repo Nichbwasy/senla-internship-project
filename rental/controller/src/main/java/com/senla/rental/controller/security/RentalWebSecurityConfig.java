@@ -24,6 +24,8 @@ public class RentalWebSecurityConfig {
             "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
     });
 
+    //TODO: Fix token validation
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.addFilterBefore(commonJwtFilter, UsernamePasswordAuthenticationFilter.class)

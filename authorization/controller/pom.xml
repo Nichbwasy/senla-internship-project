@@ -13,12 +13,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- SPRING BOOT STARTER WEB -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot-starter-version}</version>
-        </dependency>
         <!-- SWAGGER -->
         <dependency>
             <groupId>org.springdoc</groupId>

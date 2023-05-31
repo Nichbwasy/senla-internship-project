@@ -15,11 +15,14 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {
         "com.senla.car.dao",
         "com.senla.car.service",
         "com.senla.car.run",
-        "com.senla.authorization.client"
+        "com.senla.authorization.client",
+        "com.senla.common.aspects",
+        "com.senla.common.security"
         }, excludeFilters = {
         @ComponentScan.Filter(type= FilterType.ANNOTATION, value= EnableWebMvc.class)
 })

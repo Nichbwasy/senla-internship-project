@@ -2,6 +2,7 @@ package com.senla.authorization.controller;
 
 import com.senla.authorization.dto.AuthorityDto;
 import com.senla.authorization.service.AuthorityService;
+import com.senla.common.annotations.LogMethodExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/authorization/authorities")
 public class AuthoritiesController {
 
