@@ -11,10 +11,11 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.sql.DataSource;
-    //TODO: Context doesn't see aspect!
+
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {
         "com.senla.car.dao",
         "com.senla.car.service",
