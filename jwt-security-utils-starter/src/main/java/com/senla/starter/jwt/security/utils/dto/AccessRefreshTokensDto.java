@@ -1,5 +1,5 @@
 
-package com.senla.common.security.dto;
+package com.senla.starter.jwt.security.utils.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

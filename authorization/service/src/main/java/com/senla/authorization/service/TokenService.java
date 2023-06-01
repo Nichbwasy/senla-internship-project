@@ -1,6 +1,6 @@
 package com.senla.authorization.service;
 
-import com.senla.common.security.dto.AccessRefreshTokensDto;
+import com.senla.starter.jwt.security.utils.dto.AccessRefreshTokensDto;
 
 public interface TokenService {
     AccessRefreshTokensDto refreshTokens(AccessRefreshTokensDto accessRefreshTokensDto);

@@ -34,8 +34,8 @@ public class JwtTokenProvider {
     private static SecretKey REFRESH_TOKEN_SECRET;
 
     public JwtTokenProvider(
-            @Value("${security.access.token.secret}") String accessTokenSecret,
-            @Value("${security.refresh.token.secret}") String refreshTokenSecret
+            @Value("${spring.senla.jwt.utils.access-token-secret}") String accessTokenSecret,
+            @Value("${spring.senla.jwt.utils.refresh-token-secret}") String refreshTokenSecret
     )
     {
         log.info("Initializing the JWT token provider...");

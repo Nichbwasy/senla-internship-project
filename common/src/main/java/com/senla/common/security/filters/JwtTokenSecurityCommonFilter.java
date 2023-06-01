@@ -6,12 +6,12 @@ import com.senla.common.exception.security.jwt.JwtTokenValidationException;
 import com.senla.common.exception.security.jwt.statuses.JwtTokenMalformedException;
 import com.senla.common.exception.security.jwt.statuses.JwtTokenSignatureException;
 import com.senla.common.exception.security.jwt.statuses.JwtTokenUnsupportedException;
-import com.senla.common.security.validators.JwtTokenValidator;
-import com.senla.common.security.validators.TokenStatus;
-import com.senla.common.security.authentication.JwtAuthenticationUtils;
-import com.senla.common.security.dto.AccessRefreshTokensDto;
-import com.senla.common.security.dto.JwtAuthenticationDto;
-import com.senla.common.security.utils.JwtTokenUtils;
+import com.senla.starter.jwt.security.utils.authentication.JwtAuthenticationUtils;
+import com.senla.starter.jwt.security.utils.consts.TokenStatus;
+import com.senla.starter.jwt.security.utils.dto.AccessRefreshTokensDto;
+import com.senla.starter.jwt.security.utils.dto.JwtAuthenticationDto;
+import com.senla.starter.jwt.security.utils.utils.JwtTokenUtils;
+import com.senla.starter.jwt.security.utils.validators.JwtTokenValidator;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,6 +32,13 @@ import java.util.List;
 @Slf4j
 public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
 
+    //TODO: Fix null @Autowired fields
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
+    @Autowired
+    private JwtTokenValidator jwtTokenValidator;
+    @Autowired
+    private JwtAuthenticationUtils jwtAuthenticationUtils;
     @Autowired
     private RefreshTokensMicroserviceClient refreshTokensMicroserviceClient;
 
@@ -39,10 +46,6 @@ public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
     private final static String REFRESH_HEADER = "Refresh";
     private final static String BEARER = "Bearer ";
     private static List<String> IGNORED_PATHS;
-
-    public JwtTokenSecurityCommonFilter(String[] ignoredPaths) {
-        IGNORED_PATHS = Arrays.asList(ignoredPaths);
-    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -55,7 +58,7 @@ public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
         }
 
         String accessToken = getAccessTokenFromRequest((HttpServletRequest) servletRequest);
-        TokenStatus tokenStatus = JwtTokenValidator.validateAccessToken(accessToken);
+        TokenStatus tokenStatus = jwtTokenValidator.validateAccessToken(accessToken);
 
         switch (tokenStatus) {
             case OK -> {
@@ -84,8 +87,8 @@ public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String token) {
-        Claims claims = JwtTokenUtils.getAccessTokenClaims(token);
-        JwtAuthenticationDto jwtInfoToken = JwtAuthenticationUtils.generateJwtAuthentication(claims);
+        Claims claims = jwtTokenUtils.getAccessTokenClaims(token);
+        JwtAuthenticationDto jwtInfoToken = jwtAuthenticationUtils.generateJwtAuthentication(claims);
         return new UsernamePasswordAuthenticationToken(
                 jwtInfoToken.getUsername(),
                 null,
@@ -134,5 +137,9 @@ public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
                     else return url.equals(path);
                 }
         );
+    }
+
+    public void setIgnoredPaths(List<String> ignoredPaths) {
+        IGNORED_PATHS = ignoredPaths;
     }
 }

@@ -1,6 +1,6 @@
-package com.senla.common.security.authentication;
+package com.senla.starter.jwt.security.utils.authentication;
 
-import com.senla.common.security.dto.JwtAuthenticationDto;
+import com.senla.starter.jwt.security.utils.dto.JwtAuthenticationDto;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 public class JwtAuthenticationUtils {
 
-    public static JwtAuthenticationDto generateJwtAuthentication(Claims claims) {
+    public JwtAuthenticationDto generateJwtAuthentication(Claims claims) {
         JwtAuthenticationDto jwtInfoToken = new JwtAuthenticationDto();
         jwtInfoToken.setAuthorities(getAuthorities(claims));
         jwtInfoToken.setUsername(claims.getSubject());
@@ -21,7 +21,7 @@ public class JwtAuthenticationUtils {
         return jwtInfoToken;
     }
 
-    private static Collection<SimpleGrantedAuthority> getAuthorities(Claims claims) {
+    private Collection<SimpleGrantedAuthority> getAuthorities(Claims claims) {
         Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         List<String> roles = claims.get("authorities", List.class);
         roles.forEach(r -> authorities.add(new SimpleGrantedAuthority(r)));

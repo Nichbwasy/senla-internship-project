@@ -1,5 +1,6 @@
-package com.senla.common.security.validators;
+package com.senla.starter.jwt.security.utils.validators;
 
+import com.senla.starter.jwt.security.utils.consts.TokenStatus;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -10,33 +11,28 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 
 @Slf4j
-@Component
 public class JwtTokenValidator {
     private static SecretKey ACCESS_TOKEN_SECRET;
     private static SecretKey REFRESH_TOKEN_SECRET;
 
-    public JwtTokenValidator(
-            @Value("${security.access.token.secret}") String accessTokenSecret,
-            @Value("${security.refresh.token.secret}") String refreshTokenSecret
-    ) {
+    public JwtTokenValidator(String accessTokenSecret, String refreshTokenSecret) {
         ACCESS_TOKEN_SECRET = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessTokenSecret));
         REFRESH_TOKEN_SECRET = Keys.hmacShaKeyFor(Decoders.BASE64.decode(refreshTokenSecret));
     }
 
-    public static TokenStatus validateAccessToken(@NonNull String accessToken) {
+    public TokenStatus validateAccessToken(@NonNull String accessToken) {
         return validateToken(accessToken, ACCESS_TOKEN_SECRET);
     }
 
-    public static TokenStatus validateRefreshToken(@NonNull String refreshToken) {
+    public TokenStatus validateRefreshToken(@NonNull String refreshToken) {
         return validateToken(refreshToken, REFRESH_TOKEN_SECRET);
     }
 
-    private static TokenStatus validateToken(String token, SecretKey secret) {
+    private TokenStatus validateToken(String token, SecretKey secret) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secret)

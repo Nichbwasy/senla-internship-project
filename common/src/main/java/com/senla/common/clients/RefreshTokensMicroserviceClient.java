@@ -1,6 +1,6 @@
 package com.senla.common.clients;
 
-import com.senla.common.security.dto.AccessRefreshTokensDto;
+import com.senla.starter.jwt.security.utils.dto.AccessRefreshTokensDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;

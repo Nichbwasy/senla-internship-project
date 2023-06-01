@@ -2,7 +2,7 @@ package com.senla.authorization.controller;
 
 import com.senla.authorization.service.TokenService;
 import com.senla.common.annotations.LogMethodExecution;
-import com.senla.common.security.dto.AccessRefreshTokensDto;
+import com.senla.starter.jwt.security.utils.dto.AccessRefreshTokensDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
