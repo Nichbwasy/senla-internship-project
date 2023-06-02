@@ -26,6 +26,12 @@
 
 
     <dependencies>
+        <!-- CUSTOM STARTER -->
+        <dependency>
+            <groupId>com.senla</groupId>
+            <artifactId>jwt-security-utils-senla-spring-boot-starter</artifactId>
+            <version>3.0.6</version>
+        </dependency>
         <!-- SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,5 +1,6 @@
 package com.senla.car.run.config;
 
+import com.senla.common.clients.RefreshTokensMicroserviceClient;
 import com.senla.common.constants.UserRoles;
 import com.senla.common.security.filters.JwtTokenSecurityCommonFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 public class CarWebSecurityConfig {
 
-    private final JwtTokenSecurityCommonFilter jwtTokenFilter = new JwtTokenSecurityCommonFilter(new String[] {
-            "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
-    });
+    @Bean
+    public JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter() {
+        JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter = new JwtTokenSecurityCommonFilter();
+        jwtTokenSecurityCommonFilter.setIgnoredPaths(Arrays.asList(
+                "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
+        ));
+        return jwtTokenSecurityCommonFilter;
+    }
+
+    @Bean
+    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient() {
+        return new RefreshTokensMicroserviceClient();
+    }
 
     // Needs for springdoc openapi (swagger)
     @Bean(name = "mvcHandlerMappingIntrospector")
@@ -32,7 +45,7 @@ public class CarWebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenSecurityCommonFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests((request) -> request

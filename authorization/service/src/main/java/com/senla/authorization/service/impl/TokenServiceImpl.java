@@ -10,10 +10,10 @@ import com.senla.authorization.service.exceptions.jwt.JwtTokenNoRefreshTokenInDa
 import com.senla.authorization.service.jwt.providers.JwtTokenProvider;
 import com.senla.authorization.service.exceptions.jwt.JwtTokenUserNotFoundException;
 import com.senla.common.exception.security.jwt.JwtTokenValidationException;
-import com.senla.common.security.dto.AccessRefreshTokensDto;
-import com.senla.common.security.utils.JwtTokenUtils;
-import com.senla.common.security.validators.JwtTokenValidator;
-import com.senla.common.security.validators.TokenStatus;
+import com.senla.starter.jwt.security.utils.consts.TokenStatus;
+import com.senla.starter.jwt.security.utils.dto.AccessRefreshTokensDto;
+import com.senla.starter.jwt.security.utils.utils.JwtTokenUtils;
+import com.senla.starter.jwt.security.utils.validators.JwtTokenValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class TokenServiceImpl implements TokenService {
 
+    @Autowired
+    private JwtTokenValidator jwtTokenValidator;
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
     @Autowired
     private UserDataRepository userDataRepository;
     @Autowired
@@ -75,7 +79,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private String checkUserExistence(AccessRefreshTokensDto tokens) {
-        String userLogin = JwtTokenUtils.getRefreshTokenUserLogin(tokens.getRefreshToken());
+        String userLogin = jwtTokenUtils.getRefreshTokenUserLogin(tokens.getRefreshToken());
         if (!userDataRepository.existsByLogin(userLogin)) {
             log.warn("Can't refresh tokens! User login '{}' in refresh token not found in database!", userLogin);
             throw new JwtTokenUserNotFoundException(
@@ -86,7 +90,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private void checkTokenStatus(AccessRefreshTokensDto tokens) {
-        TokenStatus tokenStatus = JwtTokenValidator.validateRefreshToken(tokens.getRefreshToken());
+        TokenStatus tokenStatus = jwtTokenValidator.validateRefreshToken(tokens.getRefreshToken());
         if (!tokenStatus.equals(TokenStatus.OK)) {
             log.warn("Can't refresh tokens! Refresh token not valid!");
             throw new JwtTokenValidationException("Can't refresh tokens! Refresh token not valid!");

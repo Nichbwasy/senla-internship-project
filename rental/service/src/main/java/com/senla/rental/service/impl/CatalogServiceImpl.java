@@ -1,12 +1,10 @@
 package com.senla.rental.service.impl;
 
-import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.common.consts.CarStatuses;
 import com.senla.car.dto.CarDto;
 import com.senla.car.dto.controllers.CarsCatalogFilterForm;
 import com.senla.common.formaters.TimestampFormatter;
-import com.senla.common.security.utils.JwtTokenUtils;
 import com.senla.rental.common.consts.RequestStatuses;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
@@ -18,6 +16,7 @@ import com.senla.rental.service.exceptions.catalog.CarAlreadyOrderedCatalogExcep
 import com.senla.rental.service.exceptions.catalog.CarNotFoundCatalogException;
 import com.senla.rental.service.exceptions.catalog.CarUnavailableCatalogException;
 import com.senla.rental.service.mappers.RequestMapper;
+import com.senla.starter.jwt.security.utils.utils.JwtTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +36,8 @@ public class CatalogServiceImpl implements CatalogService {
     private RequestRepository requestRepository;
     @Autowired
     private RequestStatusRepository requestStatusRepository;
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
     @Autowired
     private RequestMapper requestMapper;
 
@@ -88,7 +89,7 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     private RequestDto reserveCar(String accessToken, CarOrderingRequestDto orderingDto, CarDto car) {
-        Long userId = JwtTokenUtils.getAccessTokenUserId(accessToken);
+        Long userId = jwtTokenUtils.getAccessTokenUserId(accessToken);
         Request request = new Request();
         request.setCarId(car.getId());
         request.setUserId(userId);

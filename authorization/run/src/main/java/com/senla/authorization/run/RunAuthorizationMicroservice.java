@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {
         "com.senla.authorization",
         "com.senla.common.aspects",
-        "com.senla.common.security"
+        "com.senla.common.security",
+        "com.senla.starter.jwt.security.utils"
 })
 @EnableJpaRepositories(basePackages = {"com.senla.authorization.dao"})
 @EntityScan(basePackages = {"com.senla.authorization.model"})

@@ -4,6 +4,7 @@ import com.senla.authorization.dto.registrations.JwtTokensResponseDto;
 import com.senla.authorization.dto.registrations.LogInUserDto;
 import com.senla.authorization.service.AuthorizationService;
 import com.senla.common.annotations.LogMethodExecution;
+import com.senla.starter.jwt.security.utils.validators.JwtTokenValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/authorization")
 public class AuthorizationController {
 
+    @Autowired
+    private JwtTokenValidator jwtTokenValidator;
     @Autowired
     private AuthorizationService authorizationService;
 

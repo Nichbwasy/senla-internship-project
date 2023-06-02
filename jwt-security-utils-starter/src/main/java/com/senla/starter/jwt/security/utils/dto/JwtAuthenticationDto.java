@@ -1,4 +1,4 @@
-package com.senla.common.security.dto;
+package com.senla.starter.jwt.security.utils.dto;
 
 import lombok.Data;
 import org.springframework.security.core.Authentication;

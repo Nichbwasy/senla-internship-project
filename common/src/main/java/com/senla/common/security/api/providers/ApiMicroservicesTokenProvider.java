@@ -28,7 +28,7 @@ public class ApiMicroservicesTokenProvider {
     private static String MICROSERVICE_NAME;
 
     public ApiMicroservicesTokenProvider(
-            @Value("${security.access.token.secret}") String accessTokenSecret,
+            @Value("${spring.senla.jwt.utils.access-token-secret}") String accessTokenSecret,
             @Value("${microservice.name}") String microserviceName)
     {
         ACCESS_TOKEN_SECRET = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessTokenSecret));

@@ -3,6 +3,7 @@ package com.senla.authorization.controller;
 import com.senla.authorization.dto.UserDataDto;
 import com.senla.authorization.service.UsersControlService;
 import com.senla.common.annotations.LogMethodExecution;
+import com.senla.starter.jwt.security.utils.validators.JwtTokenValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,8 @@ import java.util.List;
 @RestController
 @LogMethodExecution
 @RequestMapping("/users")
-public class UserDataController {
 
+public class UserDataController {
     @Autowired
     private UsersControlService usersControlService;
 
