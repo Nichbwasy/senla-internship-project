@@ -10,12 +10,14 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.SecretKey;
 
 @Slf4j
 public class JwtTokenValidator {
+
     private static SecretKey ACCESS_TOKEN_SECRET;
     private static SecretKey REFRESH_TOKEN_SECRET;
 

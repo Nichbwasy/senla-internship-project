@@ -1,5 +1,6 @@
 package com.senla.rental.controller.security;
 
+import com.senla.common.clients.RefreshTokensMicroserviceClient;
 import com.senla.common.constants.RolesAuthorities;
 import com.senla.common.constants.UserRoles;
 import com.senla.common.security.filters.JwtTokenSecurityCommonFilter;
@@ -14,19 +15,31 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class RentalWebSecurityConfig {
 
-    private final JwtTokenSecurityCommonFilter commonJwtFilter = new JwtTokenSecurityCommonFilter(new String[] {
-            "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
-    });
+    @Bean
+    public JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter() {
+        JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter = new JwtTokenSecurityCommonFilter();
+        jwtTokenSecurityCommonFilter.setIgnoredPaths(Arrays.asList(
+                "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
+        ));
+        return jwtTokenSecurityCommonFilter;
+    }
+
+    @Bean
+    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient() {
+        return new RefreshTokensMicroserviceClient();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.addFilterBefore(commonJwtFilter, UsernamePasswordAuthenticationFilter.class)
+        return httpSecurity.addFilterBefore(jwtTokenSecurityCommonFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests( request -> request

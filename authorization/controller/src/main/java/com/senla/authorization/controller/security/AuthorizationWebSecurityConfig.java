@@ -1,8 +1,12 @@
 package com.senla.authorization.controller.security;
 
+import com.senla.common.clients.RefreshTokensMicroserviceClient;
 import com.senla.common.constants.RolesAuthorities;
 import com.senla.common.constants.UserRoles;
 import com.senla.common.security.filters.JwtTokenSecurityCommonFilter;
+import com.senla.starter.jwt.security.utils.authentication.JwtAuthenticationUtils;
+import com.senla.starter.jwt.security.utils.utils.JwtTokenUtils;
+import com.senla.starter.jwt.security.utils.validators.JwtTokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,15 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class AuthorizationWebSecurityConfig {
-
-    @Autowired
-    private JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter;
 
     @Bean
     public JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter() {
@@ -34,12 +36,17 @@ public class AuthorizationWebSecurityConfig {
                 "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
         ));
         return jwtTokenSecurityCommonFilter;
-    };
+    }
+
+    @Bean
+    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient() {
+        return new RefreshTokensMicroserviceClient();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .addFilterBefore(jwtTokenSecurityCommonFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenSecurityCommonFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

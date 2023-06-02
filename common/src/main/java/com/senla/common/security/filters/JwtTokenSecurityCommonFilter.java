@@ -26,7 +26,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -41,11 +40,11 @@ public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
     private JwtAuthenticationUtils jwtAuthenticationUtils;
     @Autowired
     private RefreshTokensMicroserviceClient refreshTokensMicroserviceClient;
+    private List<String> ignoredPaths;
 
     private final static String AUTHORIZATION_HEADER = "Authorization";
     private final static String REFRESH_HEADER = "Refresh";
     private final static String BEARER = "Bearer ";
-    private static List<String> IGNORED_PATHS;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -131,15 +130,16 @@ public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
     }
 
     private Boolean checkIgnores(String url) {
-        return IGNORED_PATHS.stream().anyMatch(
+        return ignoredPaths.stream().anyMatch(
                 path -> {
                     if (path.contains("/**")) return url.startsWith(path.replace("/**", ""));
                     else return url.equals(path);
                 }
         );
     }
-
-    public void setIgnoredPaths(List<String> ignoredPaths) {
-        IGNORED_PATHS = ignoredPaths;
+    
+    public void setIgnoredPaths(List<String> paths) {
+        ignoredPaths = paths;
     }
+
 }
