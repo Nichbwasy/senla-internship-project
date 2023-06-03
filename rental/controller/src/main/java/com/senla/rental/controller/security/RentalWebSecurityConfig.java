@@ -5,6 +5,7 @@ import com.senla.common.constants.RolesAuthorities;
 import com.senla.common.constants.UserRoles;
 import com.senla.common.security.filters.JwtTokenSecurityCommonFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,8 +34,10 @@ public class RentalWebSecurityConfig {
     }
 
     @Bean
-    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient() {
-        return new RefreshTokensMicroserviceClient();
+    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient(
+            @Value("${microservice.name}") String microserviceName,
+            @Value("${authorization.microservice.url}") String microserviceUrl) {
+        return new RefreshTokensMicroserviceClient(microserviceName, microserviceUrl);
     }
 
     @Bean

@@ -10,20 +10,41 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
+@Testcontainers
 @AutoConfigureMockMvc(addFilters = false) // disable security filter chain
 public class AuthoritiesControllerTests {
+
+    @Container
+    private final static PostgreSQLContainer postgreSQLContainer =
+            new PostgreSQLContainer("postgres:14");
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private AuthoritiesController authoritiesController;
+
+    /*
+        As PostgreSQLContainer creates on random port, db name, username and password
+        needs to replace some properties to connect to postgres database test container.
+     */
+    @DynamicPropertySource
+    public static void overrideProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        dynamicPropertyRegistry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        dynamicPropertyRegistry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+    }
 
     @Test
     public void getAllAuthoritiesTest() throws Exception {

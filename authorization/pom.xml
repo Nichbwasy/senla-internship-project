@@ -26,22 +26,10 @@
 
 
     <dependencies>
-        <!-- CUSTOM STARTER -->
-        <dependency>
-            <groupId>com.senla</groupId>
-            <artifactId>jwt-security-utils-senla-spring-boot-starter</artifactId>
-            <version>3.0.6</version>
-        </dependency>
         <!-- SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${spring-boot-starter-version}</version>
-        </dependency>
-        <!-- SPRING BOOT STARTER WEB -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
         <!-- SPRING AOP -->
@@ -57,6 +45,27 @@
             <version>${spring-boot-starter-version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- TEST CONTAINER -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.18.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.18.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.18.3</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JUNIT -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
