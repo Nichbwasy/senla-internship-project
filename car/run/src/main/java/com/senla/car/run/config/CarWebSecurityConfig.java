@@ -4,6 +4,7 @@ import com.senla.common.clients.RefreshTokensMicroserviceClient;
 import com.senla.common.constants.UserRoles;
 import com.senla.common.security.filters.JwtTokenSecurityCommonFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,8 +33,10 @@ public class CarWebSecurityConfig {
     }
 
     @Bean
-    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient() {
-        return new RefreshTokensMicroserviceClient();
+    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient(
+            @Value("${microservice.name}") String microserviceName,
+            @Value("${authorization.microservice.url}") String microserviceUrl) {
+        return new RefreshTokensMicroserviceClient(microserviceName, microserviceUrl);
     }
 
     // Needs for springdoc openapi (swagger)
