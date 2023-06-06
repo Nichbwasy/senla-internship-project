@@ -48,4 +48,10 @@ public class RequestsController {
         log.info("Trying to get all requests...");
         return ResponseEntity.ok().body(requestsService.selectAll());
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<RequestDto>> getAllUserRequests(@PathVariable Long userId) {
+        log.info("Trying to get all user rental requests...");
+        return ResponseEntity.ok().body(requestsService.selectAllForUser(userId));
+    }
 }

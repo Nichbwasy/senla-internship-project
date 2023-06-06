@@ -19,6 +19,7 @@
         <module>dto</module>
         <module>service</module>
         <module>controller</module>
+        <module>run</module>
     </modules>
     <packaging>pom</packaging>
 

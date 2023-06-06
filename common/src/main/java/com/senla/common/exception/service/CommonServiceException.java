@@ -1,4 +1,4 @@
-package com.senla.rental.service.exceptions;
+package com.senla.common.exception.service;
 
 public class CommonServiceException extends RuntimeException {
     public CommonServiceException() {

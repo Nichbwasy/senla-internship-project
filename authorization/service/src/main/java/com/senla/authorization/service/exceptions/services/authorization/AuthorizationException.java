@@ -1,8 +1,8 @@
 package com.senla.authorization.service.exceptions.services.authorization;
 
-import com.senla.authorization.service.exceptions.services.AuthorizationServicesException;
+import com.senla.common.exception.service.CommonServiceException;
 
-public class AuthorizationException extends AuthorizationServicesException {
+public class AuthorizationException extends CommonServiceException {
     public AuthorizationException() {
     }
 

@@ -20,7 +20,7 @@ services:
     image: mongo
     container_name: database-mongo
     volumes:
-      - ./mongodb:/data/mongodb
+      - ./mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     environment:
       - MONGO_INITDB_DATABASE=payment
       - MONGO_INITDB_ROOT_USERNAME=root
@@ -46,12 +46,12 @@ services:
     container_name: mongo-express
     restart: always
     environment:
-      - ME_CONFIG_MONGODB_SERVER=database-mongo
-      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_URL=mongodb://root:root@database-mongo:27017/payment
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
-      - ME_CONFIG_MONGODB_AUTH_DATABASE=payment
       - ME_CONFIG_BASICAUTH_USERNAME=root
       - ME_CONFIG_BASICAUTH_PASSWORD=root
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
     ports:
       - 5051:80
     links:

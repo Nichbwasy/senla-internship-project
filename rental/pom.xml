@@ -20,6 +20,7 @@
         <module>dto</module>
         <module>run</module>
         <module>common</module>
+        <module>client</module>
     </modules>
     <packaging>pom</packaging>
 
