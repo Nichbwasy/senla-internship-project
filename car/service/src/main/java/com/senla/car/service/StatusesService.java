@@ -10,4 +10,6 @@ public interface StatusesService {
     StatusDto select(Long id);
     Long delete(Long id);
     List<StatusDto> selectAll();
+
+    Boolean existsByName(String name);
 }

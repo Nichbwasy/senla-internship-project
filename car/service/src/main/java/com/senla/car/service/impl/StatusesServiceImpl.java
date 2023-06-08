@@ -64,4 +64,12 @@ public class StatusesServiceImpl implements StatusesService {
         return statuses.stream().map(s -> statusMapper.mapToDto(s)).collect(Collectors.toList());
     }
 
+    @Override
+    public Boolean existsByName(String name) {
+        Boolean exists = statusesRepository.existsByName(name);
+        if (exists) log.info("Car status with name '{}' exists.", name);
+        else log.info("Car status with name '{}' not exists.", name);
+        return exists;
+    }
+
 }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RentalRateRepository extends JpaRepository<RentalRate, Long> {
 
-
+    RentalRate findByCarTypeAndCarCondition(String carType, String carCondition);
 
 }

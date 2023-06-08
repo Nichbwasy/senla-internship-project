@@ -11,12 +11,12 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "request")
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "graph.request.fetches",
             attributeNodes = {
-                @NamedAttributeNode("requestRejection"),
-                @NamedAttributeNode("requestStatus")
+                @NamedAttributeNode(value = "requestRejection"),
+                @NamedAttributeNode(value = "requestStatus")
             }
         )
 })
@@ -50,11 +50,13 @@ public class Request {
     private BigDecimal price;
 
     @OneToOne(targetEntity = RequestRejection.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "requestrejection_id", referencedColumnName = "id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private RequestRejection requestRejection;
 
     @OneToOne(targetEntity = RequestStatus.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "requeststatus_id", referencedColumnName = "id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private RequestStatus requestStatus;

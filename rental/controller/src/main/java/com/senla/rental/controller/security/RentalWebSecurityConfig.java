@@ -52,6 +52,7 @@ public class RentalWebSecurityConfig {
                                 "/profile/admin", "/profile/admin/**", "/profile/admin/requests","/profile/admin/requests/**",
                                 "/blacklist/**", "/car/refunds/**",
                                 "/requests", "/requests/**",
+                                "/rates", "/rates/**",
                                 "/car/refunds/compensations/**", "/requests/**",
                                 "/requests/rejections/**", "/requests/statuses/**")
                             .hasAuthority(UserRoles.ADMIN)

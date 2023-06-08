@@ -48,4 +48,10 @@ public class ConditionsController {
         log.info("Trying to get all car conditions...");
         return ResponseEntity.ok().body(conditionsService.selectAll());
     }
+
+    @GetMapping("/existence/{name}")
+    public ResponseEntity<Boolean> existsByName(@PathVariable String name) {
+        log.info("Trying to check cat condition existence with name '{}'...", name);
+        return ResponseEntity.ok().body(conditionsService.existsByName(name));
+    }
 }

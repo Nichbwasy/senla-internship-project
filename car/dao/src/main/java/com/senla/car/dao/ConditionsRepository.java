@@ -5,4 +5,6 @@ import com.senla.common.dao.CrudRepository;
 
 public interface ConditionsRepository extends CrudRepository<Condition, Long> {
 
+    Boolean existsByName(String name);
+
 }

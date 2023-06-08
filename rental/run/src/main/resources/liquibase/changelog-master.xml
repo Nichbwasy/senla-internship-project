@@ -161,4 +161,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="homework-2-rental-add-data-to-rental-rates-table" author="Vadim Yarosh">
+        <sqlFile encoding="UTF-8" path="./sql/12.rental-add-dml-for-rentalrate.sql" splitStatements="false" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog> 

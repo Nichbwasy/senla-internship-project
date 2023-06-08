@@ -31,7 +31,6 @@ import java.util.List;
 @Slf4j
 public class JwtTokenSecurityCommonFilter extends GenericFilterBean {
 
-    //TODO: Fix null @Autowired fields
     @Autowired
     private JwtTokenUtils jwtTokenUtils;
     @Autowired

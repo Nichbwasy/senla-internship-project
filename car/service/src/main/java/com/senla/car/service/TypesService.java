@@ -10,4 +10,5 @@ public interface TypesService {
     TypeDto select(Long id);
     Long delete(Long id);
     List<TypeDto> selectAll();
+    Boolean existsByName(String name);
 }

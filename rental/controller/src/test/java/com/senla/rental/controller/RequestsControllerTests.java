@@ -18,6 +18,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @SpringBootTest
@@ -55,7 +56,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.post("/requests")
@@ -76,7 +78,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestsController.addRequest(requestDto);
 
@@ -96,7 +99,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestDto = requestsController.addRequest(requestDto).getBody();
 
@@ -127,7 +131,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         RequestDto oldTypeDto = requestsController.addRequest(requestDto).getBody();
         requestDto = new RequestDto(
@@ -137,7 +142,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.put("/requests")
@@ -160,7 +166,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.put("/requests")
@@ -180,7 +187,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestDto = requestsController.addRequest(requestDto).getBody();
 
@@ -200,7 +208,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/requests/" + requestDto.getId()))
@@ -218,7 +227,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         RequestDto requestStatusDto2 = new RequestDto(
                 null,
@@ -227,7 +237,8 @@ public class RequestsControllerTests {
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestsController.addRequest(requestStatusDto1);
         requestsController.addRequest(requestStatusDto2);

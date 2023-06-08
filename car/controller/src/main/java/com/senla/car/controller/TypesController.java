@@ -49,4 +49,10 @@ public class TypesController {
         return ResponseEntity.ok().body(typesService.selectAll());
     }
 
+    @GetMapping("/existence/{name}")
+    public ResponseEntity<Boolean> existsByName(@PathVariable String name) {
+        log.info("Trying to check cat type existence with name '{}'...", name);
+        return ResponseEntity.ok().body(typesService.existsByName(name));
+    }
+
 }
