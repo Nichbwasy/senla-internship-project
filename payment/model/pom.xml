@@ -13,10 +13,10 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- JPA -->
+        <!-- MONGODB -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
     </dependencies>

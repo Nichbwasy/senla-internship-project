@@ -3,9 +3,8 @@ package com.senla.payment.run;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
@@ -13,13 +12,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "com.senla.common.aspects",
         "com.senla.common.security",
         "com.senla.authorization.client",
+        "com.senla.starter.jwt.security.utils",
         "com.senla.rental.client"
 })
-@EnableJpaRepositories(basePackages = {
+@EnableMongoRepositories(basePackages = {
         "com.senla.payment.dao"
-})
-@EntityScan(basePackages = {
-        "com.senla.payment.model"
 })
 public class RunPaymentMicroservice {
 

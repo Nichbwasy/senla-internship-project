@@ -135,5 +135,30 @@
     <changeSet id="homework-2-rental-add-triggers" author="Vadim Yarosh">
         <sqlFile encoding="utf8" path="./sql/11.rental-add-triggers.sql" splitStatements="false" relativeToChangelogFile="true"/>
     </changeSet>
+    
+    <changeSet id="homework-2-rental-add-rental-rates-table" author="Vadim Yarosh">
+        <createTable tableName="rentalrate">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="cartype" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="carcondition" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rateperhour" type="decimal" defaultValue="0">
+                <constraints nullable="false" checkConstraint="ratepriceperhour > 0"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-rental-add-price-column-to-request-table" author="Vadim Yarosh">
+        <addColumn tableName="request">
+            <column name="price" type="decimal" defaultValue="0">
+                <constraints nullable="false" checkConstraint="price > 0"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog> 

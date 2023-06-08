@@ -84,6 +84,12 @@
             <artifactId>jackson-core</artifactId>
             <version>2.15.1</version>
         </dependency>
+        <!-- CUSTOM STARTER -->
+        <dependency>
+            <groupId>com.senla</groupId>
+            <artifactId>jwt-security-utils-senla-spring-boot-starter</artifactId>
+            <version>3.0.6</version>
+        </dependency>
 
         <dependency>
             <groupId>com.senla.car</groupId>

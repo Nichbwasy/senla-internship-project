@@ -22,7 +22,8 @@ import javax.sql.DataSource;
         "com.senla.car.run",
         "com.senla.authorization.client",
         "com.senla.common.aspects",
-        "com.senla.common.security"
+        "com.senla.common.security",
+        "com.senla.starter.jwt.security.utils"
         }, excludeFilters = {
         @ComponentScan.Filter(type= FilterType.ANNOTATION, value= EnableWebMvc.class)
 })

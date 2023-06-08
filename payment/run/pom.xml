@@ -13,13 +13,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- LIQUIBASE -->
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>4.22.0</version>
-        </dependency>
-
         <dependency>
             <groupId>com.senla.authorization</groupId>
             <artifactId>client</artifactId>

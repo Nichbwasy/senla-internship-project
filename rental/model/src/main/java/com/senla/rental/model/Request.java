@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Data
@@ -42,6 +43,11 @@ public class Request {
     @NotNull(message = "Request end time is mandatory!")
     @Column(name = "end_time", nullable = false)
     private Timestamp endTime;
+
+    @NotNull(message = "Price is mandatory!")
+    @Min(value = 0, message = "Price can not be lesser than 0!")
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 
     @OneToOne(targetEntity = RequestRejection.class, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude

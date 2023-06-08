@@ -38,7 +38,7 @@ public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
 
     @Override
     public CarRentalReceiptDto getCarRentalReceipt(Long id) {
-        CarRentalReceipt receipt = carRentalReceiptRepository.getReferenceById(id);
+        CarRentalReceipt receipt = carRentalReceiptRepository.findById(id).get();
         log.info("Car refund receipt with id '{}' has been found.", id);
         return carRentalReceiptMapper.mapToDto(receipt);
     }
