@@ -10,4 +10,5 @@ public interface RequestStatusesService {
     RequestStatusDto select(Long id);
     Long delete(Long id);
     List<RequestStatusDto> selectAll();
+    RequestStatusDto selectByName(String name);
 }

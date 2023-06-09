@@ -1,6 +1,6 @@
 package com.senla.rental.service.impl;
 
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.RequestRejectionRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;

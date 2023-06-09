@@ -3,14 +3,13 @@ package com.senla.rental.service.impl;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.client.ConditionMicroserviceClient;
 import com.senla.car.client.TypeMicroserviceClient;
-import com.senla.car.client.impl.TypeMicroserviceClientImpl;
 import com.senla.car.common.consts.CarStatuses;
 import com.senla.car.dto.CarDto;
 import com.senla.car.dto.controllers.CarsCatalogFilterForm;
 import com.senla.common.constants.car.CarConditions;
 import com.senla.common.constants.car.CarTypes;
 import com.senla.common.formaters.TimestampFormatter;
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.RentalRateRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
@@ -33,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service

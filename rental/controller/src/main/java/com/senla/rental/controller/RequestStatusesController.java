@@ -48,4 +48,10 @@ public class RequestStatusesController {
         log.info("Trying to get all request statuses records...");
         return ResponseEntity.ok().body(requestStatusesService.selectAll());
     }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<RequestStatusDto> getRequestStatusByName(@PathVariable String name) {
+        log.info("Trying to find request status with name '{}'...", name);
+        return ResponseEntity.ok().body(requestStatusesService.selectByName(name));
+    }
 }

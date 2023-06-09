@@ -1,4 +1,4 @@
-package com.senla.rental.common.consts;
+package com.senla.common.constants.requests;
 
 public class RequestStatuses {
 
@@ -8,5 +8,6 @@ public class RequestStatuses {
     public final static String PROCESSING = "IN_PROCESS";
     public final static String CANCELED = "CANCELED";
     public final static String CLOSED = "CLOSED";
+    public final static String PAYED = "PAYED";
 
 }

@@ -1,15 +1,22 @@
 package com.senla.payment.service.impl;
 
 import com.senla.authorization.client.UserDataMicroserviceClient;
+import com.senla.common.constants.requests.RequestStatuses;
+import com.senla.common.exception.repository.UpdateStatementRepositoryException;
 import com.senla.payment.dao.CarRentalReceiptRepository;
 import com.senla.payment.dto.CarRentalReceiptDto;
+import com.senla.payment.dto.clients.AcceptPaymentDto;
 import com.senla.payment.model.CarRentalReceipt;
 import com.senla.payment.service.CarRentalReceiptService;
+import com.senla.payment.service.exceptions.receipts.RequestAccessingPaymentReceiptException;
+import com.senla.payment.service.exceptions.receipts.RequestStatusNotFoundReceiptException;
 import com.senla.payment.service.exceptions.receipts.UserNotFoundReceiptsServiceException;
 import com.senla.payment.service.exceptions.receipts.UserRequestsNotFoundException;
 import com.senla.payment.service.mappers.CarRentalReceiptMapper;
 import com.senla.rental.client.RequestMicroserviceClient;
+import com.senla.rental.client.RequestStatusMicroserviceClient;
 import com.senla.rental.dto.RequestDto;
+import com.senla.rental.dto.RequestStatusDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +35,7 @@ public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
 
     @Value("${car.rental.user.receipts.page.size}")
     private Integer USER_RECEIPTS_PAGE_SIZE;
+
     @Autowired
     private CarRentalReceiptMapper carRentalReceiptMapper;
     @Autowired
@@ -35,6 +44,8 @@ public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
     private RequestMicroserviceClient requestMicroserviceClient;
     @Autowired
     private UserDataMicroserviceClient userDataMicroserviceClient;
+    @Autowired
+    private RequestStatusMicroserviceClient requestStatusMicroserviceClient;
 
     @Override
     public CarRentalReceiptDto getCarRentalReceipt(Long id) {
@@ -83,6 +94,88 @@ public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
         if (userDataMicroserviceClient.getUserDataByUserId(userId) == null) {
             log.warn("User with id '{}' not found!", userId);
             throw new UserNotFoundReceiptsServiceException(String.format("User with id '%s' not found!", userId));
+        }
+    }
+
+    @Override
+    @Transactional
+    public CarRentalReceiptDto acceptPayment(AcceptPaymentDto dto) {
+        log.info("Rental request '{}' from user '{}' to rent the car '{}' has been accepted.",
+                dto.getRequestDto().getId(), dto.getUserDataDto().getId(), dto.getCarDto().getId());
+
+        checkRequestStatus(dto);
+
+        RequestStatusDto requestStatus = getPayedRequestStatus();
+
+
+        RequestDto requestDto = updateRequestStatusForRequest(dto, requestStatus);
+        log.info("Request status for the request '{}' has been changed to the '{}'.",
+                requestDto.getId(), RequestStatuses.PAYED);
+
+        CarRentalReceipt carRentalReceipt = createReceipt(dto);
+
+        log.info("Car rental receipt '{}' for the request '{}' has been saved!",
+                carRentalReceipt.getId(), carRentalReceipt.getRequestId());
+        return carRentalReceiptMapper.mapToDto(carRentalReceipt);
+    }
+
+    private CarRentalReceipt createReceipt(AcceptPaymentDto dto) {
+        CarRentalReceipt carRentalReceipt = new CarRentalReceipt(
+                null,
+                dto.getUserDataDto().getId(),
+                dto.getUserDataDto().getLogin(),
+                dto.getRequestDto().getId(),
+                dto.getCarDto().getId(),
+                dto.getCarDto().getRegistration().getModel(),
+                dto.getCarDto().getRegistration().getBodyNumber(),
+                dto.getRequestDto().getPrice(),
+                new Timestamp(System.currentTimeMillis())
+        );
+
+        carRentalReceipt = carRentalReceiptRepository.save(carRentalReceipt);
+        return carRentalReceipt;
+    }
+
+    private RequestDto updateRequestStatusForRequest(AcceptPaymentDto dto, RequestStatusDto requestStatus) {
+        dto.getRequestDto().setRequestStatus(requestStatus);
+        RequestDto requestDto = requestMicroserviceClient.updateRequest(dto.getRequestDto());
+        if (requestDto == null) {
+            log.warn("Exception while updating request! Unable update request status for the request '{}'",
+                    dto.getRequestDto().getId());
+            throw new UpdateStatementRepositoryException(
+                    String.format("Exception while updating request! Unable update request status for the request '%s'",
+                            dto.getRequestDto().getId())
+            );
+        }
+        return requestDto;
+    }
+
+    private RequestStatusDto getPayedRequestStatus() {
+        RequestStatusDto requestStatus = requestStatusMicroserviceClient.getRequestStatusByName(RequestStatuses.PAYED);
+        if (requestStatus == null) {
+            log.warn("Unable to find request status '{}'!", RequestStatuses.PAYED);
+            throw new RequestStatusNotFoundReceiptException(
+                    String.format("Unable to find request status '%s'!", RequestStatuses.PAYED)
+            );
+        }
+        return requestStatus;
+    }
+
+    private void checkRequestStatus(AcceptPaymentDto dto) {
+        RequestStatusDto currentRequestStatus = dto.getRequestDto().getRequestStatus();
+        if (!currentRequestStatus.getName().equals(RequestStatuses.CREATED)) {
+            StringBuilder errorMessage = new StringBuilder();
+            errorMessage.append(String.format("Unable accept payment for request '%s'! ", dto.getRequestDto().getId()));
+            switch (currentRequestStatus.getName()) {
+                case RequestStatuses.ACCEPTED, RequestStatuses.PAYED, RequestStatuses.PROCESSING ->
+                        errorMessage.append("Already payed!");
+                case RequestStatuses.DENIED -> errorMessage.append("Request denied payed!");
+                case RequestStatuses.CLOSED -> errorMessage.append("Request closed!");
+                case RequestStatuses.CANCELED -> errorMessage.append("Request canceled!");
+                default -> errorMessage.append("Unknown status!");
+            }
+            log.warn(errorMessage.toString());
+            throw new RequestAccessingPaymentReceiptException(errorMessage.toString());
         }
     }
 }

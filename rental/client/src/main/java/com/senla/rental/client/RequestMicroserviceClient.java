@@ -7,5 +7,7 @@ import java.util.List;
 public interface RequestMicroserviceClient {
 
     List<RequestDto> getAllUserRequests(Long userId);
+    RequestDto updateRequest(RequestDto requestDto);
+
 
 }

@@ -54,4 +54,6 @@ public class RequestsController {
         log.info("Trying to get all user rental requests...");
         return ResponseEntity.ok().body(requestsService.selectAllForUser(userId));
     }
+
+
 }

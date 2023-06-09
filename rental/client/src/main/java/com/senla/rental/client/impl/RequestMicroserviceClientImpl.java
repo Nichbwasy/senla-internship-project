@@ -4,6 +4,7 @@ import com.senla.common.clients.MicroserviceClient;
 import com.senla.rental.client.RequestMicroserviceClient;
 import com.senla.rental.dto.RequestDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -29,5 +30,13 @@ public class RequestMicroserviceClientImpl extends MicroserviceClient implements
         log.info("Sending a request to the '{}' from '{}' to get a all user '{}' rental requests.",
                 MICROSERVICE_URL + path, MICROSERVICE_NAME, userId);
         return this.sendRequest(path, HttpMethod.GET, clazz, null, null);
+    }
+
+    @Override
+    public RequestDto updateRequest(RequestDto requestDto) {
+        String path = "/requests";
+        log.info("Sending a request to the '{}' from '{}' to update request '{}' rental requests.",
+                MICROSERVICE_URL + path, MICROSERVICE_NAME, requestDto.getId());
+        return this.sendRequest(path, HttpMethod.PUT, RequestDto.class, null, requestDto);
     }
 }

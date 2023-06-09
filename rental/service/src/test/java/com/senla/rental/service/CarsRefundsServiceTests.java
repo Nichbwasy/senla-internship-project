@@ -6,7 +6,7 @@ import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
 import com.senla.common.exception.repository.EntityNotFoundException;
 import com.senla.common.exception.repository.InsertStatementRepositoryException;
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.CarRefundRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;

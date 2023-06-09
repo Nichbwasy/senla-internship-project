@@ -165,4 +165,8 @@
         <sqlFile encoding="UTF-8" path="./sql/12.rental-add-dml-for-rentalrate.sql" splitStatements="false" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="homework-2-rental-add-new-request-status-dml" author="Vadim Yarosh">
+        <sqlFile encoding="UTF-8" path="./sql/13.rental-add-new-request-status-dml.sql" splitStatements="false" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog> 

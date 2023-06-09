@@ -4,7 +4,7 @@ import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.authorization.dto.UserDataDto;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.CarRefundRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;

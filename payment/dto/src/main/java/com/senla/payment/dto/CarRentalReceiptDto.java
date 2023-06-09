@@ -13,7 +13,12 @@ import java.sql.Timestamp;
 public class CarRentalReceiptDto {
 
     private Long id;
+    private Long userId;
+    private String userLogin;
     private Long requestId;
+    private Long carId;
+    private String carModel;
+    private String carBodyNumber;
     private BigDecimal price;
     private Timestamp paymentTime;
 
