@@ -22,7 +22,7 @@ public class RequestStatusMicroserviceClientImpl extends MicroserviceClient impl
 
     @Override
     public RequestStatusDto getRequestStatusByName(String name) {
-        String path = "/requests/statuses" + name;
+        String path = "/requests/statuses/status?name=" + name;
         log.info("Sending a request to the '{}' from '{}' to get request status'{}'.",
                 MICROSERVICE_URL + path, MICROSERVICE_NAME, name);
         return this.sendRequest(path, HttpMethod.GET, RequestStatusDto.class, null, null);

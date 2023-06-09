@@ -20,7 +20,8 @@ import java.sql.Timestamp;
 public class CarRentalReceipt {
 
     @Id
-    private Long id;
+    @BsonProperty(value = "id")
+    private String id;
 
     @NotNull(message = "User id is mandatory!")
     @Min(value = 0, message = "User id cant be lesser than 0!")

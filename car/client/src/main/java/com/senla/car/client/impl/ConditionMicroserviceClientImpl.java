@@ -21,7 +21,7 @@ public class ConditionMicroserviceClientImpl extends MicroserviceClient implemen
 
     @Override
     public Boolean existsByName(String name) {
-        String path = "/conditions/existence/" + name;
+        String path = "/conditions/existence?name=" + name;
         log.info("Sending a request to the '{}' from '{}' to check if condition '{}' exists.",
                 MICROSERVICE_URL + path, MICROSERVICE_NAME, name);
         return this.sendRequest(path, HttpMethod.GET, Boolean.class, null, null);

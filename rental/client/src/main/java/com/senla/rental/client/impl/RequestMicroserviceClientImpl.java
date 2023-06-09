@@ -33,10 +33,10 @@ public class RequestMicroserviceClientImpl extends MicroserviceClient implements
     }
 
     @Override
-    public RequestDto updateRequest(RequestDto requestDto) {
-        String path = "/requests";
+    public RequestDto updateRequestStatus(Long requestId, Long requestStatusId) {
+        String path = "/requests/updating?requestId=" + requestId + "&requestStatusId=" + requestStatusId;
         log.info("Sending a request to the '{}' from '{}' to update request '{}' rental requests.",
-                MICROSERVICE_URL + path, MICROSERVICE_NAME, requestDto.getId());
-        return this.sendRequest(path, HttpMethod.PUT, RequestDto.class, null, requestDto);
+                MICROSERVICE_URL + path, MICROSERVICE_NAME, requestId);
+        return this.sendRequest(path, HttpMethod.POST, RequestDto.class, null, null);
     }
 }

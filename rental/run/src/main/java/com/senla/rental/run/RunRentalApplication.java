@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "com.senla.common.aspects",
         "com.senla.common.security",
         "com.senla.authorization.client",
+        "com.senla.payment.client",
         "com.senla.starter.jwt.security.utils",
         "com.senla.car.client"
 })

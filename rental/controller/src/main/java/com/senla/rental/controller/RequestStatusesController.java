@@ -3,6 +3,7 @@ package com.senla.rental.controller;
 import com.senla.common.annotations.LogMethodExecution;
 import com.senla.rental.dto.RequestStatusDto;
 import com.senla.rental.service.RequestStatusesService;
+import jakarta.websocket.server.PathParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +50,8 @@ public class RequestStatusesController {
         return ResponseEntity.ok().body(requestStatusesService.selectAll());
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<RequestStatusDto> getRequestStatusByName(@PathVariable String name) {
+    @GetMapping("/status")
+    public ResponseEntity<RequestStatusDto> getRequestStatusByName(@PathParam("name") String name) {
         log.info("Trying to find request status with name '{}'...", name);
         return ResponseEntity.ok().body(requestStatusesService.selectByName(name));
     }

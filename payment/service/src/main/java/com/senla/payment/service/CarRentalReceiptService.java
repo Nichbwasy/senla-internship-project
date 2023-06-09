@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CarRentalReceiptService {
 
-    CarRentalReceiptDto getCarRentalReceipt(Long id);
+    CarRentalReceiptDto getCarRentalReceipt(String id);
     List<CarRentalReceiptDto> getAllCarRentalReceipt();
     List<CarRentalReceiptDto> getUserCarRentalReceiptsPage(Long userId, Integer page);
     CarRentalReceiptDto acceptPayment(AcceptPaymentDto acceptPaymentDto);

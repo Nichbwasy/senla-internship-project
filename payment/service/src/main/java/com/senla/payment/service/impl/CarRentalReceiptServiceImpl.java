@@ -48,7 +48,7 @@ public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
     private RequestStatusMicroserviceClient requestStatusMicroserviceClient;
 
     @Override
-    public CarRentalReceiptDto getCarRentalReceipt(Long id) {
+    public CarRentalReceiptDto getCarRentalReceipt(String id) {
         CarRentalReceipt receipt = carRentalReceiptRepository.findById(id).get();
         log.info("Car refund receipt with id '{}' has been found.", id);
         return carRentalReceiptMapper.mapToDto(receipt);
@@ -138,7 +138,7 @@ public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
 
     private RequestDto updateRequestStatusForRequest(AcceptPaymentDto dto, RequestStatusDto requestStatus) {
         dto.getRequestDto().setRequestStatus(requestStatus);
-        RequestDto requestDto = requestMicroserviceClient.updateRequest(dto.getRequestDto());
+        RequestDto requestDto = requestMicroserviceClient.updateRequestStatus(dto.getRequestDto().getId(), requestStatus.getId());
         if (requestDto == null) {
             log.warn("Exception while updating request! Unable update request status for the request '{}'",
                     dto.getRequestDto().getId());

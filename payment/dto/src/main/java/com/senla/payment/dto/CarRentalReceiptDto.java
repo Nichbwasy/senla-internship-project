@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class CarRentalReceiptDto {
 
-    private Long id;
+    private String id;
     private Long userId;
     private String userLogin;
     private Long requestId;

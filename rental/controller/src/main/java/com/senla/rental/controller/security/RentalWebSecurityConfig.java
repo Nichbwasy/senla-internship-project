@@ -55,7 +55,7 @@ public class RentalWebSecurityConfig {
                                 "/rates", "/rates/**",
                                 "/car/refunds/compensations/**", "/requests/**",
                                 "/requests/rejections/**", "/requests/statuses/**")
-                            .hasAuthority(UserRoles.ADMIN)
+                            .hasAnyAuthority(UserRoles.ADMIN, UserRoles.MICROSERVICE)
                         .requestMatchers(
                                 "/catalog", "/catalog/request", "/catalog/request/**",
                                 "/profile", "/profile/**")

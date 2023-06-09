@@ -24,7 +24,7 @@ public class ReceiptsController {
     }
 
     @GetMapping("/receipt/{id}")
-    public ResponseEntity<CarRentalReceiptDto> getCarRentalReceipt(@PathVariable Long id) {
+    public ResponseEntity<CarRentalReceiptDto> getCarRentalReceipt(@PathVariable String id) {
         log.info("Trying to get all receipts...");
         return ResponseEntity.ok().body(carRentalReceiptService.getCarRentalReceipt(id));
     }
