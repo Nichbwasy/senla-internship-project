@@ -1,6 +1,6 @@
 package com.senla.rental.service.impl;
 
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.RequestRejectionRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
@@ -9,6 +9,7 @@ import com.senla.rental.dto.RequestRejectionDto;
 import com.senla.rental.dto.controller.requests.RequestsFilterFormDto;
 import com.senla.rental.model.Request;
 import com.senla.rental.model.RequestRejection;
+import com.senla.rental.model.RequestStatus;
 import com.senla.rental.service.RequestsService;
 import com.senla.rental.service.exceptions.refunds.RefundAlreadyExistsRefundException;
 import com.senla.rental.service.exceptions.requests.RequestAlreadyCanceledRequestException;
@@ -57,6 +58,16 @@ public class RequestsServiceImpl implements RequestsService {
         log.info("Trying to update request record with id '{}'", requestDto.getId());
         Request request = requestRepository.getReferenceById(requestDto.getId());
         requestMapper.updateModel(requestDto, request);
+        return requestMapper.mapToDto(request);
+    }
+
+    @Override
+    @Transactional
+    public RequestDto updateRequestStatus(Long requestId, Long requestStatusId) {
+        Request request = requestRepository.getReferenceById(requestId);
+        RequestStatus requestStatus = requestStatusRepository.getReferenceById(requestStatusId);
+        request.setRequestStatus(requestStatus);
+        log.info("Request '{}' has been updated. New request status {}.", requestId, requestStatusId);
         return requestMapper.mapToDto(request);
     }
 

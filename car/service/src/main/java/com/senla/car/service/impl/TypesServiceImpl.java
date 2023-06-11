@@ -63,4 +63,11 @@ public class TypesServiceImpl implements TypesService {
         return types.stream().map(t -> typeMapper.mapToDto(t)).collect(Collectors.toList());
     }
 
+    @Override
+    public Boolean existsByName(String name) {
+        Boolean exists = typesRepository.existsByName(name);
+        if (exists) log.info("Car type with name '{}' exists.", name);
+        else log.info("Car type with name '{}' not exists.", name);
+        return exists;
+    }
 }

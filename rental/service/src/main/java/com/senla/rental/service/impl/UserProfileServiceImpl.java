@@ -2,7 +2,7 @@ package com.senla.rental.service.impl;
 
 import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.authorization.dto.UserDataDto;
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.CarRefundRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
@@ -12,7 +12,6 @@ import com.senla.rental.dto.RequestDto;
 import com.senla.rental.dto.controller.UserProfileDto;
 import com.senla.rental.model.CarRefund;
 import com.senla.rental.model.Request;
-import com.senla.rental.model.RequestStatus;
 import com.senla.rental.service.UserProfileService;
 import com.senla.rental.service.exceptions.profiles.*;
 import com.senla.rental.service.exceptions.requests.RequestAlreadyCanceledRequestException;

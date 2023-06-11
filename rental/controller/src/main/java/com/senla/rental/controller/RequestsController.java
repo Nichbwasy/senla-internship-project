@@ -3,6 +3,7 @@ package com.senla.rental.controller;
 import com.senla.common.annotations.LogMethodExecution;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.service.RequestsService;
+import jakarta.websocket.server.PathParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,13 @@ public class RequestsController {
         return ResponseEntity.ok().body(requestsService.update(requestDto));
     }
 
+    @PostMapping("/updating")
+    public ResponseEntity<RequestDto> updateRequestStatus(@PathParam("requestId") Long requestId,
+                                                          @PathParam("requestStatusId") Long requestStatusId) {
+        log.info("Trying to update request status to '{}' for request with id '{}'...", requestStatusId, requestId);
+        return ResponseEntity.ok().body(requestsService.updateRequestStatus(requestId, requestStatusId));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteRequest(@PathVariable Long id) {
         log.info("Trying to delete request with id '{}'...", id);
@@ -48,4 +56,12 @@ public class RequestsController {
         log.info("Trying to get all requests...");
         return ResponseEntity.ok().body(requestsService.selectAll());
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<RequestDto>> getAllUserRequests(@PathVariable Long userId) {
+        log.info("Trying to get all user rental requests...");
+        return ResponseEntity.ok().body(requestsService.selectAllForUser(userId));
+    }
+
+
 }

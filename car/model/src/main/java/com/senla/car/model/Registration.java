@@ -23,7 +23,7 @@ public class Registration implements ModelEntity<Long>  {
     private String number;
 
     @NotNull(message = "Registration model name is mandatory!")
-    @Size(min = 3, max = 255, message = "Registration number must contains from 3 to 255 characters!")
+    @Size(min = 3, max = 255, message = "Registration model must contains from 3 to 255 characters!")
     @Column(name = "model", length = 255, nullable = false)
     private String model;
 

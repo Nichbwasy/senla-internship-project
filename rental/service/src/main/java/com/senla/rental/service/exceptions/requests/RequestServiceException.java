@@ -1,6 +1,6 @@
 package com.senla.rental.service.exceptions.requests;
 
-import com.senla.rental.service.exceptions.CommonServiceException;
+import com.senla.common.exception.service.CommonServiceException;
 
 public class RequestServiceException extends CommonServiceException {
     public RequestServiceException() {

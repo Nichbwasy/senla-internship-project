@@ -1,6 +1,6 @@
 package com.senla.rental.service.exceptions.refunds;
 
-import com.senla.rental.service.exceptions.CommonServiceException;
+import com.senla.common.exception.service.CommonServiceException;
 
 public class CarRefundServiceException extends CommonServiceException {
     public CarRefundServiceException() {

@@ -5,17 +5,18 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "request")
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "graph.request.fetches",
             attributeNodes = {
-                @NamedAttributeNode("requestRejection"),
-                @NamedAttributeNode("requestStatus")
+                @NamedAttributeNode(value = "requestRejection"),
+                @NamedAttributeNode(value = "requestStatus")
             }
         )
 })
@@ -43,12 +44,19 @@ public class Request {
     @Column(name = "end_time", nullable = false)
     private Timestamp endTime;
 
+    @NotNull(message = "Price is mandatory!")
+    @Min(value = 0, message = "Price can not be lesser than 0!")
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
+
     @OneToOne(targetEntity = RequestRejection.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "requestrejection_id", referencedColumnName = "id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private RequestRejection requestRejection;
 
     @OneToOne(targetEntity = RequestStatus.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "requeststatus_id", referencedColumnName = "id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private RequestStatus requestStatus;

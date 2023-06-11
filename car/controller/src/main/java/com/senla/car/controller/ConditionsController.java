@@ -3,6 +3,7 @@ package com.senla.car.controller;
 import com.senla.car.dto.ConditionDto;
 import com.senla.car.service.ConditionsService;
 import com.senla.common.annotations.LogMethodExecution;
+import jakarta.websocket.server.PathParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +48,11 @@ public class ConditionsController {
     public ResponseEntity<List<ConditionDto>> getAllCondition() {
         log.info("Trying to get all car conditions...");
         return ResponseEntity.ok().body(conditionsService.selectAll());
+    }
+
+    @GetMapping("/existence")
+    public ResponseEntity<Boolean> existsByName(@PathParam("name") String name) {
+        log.info("Trying to check cat condition existence with name '{}'...", name);
+        return ResponseEntity.ok().body(conditionsService.existsByName(name));
     }
 }

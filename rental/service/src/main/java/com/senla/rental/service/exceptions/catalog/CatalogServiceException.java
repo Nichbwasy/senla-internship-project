@@ -1,6 +1,6 @@
 package com.senla.rental.service.exceptions.catalog;
 
-import com.senla.rental.service.exceptions.CommonServiceException;
+import com.senla.common.exception.service.CommonServiceException;
 
 public class CatalogServiceException extends CommonServiceException {
 

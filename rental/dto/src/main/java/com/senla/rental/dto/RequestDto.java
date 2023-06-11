@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Data
@@ -18,5 +19,6 @@ public class RequestDto implements Serializable {
     private Timestamp endTime;
     private RequestRejectionDto requestRejection;
     private RequestStatusDto requestStatus;
+    private BigDecimal price;
 
 }
