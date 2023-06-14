@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @ComponentScan(basePackages = {
         "com.senla.rental",
+        "com.senla.payment.common.kafka",
+        "com.senla.common.kafka",
         "com.senla.common.aspects",
         "com.senla.common.security",
         "com.senla.authorization.client",

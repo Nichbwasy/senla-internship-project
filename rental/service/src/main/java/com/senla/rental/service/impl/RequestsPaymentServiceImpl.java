@@ -4,6 +4,7 @@ import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.authorization.dto.UserDataDto;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
+import com.senla.common.kafka.KafkaProducer;
 import com.senla.payment.client.AcceptPaymentMicroserviceClient;
 import com.senla.payment.dto.CarRentalReceiptDto;
 import com.senla.payment.dto.clients.AcceptPaymentDto;
@@ -14,6 +15,7 @@ import com.senla.rental.service.exceptions.payment.*;
 import com.senla.rental.service.mappers.RequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class RequestsPaymentServiceImpl implements RequestsPaymentService {
+
+    @Value("${payment.topic.name}")
+    private String paymentTopic;
 
     @Autowired
     private UserDataMicroserviceClient userClient;
@@ -32,6 +37,9 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
     private RequestRepository requestRepository;
     @Autowired
     private RequestMapper requestMapper;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     @Override
     public CarRentalReceiptDto payRequest(Long userId, Long requestId) {
@@ -46,6 +54,10 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
         CarRentalReceiptDto receiptDto = paying(user, request, car);
         log.info("Request '{}' of the user '{}' has been payed.", request.getId(), user.getId());
+
+        String message = String.format("Request '%s' of the user '%s' has been payed.", request.getId(), user.getId());
+        kafkaProducer.sendMessage(paymentTopic, message);
+
         return receiptDto;
     }
 
