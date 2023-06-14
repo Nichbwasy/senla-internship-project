@@ -1,4 +1,4 @@
-package com.senla.payment.common.kafka.configs;
+package com.senla.rental.run.configs;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaPaymentProducerConfig {
+public class KafkaRentalProducerConfig {
 
     @Value("${kafka.bootstrap.servers}")
     private String bootstrapServers;

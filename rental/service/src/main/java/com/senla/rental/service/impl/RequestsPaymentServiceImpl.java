@@ -4,6 +4,7 @@ import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.authorization.dto.UserDataDto;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
+import com.senla.common.json.JsonMapper;
 import com.senla.common.kafka.KafkaProducer;
 import com.senla.payment.client.AcceptPaymentMicroserviceClient;
 import com.senla.payment.dto.CarRentalReceiptDto;
@@ -24,15 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
-    @Value("${payment.topic.name}")
+    @Value("${access.payment.topic}")
     private String paymentTopic;
 
     @Autowired
     private UserDataMicroserviceClient userClient;
     @Autowired
     private CarMicroserviceClient carClient;
-    @Autowired
-    private AcceptPaymentMicroserviceClient paymentClient;
     @Autowired
     private RequestRepository requestRepository;
     @Autowired
@@ -42,7 +41,7 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
     private KafkaProducer kafkaProducer;
 
     @Override
-    public CarRentalReceiptDto payRequest(Long userId, Long requestId) {
+    public String payRequest(Long userId, Long requestId) {
 
         UserDataDto user = checkIfUserExist(userId);
 
@@ -52,24 +51,19 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
         CarDto car = checkIfCarExists(request);
 
-        CarRentalReceiptDto receiptDto = paying(user, request, car);
+        String result = paying(user, request, car);
         log.info("Request '{}' of the user '{}' has been payed.", request.getId(), user.getId());
 
-        String message = String.format("Request '%s' of the user '%s' has been payed.", request.getId(), user.getId());
-        kafkaProducer.sendMessage(paymentTopic, message);
-
-        return receiptDto;
+        return result;
     }
 
-    private CarRentalReceiptDto paying(UserDataDto user, RequestDto request, CarDto car) {
-        CarRentalReceiptDto receiptDto = paymentClient.acceptPayment(new AcceptPaymentDto(user, car, request));
-        if (receiptDto == null) {
-            log.warn("Exception while accepting payment fot request '{}'!", request.getId());
-            throw new PaymentRentalServiceException(
-                    String.format("Exception while accepting payment fot request '%s'!", request.getId())
-            );
-        }
-        return receiptDto;
+    private String paying(UserDataDto user, RequestDto request, CarDto car) {
+        AcceptPaymentDto acceptPaymentDto = new AcceptPaymentDto(user, car, request);
+
+        String message = JsonMapper.objectToJson(acceptPaymentDto);
+        kafkaProducer.sendMessage(paymentTopic, message);
+
+        return String.format("Payment is processing for request '%s'. Please wait...", request.getId());
     }
 
     private CarDto checkIfCarExists(RequestDto request) {

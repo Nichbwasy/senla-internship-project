@@ -21,7 +21,6 @@
         <module>controller</module>
         <module>run</module>
         <module>client</module>
-        <module>common</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -3,10 +3,12 @@ package com.senla.payment.service.impl;
 import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.common.exception.repository.UpdateStatementRepositoryException;
+import com.senla.common.json.JsonMapper;
 import com.senla.common.kafka.KafkaProducer;
 import com.senla.payment.dao.CarRentalReceiptRepository;
 import com.senla.payment.dto.CarRentalReceiptDto;
 import com.senla.payment.dto.clients.AcceptPaymentDto;
+import com.senla.payment.dto.clients.SetPayedRequestStatusFormDto;
 import com.senla.payment.model.CarRentalReceipt;
 import com.senla.payment.service.CarRentalReceiptService;
 import com.senla.payment.service.exceptions.receipts.RequestAccessingPaymentReceiptException;
@@ -34,7 +36,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
 
-    @Value("${payment.topic.name}")
+    @Value("${change.request.status.topic.name}")
     private String paymentTopic;
     @Value("${car.rental.user.receipts.page.size}")
     private Integer USER_RECEIPTS_PAGE_SIZE;
@@ -113,19 +115,16 @@ public class CarRentalReceiptServiceImpl implements CarRentalReceiptService {
 
         RequestStatusDto requestStatus = getPayedRequestStatus();
 
+        SetPayedRequestStatusFormDto setPayedRequestStatusFormDto =
+                new SetPayedRequestStatusFormDto(dto.getRequestDto().getId(), requestStatus.getId());
 
-        RequestDto requestDto = updateRequestStatusForRequest(dto, requestStatus);
-        log.info("Request status for the request '{}' has been changed to the '{}'.",
-                requestDto.getId(), RequestStatuses.PAYED);
+        String message = JsonMapper.objectToJson(setPayedRequestStatusFormDto);
+        kafkaProducer.sendMessage(paymentTopic, message);
 
         CarRentalReceipt carRentalReceipt = createReceipt(dto);
 
         log.info("Car rental receipt '{}' for the request '{}' has been saved!",
                 carRentalReceipt.getId(), carRentalReceipt.getRequestId());
-
-        String message = String.format("Request with id  '%s' has been accepted for the user '%s'!",
-                dto.getRequestDto().getId(), dto.getRequestDto().getUserId());
-        kafkaProducer.sendMessage(paymentTopic, message);
 
         return carRentalReceiptMapper.mapToDto(carRentalReceipt);
     }

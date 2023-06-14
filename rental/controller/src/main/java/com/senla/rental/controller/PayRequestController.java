@@ -20,7 +20,7 @@ public class PayRequestController {
     private RequestsPaymentService requestsPaymentService;
 
     @PostMapping("/request/payment/{requestId}")
-    public ResponseEntity<CarRentalReceiptDto> payRequest(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+    public ResponseEntity<String> payRequest(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
                                                           @PathVariable Long requestId) {
         log.info("Trying to paying the request with id '{}'...", requestId);
         Long userId = jwtTokenUtils.getAccessTokenUserId(authorization.substring(7));

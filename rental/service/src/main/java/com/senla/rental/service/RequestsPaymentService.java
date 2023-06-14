@@ -4,6 +4,6 @@ import com.senla.payment.dto.CarRentalReceiptDto;
 
 public interface RequestsPaymentService {
 
-    CarRentalReceiptDto payRequest(Long userId, Long requestId);
+    String payRequest(Long userId, Long requestId);
 
 }

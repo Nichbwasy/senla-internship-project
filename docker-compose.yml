@@ -71,7 +71,7 @@ services:
       DOCKER_API_VERSION: 1.22
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "payment_topic"
+      KAFKA_CREATE_TOPICS: "access_payment_topic,change_request_status_topic"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     depends_on:
       - zookeeper
