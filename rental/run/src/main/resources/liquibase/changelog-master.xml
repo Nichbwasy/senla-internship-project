@@ -169,4 +169,15 @@
         <sqlFile encoding="UTF-8" path="./sql/13.rental-add-new-request-status-dml.sql" splitStatements="false" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="homework-2-rental-add-columns-request-order-number-and-receipt-umber-to-request-table" author="Vadim Yarosh">
+        <addColumn tableName="request">
+            <column name="request_order_number" type="varchar(64)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="receipt_number" type="varchar(32)" defaultValue="null">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog> 

@@ -10,6 +10,7 @@ import com.senla.common.constants.car.CarConditions;
 import com.senla.common.constants.car.CarTypes;
 import com.senla.common.formaters.TimestampFormatter;
 import com.senla.common.constants.requests.RequestStatuses;
+import com.senla.common.generators.StringGenerator;
 import com.senla.rental.dao.RentalRateRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
@@ -129,6 +130,7 @@ public class CatalogServiceImpl implements CatalogService {
         Long userId = jwtTokenUtils.getAccessTokenUserId(accessToken);
         Request request = new Request();
         request.setCarId(car.getId());
+        request.setRequestOrderNumber(StringGenerator.generateString(64));
         request.setUserId(userId);
         request.setStartTime(orderingDto.getStartTime());
         request.setEndTime(orderingDto.getEndTimme());

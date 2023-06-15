@@ -6,9 +6,7 @@ import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
 import com.senla.common.json.JsonMapper;
 import com.senla.common.kafka.KafkaProducer;
-import com.senla.payment.client.AcceptPaymentMicroserviceClient;
-import com.senla.payment.dto.CarRentalReceiptDto;
-import com.senla.payment.dto.clients.AcceptPaymentDto;
+import com.senla.payment.dto.PaymentRequestDto;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.service.RequestsPaymentService;
@@ -25,8 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
-    @Value("${access.payment.topic}")
-    private String paymentTopic;
+    @Value("${payment.request.topic}")
+    private String paymentRequestTopic;
+
+    @Value("${rental.payment.confirm.topic}")
+    private String paymentConfirmTopic;
 
     @Autowired
     private UserDataMicroserviceClient userClient;
@@ -49,24 +50,27 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
         RequestDto request = checkIfRequestBelongToUser(requestId, user);
 
-        CarDto car = checkIfCarExists(request);
+        checkIfCarExists(request);
 
-        String result = paying(user, request, car);
+        String result = paying(request);
         log.info("Request '{}' of the user '{}' has been payed.", request.getId(), user.getId());
 
         return result;
     }
 
-    private String paying(UserDataDto user, RequestDto request, CarDto car) {
-        AcceptPaymentDto acceptPaymentDto = new AcceptPaymentDto(user, car, request);
+    private String paying(RequestDto request) {
+        PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
+        paymentRequestDto.setOrderNumber(request.getRequestOrderNumber());
+        paymentRequestDto.setAmount(request.getPrice());
+        paymentRequestDto.setResponseTopicName(paymentConfirmTopic);
 
-        String message = JsonMapper.objectToJson(acceptPaymentDto);
-        kafkaProducer.sendMessage(paymentTopic, message);
+        String paymentRequestJson = JsonMapper.objectToJson(paymentRequestDto);
+        kafkaProducer.sendMessage(paymentRequestTopic, paymentRequestJson);
 
         return String.format("Payment is processing for request '%s'. Please wait...", request.getId());
     }
 
-    private CarDto checkIfCarExists(RequestDto request) {
+    private void checkIfCarExists(RequestDto request) {
         CarDto car = carClient.getCarById(request.getCarId());
         if (car == null) {
             log.warn("Unable find car with id '{}' for the request '{}'!", request.getCarId(), request.getCarId());
@@ -75,7 +79,6 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
                             request.getCarId(), request.getCarId())
             );
         }
-        return car;
     }
 
     private RequestDto checkIfRequestBelongToUser(Long requestId, UserDataDto user) {

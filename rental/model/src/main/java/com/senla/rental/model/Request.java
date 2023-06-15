@@ -3,7 +3,9 @@ package com.senla.rental.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -25,6 +27,16 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message = "Request order number is mandatory!")
+    @Size(min = 64, max = 64, message = "Request order number must contains 64 characters!")
+    @Column(name = "request_order_number", nullable = false, unique = true, length = 64)
+    private String requestOrderNumber;
+
+    @NotNull(message = "Request receipt number is mandatory!")
+    @Size(min = 32, max = 32, message = "Request receipt number must contains 32 characters!")
+    @Column(name = "receipt_number", unique = true, length = 32)
+    private String receiptNumber;
 
     @NotNull(message = "Request user id is mandatory!")
     @Min(value = 1, message = "Black list user id can't be lesser then 1!")

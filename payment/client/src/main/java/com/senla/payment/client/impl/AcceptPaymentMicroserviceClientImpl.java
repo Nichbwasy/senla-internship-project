@@ -2,7 +2,6 @@ package com.senla.payment.client.impl;
 
 import com.senla.common.clients.MicroserviceClient;
 import com.senla.payment.client.AcceptPaymentMicroserviceClient;
-import com.senla.payment.dto.CarRentalReceiptDto;
 import com.senla.payment.dto.clients.AcceptPaymentDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -48,7 +48,6 @@ public class PaymentWebSecurityConfig {
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico")
                         .permitAll()
                         .requestMatchers(
-                                "/receipts/**",
                                 "/payment", "/payment/**"
                         )
                         .hasAnyAuthority(UserRoles.ADMIN, UserRoles.MICROSERVICE)

@@ -13,6 +13,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class RequestDto implements Serializable {
     private Long id;
+    private String requestOrderNumber;
+    private String receiptNumber;
     private Long userId;
     private Long carId;
     private Timestamp startTime;

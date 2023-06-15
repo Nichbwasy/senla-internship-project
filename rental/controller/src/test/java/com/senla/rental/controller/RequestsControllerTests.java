@@ -51,6 +51,8 @@ public class RequestsControllerTests {
     public void addRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM1",
+                null,
                 1L,
                 1L,
                 new Timestamp(System.currentTimeMillis()),
@@ -73,6 +75,8 @@ public class RequestsControllerTests {
     public void addAlreadyExistedRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM2",
+                null,
                 2L,
                 2L,
                 new Timestamp(System.currentTimeMillis()),
@@ -93,6 +97,8 @@ public class RequestsControllerTests {
     @Test
     public void getRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
+                null,
+                "NUM3",
                 null,
                 3L,
                 3L,
@@ -126,6 +132,8 @@ public class RequestsControllerTests {
     public void updateRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM4",
+                null,
                 4L,
                 4L,
                 new Timestamp(System.currentTimeMillis()),
@@ -137,6 +145,8 @@ public class RequestsControllerTests {
         RequestDto oldTypeDto = requestsController.addRequest(requestDto).getBody();
         requestDto = new RequestDto(
                 oldTypeDto.getId(),
+                "NUM44",
+                null,
                 44L,
                 44L,
                 new Timestamp(System.currentTimeMillis()),
@@ -161,6 +171,8 @@ public class RequestsControllerTests {
     public void updateNotExistedRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 0L,
+                "NUM0",
+                null,
                 0L,
                 0L,
                 new Timestamp(System.currentTimeMillis()),
@@ -181,6 +193,8 @@ public class RequestsControllerTests {
     @Test
     public void deleteRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
+                null,
+                "NUM5",
                 null,
                 5L,
                 5L,
@@ -203,6 +217,8 @@ public class RequestsControllerTests {
     public void deleteNotExistedRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 0L,
+                "NUM0",
+                null,
                 0L,
                 0L,
                 new Timestamp(System.currentTimeMillis()),
@@ -222,6 +238,8 @@ public class RequestsControllerTests {
     public void getAllRequestsTest() throws Exception {
         RequestDto requestStatusDto1 = new RequestDto(
                 null,
+                "NUM6",
+                null,
                 6L,
                 6L,
                 new Timestamp(System.currentTimeMillis()),
@@ -231,6 +249,8 @@ public class RequestsControllerTests {
                 new BigDecimal(0)
         );
         RequestDto requestStatusDto2 = new RequestDto(
+                null,
+                "NUM7",
                 null,
                 7L,
                 7L,

@@ -1,6 +1,5 @@
 package com.senla.rental.controller;
 
-import com.senla.payment.dto.CarRentalReceiptDto;
 import com.senla.rental.service.RequestsPaymentService;
 import com.senla.starter.jwt.security.utils.utils.JwtTokenUtils;
 import lombok.extern.slf4j.Slf4j;

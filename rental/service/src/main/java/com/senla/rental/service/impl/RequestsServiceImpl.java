@@ -1,6 +1,7 @@
 package com.senla.rental.service.impl;
 
 import com.senla.common.constants.requests.RequestStatuses;
+import com.senla.payment.dto.PaymentReceiptDto;
 import com.senla.rental.dao.RequestRejectionRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
@@ -13,6 +14,7 @@ import com.senla.rental.model.RequestStatus;
 import com.senla.rental.service.RequestsService;
 import com.senla.rental.service.exceptions.refunds.RefundAlreadyExistsRefundException;
 import com.senla.rental.service.exceptions.requests.RequestAlreadyCanceledRequestException;
+import com.senla.rental.service.exceptions.requests.RequestNotFoundServiceException;
 import com.senla.rental.service.mappers.RequestMapper;
 import com.senla.rental.service.mappers.RequestRejectionMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -63,9 +65,20 @@ public class RequestsServiceImpl implements RequestsService {
 
     @Override
     @Transactional
-    public RequestDto updateRequestStatus(Long requestId, Long requestStatusId) {
-        Request request = requestRepository.getReferenceById(requestId);
-        RequestStatus requestStatus = requestStatusRepository.getReferenceById(requestStatusId);
+    public RequestDto updateRequestStatus(PaymentReceiptDto dto) {
+
+        if (!requestRepository.existsByRequestOrderNumber(dto.getOrderNumber())) {
+            log.warn("Unable find request with order number '{}'!", dto.getOrderNumber());
+            throw new RequestNotFoundServiceException(
+                    String.format("Unable find request with order number '%s'!", dto.getOrderNumber())
+            );
+
+        }
+
+        // TODO: Add logic to change request status record in depends of received receipt
+
+        Request request = requestRepository.getByRequestOrderNumber(dto.getOrderNumber());
+        RequestStatus requestStatus = requestStatusRepository.findByName(Re);
         request.setRequestStatus(requestStatus);
         log.info("Request '{}' has been updated. New request status {}.", requestId, requestStatusId);
         return requestMapper.mapToDto(request);
