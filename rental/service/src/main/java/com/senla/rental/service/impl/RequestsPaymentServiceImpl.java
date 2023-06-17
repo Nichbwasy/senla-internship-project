@@ -4,6 +4,7 @@ import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.authorization.dto.UserDataDto;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.common.json.JsonMapper;
 import com.senla.common.kafka.KafkaProducer;
 import com.senla.payment.dto.PaymentRequestDto;
@@ -11,6 +12,8 @@ import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.service.RequestsPaymentService;
 import com.senla.rental.service.exceptions.payment.*;
+import com.senla.rental.service.exceptions.payment.statuses.RequestAlreadyPaidPaymentException;
+import com.senla.rental.service.exceptions.payment.statuses.RequestClosedPaymentException;
 import com.senla.rental.service.mappers.RequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,8 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
         checkIfCarExists(request);
 
+        checkRequestStatus(request);
+
         String result = paying(request);
         log.info("Request '{}' of the user '{}' has been payed.", request.getId(), user.getId());
 
@@ -68,6 +73,36 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
         kafkaProducer.sendMessage(paymentRequestTopic, paymentRequestJson);
 
         return String.format("Payment is processing for request '%s'. Please wait...", request.getId());
+    }
+
+    private void checkRequestStatus(RequestDto request) {
+        switch (request.getRequestStatus().getName()) {
+            case RequestStatuses.PAYED, RequestStatuses.ACCEPTED -> {
+                log.warn("Unable create payment request! Request with id '{}' has already paid!", request.getId());
+                throw new RequestAlreadyPaidPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' has already paid!",
+                                request.getId())
+                );
+            }
+            case RequestStatuses.CLOSED -> {
+                log.warn("Unable create payment request! Request with id '{}' was closed!", request.getId());
+                throw new RequestClosedPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' was closed!", request.getId())
+                );
+            }
+            case RequestStatuses.CANCELED -> {
+                log.warn("Unable create payment request! Request with id '{}' was canceled!", request.getId());
+                throw new RequestClosedPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' was canceled!", request.getId())
+                );
+            }
+            case RequestStatuses.DENIED -> {
+                log.warn("Unable create payment request! Request with id '{}' was denied!", request.getId());
+                throw new RequestClosedPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' was denied!", request.getId())
+                );
+            }
+        }
     }
 
     private void checkIfCarExists(RequestDto request) {

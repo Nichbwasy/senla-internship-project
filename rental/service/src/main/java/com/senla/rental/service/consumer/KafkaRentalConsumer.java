@@ -27,9 +27,10 @@ public class KafkaRentalConsumer {
         log.info("[   KAFKA   ] Kafka has received data: {}", data);
         try {
             PaymentReceiptDto receiptDto = JsonMapper.jsonToObject(data, PaymentReceiptDto.class);
-            receiptDto.
 
-            requestsService.updateRequestStatus(formDto.getRequestId(), formDto.getNewRequestStatusId());
+            requestsService.setRequestStatusToPayed(receiptDto);
+
+            log.info("[   KAFKA   ] Status of the request '{}' has been updated.", receiptDto.getOrderNumber());
         } catch (Exception e) {
             log.error("Kafka rental consumer unable processing message! Returns to this later...");
             acknowledgment.nack(Duration.ofSeconds(30));

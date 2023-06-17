@@ -9,5 +9,6 @@ public class RequestStatuses {
     public final static String CANCELED = "CANCELED";
     public final static String CLOSED = "CLOSED";
     public final static String PAYED = "PAYED";
+    public final static String NOT_PAYED = "NOT_PAYED";
 
 }

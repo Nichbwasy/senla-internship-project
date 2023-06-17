@@ -179,5 +179,13 @@
             </column>
         </addColumn>
     </changeSet>
+    
+    <changeSet id="homework-2-rental-add-not-payed-request-status" author="Vadim Yarosh">
+        <insert tableName="requeststatus">
+            <column name="name" value="NOT_PAYED">
+                <constraints/>
+            </column>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog> 

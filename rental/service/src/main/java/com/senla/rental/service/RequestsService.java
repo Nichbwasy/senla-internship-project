@@ -13,7 +13,7 @@ import java.util.List;
 public interface RequestsService {
     RequestDto insert(RequestDto requestDto);
     RequestDto update(RequestDto requestDto);
-    RequestDto updateRequestPaymentStatus(PaymentReceiptDto paymentReceiptDto);
+    RequestDto setRequestStatusToPayed(PaymentReceiptDto paymentReceiptDto);
     RequestDto select(Long id);
     Long delete(Long id);
     List<RequestDto> selectAll();
