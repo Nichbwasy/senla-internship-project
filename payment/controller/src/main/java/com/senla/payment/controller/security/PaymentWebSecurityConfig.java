@@ -24,33 +24,14 @@ import java.util.Arrays;
 public class PaymentWebSecurityConfig {
 
     @Bean
-    public JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter() {
-        JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter = new JwtTokenSecurityCommonFilter();
-        jwtTokenSecurityCommonFilter.setIgnoredPaths(Arrays.asList(
-                "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
-        ));
-        return jwtTokenSecurityCommonFilter;
-    }
-
-    @Bean
-    public RefreshTokensMicroserviceClient refreshTokensMicroserviceClient(
-            @Value("${microservice.name}") String microserviceName,
-            @Value("${authorization.microservice.url}") String microserviceUrl) {
-        return new RefreshTokensMicroserviceClient(microserviceName, microserviceUrl);
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.addFilterBefore(jwtTokenSecurityCommonFilter(), UsernamePasswordAuthenticationFilter.class)
+        return httpSecurity
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests( request -> request
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico")
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico" +
+                                "/payment", "/payment/**")
                         .permitAll()
-                        .requestMatchers(
-                                "/payment", "/payment/**"
-                        )
-                        .hasAnyAuthority(UserRoles.ADMIN, UserRoles.MICROSERVICE)
                         .anyRequest().authenticated()
                 ).build();
     }

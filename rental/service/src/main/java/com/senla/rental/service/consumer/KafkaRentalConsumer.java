@@ -21,8 +21,8 @@ public class KafkaRentalConsumer {
 
     @KafkaListener(topics = {"rental_payment_confirm"}, groupId = "payment_topic_group")
     public void listen(
-            final @Payload String data,
-            final Acknowledgment acknowledgment
+            String data,
+            Acknowledgment acknowledgment
     ) {
         log.info("[   KAFKA   ] Kafka has received data: {}", data);
         try {

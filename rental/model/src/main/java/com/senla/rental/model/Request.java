@@ -33,7 +33,6 @@ public class Request {
     @Column(name = "request_order_number", nullable = false, unique = true, length = 64)
     private String requestOrderNumber;
 
-    @NotNull(message = "Request receipt number is mandatory!")
     @Size(min = 32, max = 32, message = "Request receipt number must contains 32 characters!")
     @Column(name = "receipt_number", unique = true, length = 32)
     private String receiptNumber;
