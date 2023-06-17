@@ -117,4 +117,12 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         log.info("Request with id '{}' has been found.", id);
         return paymentRequestMapper.mapToDto(paymentRequest);
     }
+
+    @Override
+    public Boolean existRequestWithOrderNumber(String orderNumber) {
+        Boolean itExists = paymentRequestRepository.existsByOrderNumber(orderNumber);
+        if (itExists) log.info("Request with order number '{}' exists.", orderNumber);
+        else log.info("Request with order number '{}' NOT exists.", orderNumber);
+        return itExists;
+    }
 }

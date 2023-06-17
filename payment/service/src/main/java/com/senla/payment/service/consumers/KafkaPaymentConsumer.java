@@ -29,10 +29,14 @@ public class KafkaPaymentConsumer {
         try {
             PaymentRequestDto request = JsonMapper.jsonToObject(data, PaymentRequestDto.class);
 
-            PaymentRequestDto paymentRequest = paymentRequestService.createPaymentRequest(request);
+            if (paymentRequestService.existRequestWithOrderNumber(request.getOrderNumber())) {
+                log.info("[   KAFKA   ] Request with order number already exists! No need create another one!");
+            } else {
+                PaymentRequestDto paymentRequest = paymentRequestService.createPaymentRequest(request);
 
-            log.info("[   KAFKA   ] Request to pay for order '{}' on amount '{}' has been crated.",
-                    paymentRequest.getOrderNumber(), paymentRequest.getAmount());
+                log.info("[   KAFKA   ] Request to pay for order '{}' on amount '{}' has been crated.",
+                        paymentRequest.getOrderNumber(), paymentRequest.getAmount());
+            }
         } catch (Exception e) {
             log.error("Kafka payment consumer unable processing message! Returns to this later...");
             acknowledgment.nack(Duration.ofSeconds(30));
