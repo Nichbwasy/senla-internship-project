@@ -19,10 +19,10 @@ public class KafkaRentalConsumer {
     @Autowired
     private RequestsService requestsService;
 
-    @KafkaListener(topics = {"rental_payment_confirm"}, groupId = "payment_topic_group")
+    @KafkaListener(topics = {"${rental.payment.confirm.topic}"}, groupId = "${spring.kafka.consumer.group-id}")
     public void listen(
-            String data,
-            Acknowledgment acknowledgment
+            final @Payload String data,
+            final Acknowledgment acknowledgment
     ) {
         log.info("[   KAFKA   ] Kafka has received data: {}", data);
         try {

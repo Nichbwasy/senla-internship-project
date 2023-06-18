@@ -92,7 +92,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     }
 
     private void checkIfRequestExists(String requestId) {
-        if (paymentRequestRepository.existsById(requestId)) {
+        if (!paymentRequestRepository.existsById(requestId)) {
             log.warn("Request with id '{}' wasn't be found!", requestId);
             throw new RequestNotFoundRequestServiceException(
                     String.format("Request with id '%s' wasn't be found!", requestId)
@@ -103,7 +103,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     @Override
     public List<PaymentRequestDto> getPaymentRequestPage(Integer page) {
         List<PaymentRequestDto> requests = paymentRequestRepository
-                .findAll(PageRequest.of(page, PAYMENT_REQUESTS_PAGE_SIZE))
+                .findAll(PageRequest.of(page - 1, PAYMENT_REQUESTS_PAGE_SIZE))
                 .stream()
                 .map(pr -> paymentRequestMapper.mapToDto(pr))
                 .collect(Collectors.toList());

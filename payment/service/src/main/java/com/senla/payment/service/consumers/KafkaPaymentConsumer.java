@@ -19,12 +19,10 @@ public class KafkaPaymentConsumer {
     @Autowired
     private PaymentRequestService paymentRequestService;
 
-    // TODO: Requests not working
-
-    @KafkaListener(topics = {"payment_request_topic"}, groupId = "payment_topic_group")
+    @KafkaListener(topics = {"${kafka.listener.payment.request.topic.name}"}, groupId = "${spring.kafka.consumer.group-id}")
     public void listen(
-           String data,
-           Acknowledgment acknowledgment
+           final @Payload String data,
+           final Acknowledgment acknowledgment
     ) {
         log.info("[   KAFKA   ] Kafka has received data: {}", data);
 
