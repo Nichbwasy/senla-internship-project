@@ -4,16 +4,20 @@ import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.authorization.dto.UserDataDto;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
-import com.senla.payment.client.AcceptPaymentMicroserviceClient;
-import com.senla.payment.dto.CarRentalReceiptDto;
-import com.senla.payment.dto.clients.AcceptPaymentDto;
+import com.senla.common.constants.requests.RequestStatuses;
+import com.senla.common.json.JsonMapper;
+import com.senla.common.kafka.KafkaProducer;
+import com.senla.payment.dto.PaymentRequestDto;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.service.RequestsPaymentService;
 import com.senla.rental.service.exceptions.payment.*;
+import com.senla.rental.service.exceptions.payment.statuses.RequestAlreadyPaidPaymentException;
+import com.senla.rental.service.exceptions.payment.statuses.RequestClosedPaymentException;
 import com.senla.rental.service.mappers.RequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,19 +26,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
+    @Value("${payment.request.topic}")
+    private String paymentRequestTopic;
+
+    @Value("${rental.payment.confirm.topic}")
+    private String paymentConfirmTopic;
+
     @Autowired
     private UserDataMicroserviceClient userClient;
     @Autowired
     private CarMicroserviceClient carClient;
     @Autowired
-    private AcceptPaymentMicroserviceClient paymentClient;
-    @Autowired
     private RequestRepository requestRepository;
     @Autowired
     private RequestMapper requestMapper;
 
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
     @Override
-    public CarRentalReceiptDto payRequest(Long userId, Long requestId) {
+    public String payRequest(Long userId, Long requestId) {
 
         UserDataDto user = checkIfUserExist(userId);
 
@@ -42,25 +53,59 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
 
         RequestDto request = checkIfRequestBelongToUser(requestId, user);
 
-        CarDto car = checkIfCarExists(request);
+        checkIfCarExists(request);
 
-        CarRentalReceiptDto receiptDto = paying(user, request, car);
+        checkRequestStatus(request);
+
+        String result = paying(request);
         log.info("Request '{}' of the user '{}' has been payed.", request.getId(), user.getId());
-        return receiptDto;
+
+        return result;
     }
 
-    private CarRentalReceiptDto paying(UserDataDto user, RequestDto request, CarDto car) {
-        CarRentalReceiptDto receiptDto = paymentClient.acceptPayment(new AcceptPaymentDto(user, car, request));
-        if (receiptDto == null) {
-            log.warn("Exception while accepting payment fot request '{}'!", request.getId());
-            throw new PaymentRentalServiceException(
-                    String.format("Exception while accepting payment fot request '%s'!", request.getId())
-            );
+    private String paying(RequestDto request) {
+        PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
+        paymentRequestDto.setOrderNumber(request.getRequestOrderNumber());
+        paymentRequestDto.setAmount(request.getPrice());
+        paymentRequestDto.setResponseTopicName(paymentConfirmTopic);
+
+        String paymentRequestJson = JsonMapper.objectToJson(paymentRequestDto);
+        kafkaProducer.sendMessage(paymentRequestTopic, paymentRequestJson);
+
+        return String.format("Payment is processing for request '%s'. Please wait...", request.getId());
+    }
+
+    private void checkRequestStatus(RequestDto request) {
+        switch (request.getRequestStatus().getName()) {
+            case RequestStatuses.PAYED, RequestStatuses.ACCEPTED -> {
+                log.warn("Unable create payment request! Request with id '{}' has already paid!", request.getId());
+                throw new RequestAlreadyPaidPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' has already paid!",
+                                request.getId())
+                );
+            }
+            case RequestStatuses.CLOSED -> {
+                log.warn("Unable create payment request! Request with id '{}' was closed!", request.getId());
+                throw new RequestClosedPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' was closed!", request.getId())
+                );
+            }
+            case RequestStatuses.CANCELED -> {
+                log.warn("Unable create payment request! Request with id '{}' was canceled!", request.getId());
+                throw new RequestClosedPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' was canceled!", request.getId())
+                );
+            }
+            case RequestStatuses.DENIED -> {
+                log.warn("Unable create payment request! Request with id '{}' was denied!", request.getId());
+                throw new RequestClosedPaymentException(
+                        String.format("Unable create payment request! Request with id '%s' was denied!", request.getId())
+                );
+            }
         }
-        return receiptDto;
     }
 
-    private CarDto checkIfCarExists(RequestDto request) {
+    private void checkIfCarExists(RequestDto request) {
         CarDto car = carClient.getCarById(request.getCarId());
         if (car == null) {
             log.warn("Unable find car with id '{}' for the request '{}'!", request.getCarId(), request.getCarId());
@@ -69,7 +114,6 @@ public class RequestsPaymentServiceImpl implements RequestsPaymentService {
                             request.getCarId(), request.getCarId())
             );
         }
-        return car;
     }
 
     private RequestDto checkIfRequestBelongToUser(Long requestId, UserDataDto user) {

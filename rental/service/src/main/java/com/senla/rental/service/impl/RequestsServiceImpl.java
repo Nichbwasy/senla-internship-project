@@ -1,6 +1,7 @@
 package com.senla.rental.service.impl;
 
 import com.senla.common.constants.requests.RequestStatuses;
+import com.senla.payment.dto.PaymentReceiptDto;
 import com.senla.rental.dao.RequestRejectionRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
@@ -13,6 +14,8 @@ import com.senla.rental.model.RequestStatus;
 import com.senla.rental.service.RequestsService;
 import com.senla.rental.service.exceptions.refunds.RefundAlreadyExistsRefundException;
 import com.senla.rental.service.exceptions.requests.RequestAlreadyCanceledRequestException;
+import com.senla.rental.service.exceptions.requests.RequestNotFoundServiceException;
+import com.senla.rental.service.exceptions.requests.statuses.*;
 import com.senla.rental.service.mappers.RequestMapper;
 import com.senla.rental.service.mappers.RequestRejectionMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -63,12 +66,71 @@ public class RequestsServiceImpl implements RequestsService {
 
     @Override
     @Transactional
-    public RequestDto updateRequestStatus(Long requestId, Long requestStatusId) {
-        Request request = requestRepository.getReferenceById(requestId);
-        RequestStatus requestStatus = requestStatusRepository.getReferenceById(requestStatusId);
-        request.setRequestStatus(requestStatus);
-        log.info("Request '{}' has been updated. New request status {}.", requestId, requestStatusId);
+    public RequestDto setRequestStatusToPayed(PaymentReceiptDto dto) {
+
+        checkIfRequestExists(dto);
+
+        Request request = requestRepository.getByRequestOrderNumber(dto.getOrderNumber());
+
+        checkStatusOfRequest(request);
+
+        checkAmountAndSetNewRequestStatus(dto, request);
+
         return requestMapper.mapToDto(request);
+    }
+
+    private void checkAmountAndSetNewRequestStatus(PaymentReceiptDto dto, Request request) {
+        if (request.getPrice().equals(dto.getAmount())) {
+            RequestStatus payed = requestStatusRepository.findByName(RequestStatuses.PAYED);
+            log.info("Payed amount for the request '{}' is match for receipt '{}'. Changing request status to PAYED...",
+                    request.getId(), dto.getId());
+            request.setRequestStatus(payed);
+        } else {
+            RequestStatus notPayed = requestStatusRepository.findByName(RequestStatuses.NOT_PAYED);
+            log.warn("Payed amount for the request '{}' is NOT match for receipt '{}'. Changing request status to NOT PAYED...",
+                    request.getId(), dto.getId());
+            request.setRequestStatus(notPayed);
+        }
+        log.info("Status for the request '{}' has been changed.", request.getId());
+    }
+
+    private void checkStatusOfRequest(Request request) {
+        switch (request.getRequestStatus().getName()) {
+            case RequestStatuses.PAYED, RequestStatuses.ACCEPTED -> {
+                log.warn("Can't set request status to payed! Request '{}' already payed!", request.getId());
+                throw new RequestAlreadyPayedChangingStatusException(
+                        String.format("Can't set request status to payed! Request '%s' already payed!",
+                                request.getId())
+                );
+            }
+            case RequestStatuses.CANCELED -> {
+                log.warn("Can't set request status to payed! Request '{}' was  canceled!", request.getId());
+                throw new RequestAlreadyCanceledChangingStatusException(
+                        String.format("Can't set request status to payed! Request '%s' was  canceled!", request.getId())
+                );
+            }
+            case RequestStatuses.DENIED -> {
+                log.warn("Can't set request status to payed! Request '{}' was  denied!", request.getId());
+                throw new RequestDeniedChangingStatusException(
+                        String.format("Can't set request status to payed! Request '%s' was  denied!", request.getId())
+                );
+            }
+            case RequestStatuses.CLOSED -> {
+                log.warn("Can't set request status to payed! Request '{}' was  closed!", request.getId());
+                throw new RequestClosedChangingStatusException(
+                        String.format("Can't set request status to payed! Request '%s' was  closed!", request.getId())
+                );
+            }
+        }
+    }
+
+    private void checkIfRequestExists(PaymentReceiptDto dto) {
+        if (!requestRepository.existsByRequestOrderNumber(dto.getOrderNumber())) {
+            log.warn("Unable find request with order number '{}'!", dto.getOrderNumber());
+            throw new RequestNotFoundServiceException(
+                    String.format("Unable find request with order number '%s'!", dto.getOrderNumber())
+            );
+        }
     }
 
     @Override

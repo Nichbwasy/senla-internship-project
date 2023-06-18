@@ -12,22 +12,5 @@
     <artifactId>dto</artifactId>
     <packaging>jar</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.senla.authorization</groupId>
-            <artifactId>dto</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.senla.car</groupId>
-            <artifactId>dto</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.senla.rental</groupId>
-            <artifactId>dto</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 
 </project>

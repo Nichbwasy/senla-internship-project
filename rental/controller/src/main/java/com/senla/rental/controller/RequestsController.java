@@ -38,13 +38,6 @@ public class RequestsController {
         return ResponseEntity.ok().body(requestsService.update(requestDto));
     }
 
-    @PostMapping("/updating")
-    public ResponseEntity<RequestDto> updateRequestStatus(@PathParam("requestId") Long requestId,
-                                                          @PathParam("requestStatusId") Long requestStatusId) {
-        log.info("Trying to update request status to '{}' for request with id '{}'...", requestStatusId, requestId);
-        return ResponseEntity.ok().body(requestsService.updateRequestStatus(requestId, requestStatusId));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteRequest(@PathVariable Long id) {
         log.info("Trying to delete request with id '{}'...", id);

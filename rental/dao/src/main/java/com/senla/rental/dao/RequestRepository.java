@@ -14,6 +14,9 @@ import java.util.List;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
+    Boolean existsByRequestOrderNumber(String orderNumber);
+    Request getByRequestOrderNumber(String orderNumber);
+
     @EntityGraph("graph.request.fetches")
     List<Request> findAllByCarId(Long carId);
     @EntityGraph(attributePaths = {"requestRejection", "requestStatus"})

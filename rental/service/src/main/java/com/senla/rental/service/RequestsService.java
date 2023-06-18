@@ -1,5 +1,6 @@
 package com.senla.rental.service;
 
+import com.senla.payment.dto.PaymentReceiptDto;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.dto.RequestRejectionDto;
 import com.senla.rental.dto.controller.requests.RequestsFilterFormDto;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface RequestsService {
     RequestDto insert(RequestDto requestDto);
     RequestDto update(RequestDto requestDto);
-    RequestDto updateRequestStatus(Long requestId, Long requestStatusId);
+    RequestDto setRequestStatusToPayed(PaymentReceiptDto paymentReceiptDto);
     RequestDto select(Long id);
     Long delete(Long id);
     List<RequestDto> selectAll();

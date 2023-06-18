@@ -10,16 +10,13 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarRentalReceiptDto {
+public class PaymentReceiptDto {
 
     private String id;
-    private Long userId;
-    private String userLogin;
-    private Long requestId;
-    private Long carId;
-    private String carModel;
-    private String carBodyNumber;
-    private BigDecimal price;
+    private String orderNumber;
+    private String receiptNumber;
+    private String responseTopicName;
     private Timestamp paymentTime;
+    private BigDecimal amount;
 
 }

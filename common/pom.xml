@@ -56,6 +56,12 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- SPRING BOOT KAFKA -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
         <!-- HIBERNATE -->
         <dependency>
             <groupId>org.hibernate</groupId>

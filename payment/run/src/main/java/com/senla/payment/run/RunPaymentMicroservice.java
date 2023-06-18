@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @ComponentScan(basePackages = {
         "com.senla.payment",
+        "com.senla.common.kafka",
         "com.senla.common.aspects",
         "com.senla.common.security",
         "com.senla.authorization.client",
