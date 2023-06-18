@@ -9,16 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.senla.server-eureka</groupId>
     <artifactId>server-eureka</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>run</module>
-    </modules>
+    <version>1.0-SNAPSHOT</version>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <modules>
+        <module>running</module>
+    </modules>
 
     <dependencies>
         <!-- SPRING BOOT -->
@@ -55,13 +53,4 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot-starter-version}</version>
-            </plugin>
-        </plugins>
-    </build>
 </project>

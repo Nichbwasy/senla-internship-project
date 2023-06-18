@@ -16,7 +16,6 @@
         <module>jwt-security-utils-starter</module>
         <module>payment</module>
         <module>server-eureka</module>
-        <module>server-eureka/run</module>
         <module>api-gateway</module>
     </modules>
 

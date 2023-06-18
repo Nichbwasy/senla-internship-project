@@ -12,6 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 })
 public class RunEurekaServerApplication {
 
+    // TODO: Eureka server doesn't see clients (or clients doesn't see server) (defaultZone ???)
+
     public static void main(String[] args) {
         SpringApplication.run(RunEurekaServerApplication.class);
     }

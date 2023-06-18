@@ -3,24 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>api-gateway</artifactId>
-        <groupId>com.senla</groupId>
+        <artifactId>server-eureka</artifactId>
+        <groupId>com.senla.server-eureka</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.senla.api-gateway</groupId>
-    <artifactId>run</artifactId>
+    <artifactId>running</artifactId>
+    <packaging>jar</packaging>
 
     <build>
-        <finalName>api-gateway-run</finalName>
+        <finalName>server-eureka-run</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.senla.api.gateway.run.RunApiGatewayMicroservice</mainClass>
-                    <finalName>api-gateway-run</finalName>
+                    <mainClass>com.senla.server.eureka.run.RunEurekaServerApplication</mainClass>
+                    <finalName>server-eureka-run</finalName>
                     <compilerArguments>
                         <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
                     </compilerArguments>

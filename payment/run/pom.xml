@@ -52,7 +52,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.senla.rental.run.RunRentalApplication</mainClass>
+                    <mainClass>com.senla.payment.run.RunPaymentMicroservice</mainClass>
                     <finalName>payment-run</finalName>
                     <compilerArguments>
                         <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>

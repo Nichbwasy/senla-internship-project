@@ -30,12 +30,25 @@
             <artifactId>spring-boot-starter</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- SPRING STARTER EUREKA CLIENT -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
         <!-- SPRING TESTS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot-starter-version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- GSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
 
         <!-- TEST CONTAINER -->
