@@ -63,4 +63,12 @@ public class ConditionsServiceImpl implements ConditionsService {
         log.info("All {} cae conditions has been selected from database.", conditions.size());
         return conditions.stream().map(c -> conditionMapper.mapToDto(c)).collect(Collectors.toList());
     }
+
+    @Override
+    public Boolean existsByName(String name) {
+        Boolean exists = conditionsRepository.existsByName(name);
+        if (exists) log.info("Car condition with name '{}' exists.", name);
+        else log.info("Car condition with name '{}' not exists.", name);
+        return exists;
+    }
 }

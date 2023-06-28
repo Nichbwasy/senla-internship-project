@@ -1,8 +1,8 @@
 package com.senla.authorization.service.exceptions.services.roles;
 
-import com.senla.authorization.service.exceptions.services.AuthorizationServicesException;
+import com.senla.common.exception.service.CommonServiceException;
 
-public class RolesAuthorizationServiceException extends AuthorizationServicesException {
+public class RolesAuthorizationServiceException extends CommonServiceException {
 
     public RolesAuthorizationServiceException() {
     }

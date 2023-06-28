@@ -1,7 +1,9 @@
 package com.senla.rental.controller;
 
+import com.senla.common.annotations.LogMethodExecution;
 import com.senla.rental.dto.RequestStatusDto;
 import com.senla.rental.service.RequestStatusesService;
+import jakarta.websocket.server.PathParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/requests/statuses")
 public class RequestStatusesController {
 
@@ -45,5 +48,11 @@ public class RequestStatusesController {
     public ResponseEntity<List<RequestStatusDto>> getAllRequestStatus() {
         log.info("Trying to get all request statuses records...");
         return ResponseEntity.ok().body(requestStatusesService.selectAll());
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<RequestStatusDto> getRequestStatusByName(@PathParam("name") String name) {
+        log.info("Trying to find request status with name '{}'...", name);
+        return ResponseEntity.ok().body(requestStatusesService.selectByName(name));
     }
 }

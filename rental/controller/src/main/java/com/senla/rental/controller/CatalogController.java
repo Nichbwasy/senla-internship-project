@@ -2,6 +2,7 @@ package com.senla.rental.controller;
 
 import com.senla.car.dto.CarDto;
 import com.senla.car.dto.controllers.CarsCatalogFilterForm;
+import com.senla.common.annotations.LogMethodExecution;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.dto.controller.CarOrderingRequestDto;
 import com.senla.rental.dto.controller.PostmanCarOrderingRequestDto;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/catalog")
 public class CatalogController {
 
@@ -23,20 +25,20 @@ public class CatalogController {
     private CatalogService catalogService;
 
     @GetMapping("/{page}")
-    private ResponseEntity<List<CarDto>> showCatalog(@PathVariable Integer page) {
+    public ResponseEntity<List<CarDto>> showCatalog(@PathVariable Integer page) {
         log.info("Trying show cars catalog...");
         return ResponseEntity.ok().body(catalogService.showAllFilteredCars(page, new CarsCatalogFilterForm()));
     }
 
     @PostMapping("/{page}")
-    private ResponseEntity<List<CarDto>> showFilteredCatalog(@PathVariable Integer page,
+    public ResponseEntity<List<CarDto>> showFilteredCatalog(@PathVariable Integer page,
                                                              @ModelAttribute CarsCatalogFilterForm filterForm) {
         log.info("Trying show cars catalog...");
         return ResponseEntity.ok().body(catalogService.showAllFilteredCars(page, filterForm));
     }
 
     @PostMapping("/request")
-    private ResponseEntity<RequestDto> createRequest(
+    public ResponseEntity<RequestDto> createRequest(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @ModelAttribute PostmanCarOrderingRequestDto dto) {
         log.info("Trying to reserve a car...");

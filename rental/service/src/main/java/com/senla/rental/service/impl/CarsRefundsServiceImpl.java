@@ -4,10 +4,11 @@ import com.senla.authorization.client.UserDataMicroserviceClient;
 import com.senla.authorization.dto.UserDataDto;
 import com.senla.car.client.CarMicroserviceClient;
 import com.senla.car.dto.CarDto;
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.CarRefundRepository;
 import com.senla.rental.dao.RequestRepository;
 import com.senla.rental.dao.RequestStatusRepository;
+import com.senla.rental.dao.specifications.CarRefundSpecificationExecutor;
 import com.senla.rental.dto.CarRefundDto;
 import com.senla.rental.dto.controller.CreateCarRefundFormDto;
 import com.senla.rental.model.CarRefund;
@@ -117,7 +118,7 @@ public class CarsRefundsServiceImpl implements CarsRefundsService {
 
         UserDataDto user = checkIfUserExist(request);
 
-        checkRefundRecordExist(request, car, user);
+        checkRefundRecordExistViaSpecification(request, car, user);
 
         CarRefund carRefund = createCarRefundRecord(form, request, car, user);
 
@@ -155,12 +156,25 @@ public class CarsRefundsServiceImpl implements CarsRefundsService {
         return user;
     }
 
-    private void checkRefundRecordExist(Request request, CarDto car, UserDataDto user) {if (carRefundRepository.existsByCarIdAndUserIdAndStartUsingTimeAndEndUsingTime(
+    private void checkRefundRecordExist(Request request, CarDto car, UserDataDto user) {
+        if (carRefundRepository.existsByCarIdAndUserIdAndStartUsingTimeAndEndUsingTime(
                 car.getId(),
                 user.getId(),
                 request.getStartTime(),
                 request.getEndTime()
         )) {
+            log.warn("Can't create car refund! Record already exists!");
+            throw new RefundAlreadyExistsRefundException("Can't create car refund! Record already exists!");
+        }
+    }
+
+    private void checkRefundRecordExistViaSpecification(Request request, CarDto car, UserDataDto user) {
+        if (carRefundRepository.exists(CarRefundSpecificationExecutor.alreadyRefunded(
+                car.getId(),
+                user.getId(),
+                request.getStartTime(),
+                request.getEndTime()
+        ))) {
             log.warn("Can't create car refund! Record already exists!");
             throw new RefundAlreadyExistsRefundException("Can't create car refund! Record already exists!");
         }

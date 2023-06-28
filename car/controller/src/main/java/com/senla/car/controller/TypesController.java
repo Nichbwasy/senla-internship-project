@@ -2,6 +2,7 @@ package com.senla.car.controller;
 
 import com.senla.car.dto.TypeDto;
 import com.senla.car.service.TypesService;
+import com.senla.common.annotations.LogMethodExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/types")
 public class TypesController {
 
@@ -45,6 +47,12 @@ public class TypesController {
     public ResponseEntity<List<TypeDto>> getAll() {
         log.info("Trying to get all car types...");
         return ResponseEntity.ok().body(typesService.selectAll());
+    }
+
+    @GetMapping("/existence/{name}")
+    public ResponseEntity<Boolean> existsByName(@PathVariable String name) {
+        log.info("Trying to check cat type existence with name '{}'...", name);
+        return ResponseEntity.ok().body(typesService.existsByName(name));
     }
 
 }

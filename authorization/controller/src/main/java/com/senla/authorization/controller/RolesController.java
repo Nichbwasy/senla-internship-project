@@ -3,6 +3,7 @@ package com.senla.authorization.controller;
 import com.senla.authorization.dto.RoleDto;
 import com.senla.authorization.dto.controllers.AddOrRemoveAuthoritiesDto;
 import com.senla.authorization.service.RoleService;
+import com.senla.common.annotations.LogMethodExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/authorization/roles")
 public class RolesController {
 

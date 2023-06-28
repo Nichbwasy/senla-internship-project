@@ -24,11 +24,24 @@
     </modules>
     <packaging>pom</packaging>
 
+
     <dependencies>
         <!-- SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+        <!-- SPRING STARTER EUREKA CLIENT -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+        <!-- SPRING AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
         <!-- SPRING TESTS -->
@@ -38,6 +51,34 @@
             <version>${spring-boot-starter-version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- TEST CONTAINER -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.18.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.18.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.18.3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- GSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
         <!-- JUNIT -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -61,6 +102,8 @@
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.0.Final</version>
         </dependency>
+
+
     </dependencies>
 
 </project>

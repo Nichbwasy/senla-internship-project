@@ -8,16 +8,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @SpringBootTest
+@Testcontainers
 @AutoConfigureMockMvc(addFilters = false) // disable security filter chain
 public class RequestsControllerTests {
+
+    @Container
+    private final static PostgreSQLContainer postgreSQLContainer =
+            new PostgreSQLContainer("postgres:14");
 
     @Autowired
     private MockMvc mockMvc;
@@ -25,16 +36,30 @@ public class RequestsControllerTests {
     @Autowired
     private RequestsController requestsController;
 
+    /*
+    As PostgreSQLContainer creates on random port, db name, username and password
+    needs to replace some properties to connect to postgres database test container.
+ */
+    @DynamicPropertySource
+    public static void overrideProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        dynamicPropertyRegistry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        dynamicPropertyRegistry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+    }
+
     @Test
     public void addRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM1",
+                null,
                 1L,
                 1L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.post("/requests")
@@ -50,12 +75,15 @@ public class RequestsControllerTests {
     public void addAlreadyExistedRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM2",
+                null,
                 2L,
                 2L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestsController.addRequest(requestDto);
 
@@ -70,12 +98,15 @@ public class RequestsControllerTests {
     public void getRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM3",
+                null,
                 3L,
                 3L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestDto = requestsController.addRequest(requestDto).getBody();
 
@@ -101,22 +132,28 @@ public class RequestsControllerTests {
     public void updateRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM4",
+                null,
                 4L,
                 4L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         RequestDto oldTypeDto = requestsController.addRequest(requestDto).getBody();
         requestDto = new RequestDto(
                 oldTypeDto.getId(),
+                "NUM44",
+                null,
                 44L,
                 44L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.put("/requests")
@@ -134,12 +171,15 @@ public class RequestsControllerTests {
     public void updateNotExistedRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 0L,
+                "NUM0",
+                null,
                 0L,
                 0L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.put("/requests")
@@ -154,12 +194,15 @@ public class RequestsControllerTests {
     public void deleteRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 null,
+                "NUM5",
+                null,
                 5L,
                 5L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestDto = requestsController.addRequest(requestDto).getBody();
 
@@ -174,12 +217,15 @@ public class RequestsControllerTests {
     public void deleteNotExistedRequestTest() throws Exception {
         RequestDto requestDto = new RequestDto(
                 0L,
+                "NUM0",
+                null,
                 0L,
                 0L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/requests/" + requestDto.getId()))
@@ -192,21 +238,27 @@ public class RequestsControllerTests {
     public void getAllRequestsTest() throws Exception {
         RequestDto requestStatusDto1 = new RequestDto(
                 null,
+                "NUM6",
+                null,
                 6L,
                 6L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         RequestDto requestStatusDto2 = new RequestDto(
                 null,
+                "NUM7",
+                null,
                 7L,
                 7L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         requestsController.addRequest(requestStatusDto1);
         requestsController.addRequest(requestStatusDto2);

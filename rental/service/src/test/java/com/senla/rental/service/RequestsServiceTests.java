@@ -2,7 +2,7 @@ package com.senla.rental.service;
 
 import com.senla.common.exception.repository.EntityNotFoundException;
 import com.senla.common.exception.repository.InsertStatementRepositoryException;
-import com.senla.rental.common.consts.RequestStatuses;
+import com.senla.common.constants.requests.RequestStatuses;
 import com.senla.rental.dao.RefundCompensationRepository;
 import com.senla.rental.dao.RequestRejectionRepository;
 import com.senla.rental.dao.RequestRepository;
@@ -10,12 +10,10 @@ import com.senla.rental.dao.RequestStatusRepository;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.dto.RequestRejectionDto;
 import com.senla.rental.model.Request;
-import com.senla.rental.model.RequestRejection;
 import com.senla.rental.model.RequestStatus;
 import com.senla.rental.service.exceptions.refunds.RefundAlreadyExistsRefundException;
 import com.senla.rental.service.exceptions.requests.RequestAlreadyCanceledRequestException;
 import com.senla.rental.service.impl.RequestsServiceImpl;
-import com.senla.rental.service.mappers.RefundCompensationMapper;
 import com.senla.rental.service.mappers.RequestMapper;
 import com.senla.rental.service.mappers.RequestRejectionMapper;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +23,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,12 +51,15 @@ public class RequestsServiceTests {
     public void insertTest() {
         RequestDto requestDto = new RequestDto(
                 1L,
+                "NUM1",
+                null,
                 1L,
                 1L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         Mockito.lenient()
                 .when(requestsRepository.save(Mockito.any(Request.class)))
@@ -80,12 +82,15 @@ public class RequestsServiceTests {
     public void updateTest() {
         RequestDto requestDto = new RequestDto(
                 1L,
+                "NUM2",
+                null,
                 1L,
                 1L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         Request request = requestMapper.mapToModel(requestDto);
 
@@ -102,12 +107,15 @@ public class RequestsServiceTests {
     public void updateNotExistedTest() {
         RequestDto requestDto = new RequestDto(
                 1L,
+                "NUM3",
+                null,
                 1L,
                 1L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
                 null,
-                null
+                null,
+                new BigDecimal(0)
         );
         Mockito.when(requestsRepository.getReferenceById(Mockito.any(Long.class)))
                 .thenThrow(EntityNotFoundException.class);
@@ -156,10 +164,13 @@ public class RequestsServiceTests {
     public void selectTest() {
         Request type = new Request(
                 1L,
+                "NUM4",
+                null,
                 1L,
                 1L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
+                new BigDecimal(0),
                 null,
                 null
         );
@@ -194,19 +205,25 @@ public class RequestsServiceTests {
         List<Request> requests = new ArrayList<>();
         requests.add(new Request(
                 1L,
+                "NUM1",
+                null,
                 1L,
                 1L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
+                new BigDecimal(0),
                 null,
                 null
         ));
         requests.add(new Request(
                 2L,
+                "NUM2",
+                null,
                 2L,
                 2L,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()),
+                new BigDecimal(0),
                 null,
                 null
         ));
@@ -225,7 +242,7 @@ public class RequestsServiceTests {
         Timestamp time = new Timestamp(1);
         RequestStatus status = new RequestStatus(1L, RequestStatuses.PROCESSING);
         RequestStatus statusAccepted = new RequestStatus(2L, RequestStatuses.ACCEPTED);
-        Request request = new Request(1L, 1L, 1L, time, time, null, status);
+        Request request = new Request(1L, "NUM1", null, 1L, 1L, time, time, new BigDecimal(0), null, status);
 
         Mockito.when(requestsRepository.getReferenceById(1L)).thenReturn(request);
         Mockito.when(requestStatusRepository.findByName(RequestStatuses.ACCEPTED)).thenReturn(statusAccepted);
@@ -238,7 +255,7 @@ public class RequestsServiceTests {
     public void acceptAlreadyRejectedRequestTest() {
         Timestamp time = new Timestamp(1);
         RequestStatus status = new RequestStatus(1L, RequestStatuses.CANCELED);
-        Request request = new Request(1L, 1L, 1L, time, time, null, status);
+        Request request = new Request(1L, "NUM1", null, 1L, 1L, time, time, new BigDecimal(0), null, status);
 
         Mockito.when(requestsRepository.getReferenceById(1L)).thenReturn(request);
 
@@ -249,7 +266,7 @@ public class RequestsServiceTests {
     public void acceptAlreadyAcceptedRequestTest() {
         Timestamp time = new Timestamp(1);
         RequestStatus status = new RequestStatus(1L, RequestStatuses.ACCEPTED);
-        Request request = new Request(1L, 1L, 1L, time, time, null, status);
+        Request request = new Request(1L, "NUM1", null, 1L, 1L, time, time, new BigDecimal(0), null, status);
 
         Mockito.when(requestsRepository.getReferenceById(1L)).thenReturn(request);
 
@@ -275,7 +292,7 @@ public class RequestsServiceTests {
         Timestamp time = new Timestamp(1);
         RequestStatus status = new RequestStatus(1L, RequestStatuses.PROCESSING);
         RequestStatus statusDenied = new RequestStatus(2L, RequestStatuses.DENIED);
-        Request request = new Request(1L, 1L, 1L, time, time, null, status);
+        Request request = new Request(1L, "NUM1", null, 1L, 1L, time, time, new BigDecimal(0), null, status);
         RequestRejectionDto rejection = new RequestRejectionDto(1L, "title", "text");
 
         Mockito.when(requestsRepository.getReferenceById(1L)).thenReturn(request);
@@ -293,7 +310,7 @@ public class RequestsServiceTests {
     public void rejectAlreadyRejectedRequestTest() {
         Timestamp time = new Timestamp(1);
         RequestStatus status = new RequestStatus(1L, RequestStatuses.DENIED);
-        Request request = new Request(1L, 1L, 1L, time, time, null, status);
+        Request request = new Request(1L, "NUM1",null, 1L, 1L, time, time, new BigDecimal(0), null, status);
         RequestRejectionDto rejection = new RequestRejectionDto(1L, "title", "text");
 
         Mockito.when(requestsRepository.getReferenceById(1L)).thenReturn(request);

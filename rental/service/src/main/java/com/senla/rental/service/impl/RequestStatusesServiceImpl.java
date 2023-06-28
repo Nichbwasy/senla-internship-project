@@ -64,4 +64,11 @@ public class RequestStatusesServiceImpl implements RequestStatusesService {
                 .map(rs -> requestStatusMapper.mapToDto(rs))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public RequestStatusDto selectByName(String name) {
+        RequestStatus requestStatus = requestStatusRepository.findByName(name);
+        log.info("Request status '{}' has been found.", name);
+        return requestStatusMapper.mapToDto(requestStatus);
+    }
 }

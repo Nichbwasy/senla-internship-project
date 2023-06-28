@@ -1,5 +1,6 @@
 package com.senla.rental.controller;
 
+import com.senla.common.annotations.LogMethodExecution;
 import com.senla.rental.dto.RequestRejectionDto;
 import com.senla.rental.service.RequestRejectionsService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/requests/rejections")
 public class RequestRejectionsController {
 

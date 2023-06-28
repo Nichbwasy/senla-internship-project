@@ -1,5 +1,6 @@
 package com.senla.rental.controller;
 
+import com.senla.common.annotations.LogMethodExecution;
 import com.senla.rental.dto.CarRefundDto;
 import com.senla.rental.dto.RequestDto;
 import com.senla.rental.dto.RequestRejectionDto;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@LogMethodExecution
 @RequestMapping("/profile/admin")
 public class AdminProfileController {
 

@@ -1,6 +1,6 @@
 package com.senla.rental.service.exceptions.profiles;
 
-import com.senla.rental.service.exceptions.CommonServiceException;
+import com.senla.common.exception.service.CommonServiceException;
 
 public class UserProfileServiceException extends CommonServiceException {
     public UserProfileServiceException() {

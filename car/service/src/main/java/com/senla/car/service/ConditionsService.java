@@ -10,4 +10,6 @@ public interface ConditionsService {
     ConditionDto select(Long id);
     Long delete(Long id);
     List<ConditionDto> selectAll();
+
+    Boolean existsByName(String name);
 }

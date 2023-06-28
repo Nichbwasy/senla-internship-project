@@ -135,5 +135,57 @@
     <changeSet id="homework-2-rental-add-triggers" author="Vadim Yarosh">
         <sqlFile encoding="utf8" path="./sql/11.rental-add-triggers.sql" splitStatements="false" relativeToChangelogFile="true"/>
     </changeSet>
+    
+    <changeSet id="homework-2-rental-add-rental-rates-table" author="Vadim Yarosh">
+        <createTable tableName="rentalrate">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="cartype" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="carcondition" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rateperhour" type="decimal" defaultValue="0">
+                <constraints nullable="false" checkConstraint="ratepriceperhour > 0"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-rental-add-price-column-to-request-table" author="Vadim Yarosh">
+        <addColumn tableName="request">
+            <column name="price" type="decimal" defaultValue="0">
+                <constraints nullable="false" checkConstraint="price > 0"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="homework-2-rental-add-data-to-rental-rates-table" author="Vadim Yarosh">
+        <sqlFile encoding="UTF-8" path="./sql/12.rental-add-dml-for-rentalrate.sql" splitStatements="false" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="homework-2-rental-add-new-request-status-dml" author="Vadim Yarosh">
+        <sqlFile encoding="UTF-8" path="./sql/13.rental-add-new-request-status-dml.sql" splitStatements="false" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="homework-2-rental-add-columns-request-order-number-and-receipt-umber-to-request-table" author="Vadim Yarosh">
+        <addColumn tableName="request">
+            <column name="request_order_number" type="varchar(64)">
+                <constraints unique="true"/>
+            </column>
+            <column name="receipt_number" type="varchar(32)" defaultValue="null">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="homework-2-rental-add-not-payed-request-status" author="Vadim Yarosh">
+        <insert tableName="requeststatus">
+            <column name="name" value="NOT_PAYED">
+                <constraints/>
+            </column>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog> 

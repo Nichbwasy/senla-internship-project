@@ -1,0 +1,1 @@
+INSERT INTO rental.requeststatus (name) VALUES ('PAYED');

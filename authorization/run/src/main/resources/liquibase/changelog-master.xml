@@ -69,7 +69,7 @@
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="userData_id" type="bigint">
+            <column name="userdata_id" type="bigint">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="refresh_token" type="varchar(1000)">
@@ -77,13 +77,13 @@
             </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="userrefreshtoken"
-                                 baseColumnNames="userData_id"
+                                 baseColumnNames="userdata_id"
                                  constraintName="userrefreshtoken_userdata_id_fkey"
                                  referencedTableName="userdata"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
-        <createIndex tableName="userrefreshtoken" indexName="userrefreshtoken_userData_id">
-            <column name="userData_id"/>
+        <createIndex tableName="userrefreshtoken" indexName="userrefreshtoken_userdata_id">
+            <column name="userdata_id"/>
         </createIndex>
     </changeSet>
 

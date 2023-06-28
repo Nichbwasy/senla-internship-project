@@ -25,6 +25,13 @@
             <artifactId>postgresql</artifactId>
             <version>${common-postgresql-version}</version>
         </dependency>
+        <!-- H2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.senla.authorization</groupId>
