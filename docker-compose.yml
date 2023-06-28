@@ -141,6 +141,7 @@ services:
       PROFILE_USER_REFUNDS_PAGE_SIZE: 5
       EUREKA_DEFAULT_ZONE: http://eureka-server:8761
 
+  # TODO: Fix kafka For some reasons payment doesn't see it (rental is ok)
   payment-microservice:
     container_name: payment-microservice
     depends_on:

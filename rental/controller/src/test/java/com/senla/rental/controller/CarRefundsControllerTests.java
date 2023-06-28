@@ -41,7 +41,7 @@ public class CarRefundsControllerTests {
     /*
     As PostgreSQLContainer creates on random port, db name, username and password
     needs to replace some properties to connect to postgres database test container.
- */
+    */
     @DynamicPropertySource
     public static void overrideProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
         dynamicPropertyRegistry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);

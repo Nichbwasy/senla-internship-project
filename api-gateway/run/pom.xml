@@ -12,6 +12,14 @@
     <groupId>com.senla.api-gateway</groupId>
     <artifactId>run</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-netflix-eureka-client</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <finalName>api-gateway-run</finalName>
         <plugins>
