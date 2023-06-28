@@ -80,6 +80,7 @@ services:
   authorization-microservice:
     container_name: authorization-microservice
     depends_on:
+      - eureka-server
       - database-postgres
     build:
       context: ./authorization
@@ -97,6 +98,7 @@ services:
   car-microservice:
     container_name: car-microservice
     depends_on:
+      - eureka-server
       - database-postgres
     image: tomcat:10.1.7-jdk17
     restart: no
@@ -115,6 +117,7 @@ services:
   rental-microservice:
     container_name: rental-microservice
     depends_on:
+      - eureka-server
       - database-postgres
     build:
       context: ./rental
@@ -127,11 +130,64 @@ services:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: root
       MICROSERVICE_NAME: RENTAL_MICROSERVICE
+      KAFKA_BOOTSTRAP_SERVICES: http://kafka:9092
+      PAYMENT_TOPIC_GROUP_ID: payment_topic_group
+      PAYMENT_REQUEST_TOPIC_NAME: payment_request_topic
+      RENTAL_CONFIRM_PAYMENT_TOPIC_NAME: rental_payment_confirm
       AUTHORIZATION_MICROSERVICE_URL: http://authorization-microservice:8081
       CAR_MICROSERVICE_URL: http://car-microservice:8082/car-run
       PROFILE_ADMIN_REQUESTS_PAGE_SIZE: 5
       PROFILE_ADMIN_REFUNDS_PAGE_SIZE: 5
       PROFILE_USER_REFUNDS_PAGE_SIZE: 5
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761
+
+  # TODO: Fix kafka For some reasons payment doesn't see it (rental is ok)
+  payment-microservice:
+    container_name: payment-microservice
+    depends_on:
+      - eureka-server
+      - database-mongo
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    ports:
+      - 8084:8080
+    restart: no
+    environment:
+      AUTHENTICATION_DATABASE: admin
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: root
+      DATABASE_NAME: payment
+      DATABASE_PORT: 27017
+      DATABASE_HOST: database-mongo
+      KAFKA_BOOTSTRAP_SERVICES: http://kafka:9092
+      PAYMENT_TOPIC_GROUP_ID: payment_topic_group
+      KAFKA_PAYMENT_REQUEST_TOPIC_NAME: payment_request_topic
+      MICROSERVICE_NAME: PAYMENT_MICROSERVICE
+      USER_RECEIPTS_PAGE_SIZE: 5
+      PAYMENT_REQUESTS_PAGE_SIZE: 5
+
+  eureka-server:
+    container_name: eureka-server
+    build:
+      context: ./server-eureka
+      dockerfile: Dockerfile
+    ports:
+      - 8761:8761
+    restart: always
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - 9191:9191
+    environment:
+      AUTHORIZATION_MICROSERVICE_URI: http://authorization-microservice:8081
+      CAR_MICROSERVICE_URI: http://car-microservice:8082/car-run
+      RENTAL_MICROSERVICE_URI: http://rental-microservice:8083
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761
 
 volumes:
   data: {}
