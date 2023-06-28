@@ -102,5 +102,16 @@
     <changeSet id="homework-2-authorization-add-triggers" author="Vadim Yarosh">
         <sqlFile encoding="utf8" path="./sql/10.authorization-add-triggers.sql" splitStatements="false" relativeToChangelogFile="true"/>
     </changeSet>
+
+    <changeSet id="homework-2-authorization-add-email-and-user-ststus-colums-to-userdata" author="Vadim Yarosh">
+        <addColumn tableName="userdata">
+            <column name="email" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="email_status" type="varchar(64)" defaultValue="EMAIL_NOT_VERIFIED">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
     
 </databaseChangeLog> 

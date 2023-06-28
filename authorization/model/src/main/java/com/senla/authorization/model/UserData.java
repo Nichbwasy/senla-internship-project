@@ -29,6 +29,16 @@ public class UserData {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
+    @NotNull(message = "Email is mandatory!")
+    @Size(min = 3, max = 128, message = "Email must contains from 3 to 128 characters!")
+    @Column(name = "email", length = 128, unique = true, nullable = false)
+    private String email;
+
+    @NotNull(message = "Email status is mandatory!")
+    @Size(max = 64, message = "Email status can not contains more than 64 characters!")
+    @Column(name = "email_status", length = 64, nullable = false)
+    private String emailStatus;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(name = "role_user",
             joinColumns = @JoinColumn(name =  "user_id"),

@@ -1,7 +1,7 @@
 
 package com.senla.common.security.api.providers;
 
-import com.senla.common.constants.UserRoles;
+import com.senla.common.constants.authorization.UserRoles;
 import com.senla.common.exception.security.jwt.JwtTokenGenerationException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -6,6 +6,7 @@ import com.senla.authorization.dto.registrations.UserRegistrationDataDto;
 import com.senla.authorization.model.UserData;
 import com.senla.authorization.service.RegistrationService;
 import com.senla.authorization.service.encoders.PasswordEncoder;
+import com.senla.authorization.service.exceptions.services.registration.EmailInUseException;
 import com.senla.authorization.service.exceptions.services.registration.LoginInUseException;
 import com.senla.authorization.service.exceptions.services.registration.PasswordMatchException;
 import com.senla.authorization.service.mappers.UserMapper;
@@ -41,6 +42,12 @@ public class RegistrationServiceImpl implements RegistrationService {
             log.warn("User with login '{}' already exist!", formDto.getLogin());
             throw new LoginInUseException(
                     String.format("User with login '%s' already exist!", formDto.getLogin())
+            );
+        }
+        if (userDataRepository.existsByEmail(formDto.getEmail())) {
+            log.warn("User with email '{}' already exist!", formDto.getEmail());
+            throw new EmailInUseException(
+                    String.format("User with email '%s' already exist!", formDto.getEmail())
             );
         }
         if (!formDto.getPassword().equals(formDto.getRepeatPassword())) {

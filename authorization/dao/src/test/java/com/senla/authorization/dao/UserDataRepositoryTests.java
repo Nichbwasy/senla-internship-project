@@ -16,9 +16,9 @@ public class UserDataRepositoryTests {
 
     @Test
     public void selectUsersWithLoginMatchesTest() {
-        userDataRepository.save(new UserData(null, "User1", "pass", null));
-        userDataRepository.save(new UserData(null, "User2", "pass", null));
-        userDataRepository.save(new UserData(null, "Login1", "pass", null));
+        userDataRepository.save(new UserData(null, "User1", "pass", "mail1", "st1", null));
+        userDataRepository.save(new UserData(null, "User2", "pass", "mail2", "st1",null));
+        userDataRepository.save(new UserData(null, "Login1", "pass", "mail3", "st1",null));
 
         List<UserData> result = userDataRepository.selectUsersWithLoginMatches("User");
         Assertions.assertEquals(2, result.size());

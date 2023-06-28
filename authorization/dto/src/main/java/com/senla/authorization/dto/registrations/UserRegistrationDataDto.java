@@ -21,6 +21,11 @@ public class UserRegistrationDataDto {
     @Pattern(regexp = "^[a-zA-Z0-9._@#$%^&*!=+]{3,64}$", message = "Password has a incorrect format!")
     private String password;
 
+    @NotNull(message = "User email is mandatory!")
+    @Size(min = 3, max = 128, message = "Email must contains from 3 to 128 characters!")
+    @Pattern(regexp = "[a-zA-Z0-9\\.\\-\\_]+[@][a-zA-Z0-9]+[.][a-zA-Z]{2,9}", message = "Email has a wrong format!")
+    private String email;
+
     @NotNull(message = "User repeat password is mandatory!")
     @Size(min = 3, max = 64, message = "UserData password must contains from 3 to 64 characters!")
     @Pattern(regexp = "^[a-zA-Z0-9._@#$%^&*!=+]{3,64}$", message = "Password has a incorrect format!")

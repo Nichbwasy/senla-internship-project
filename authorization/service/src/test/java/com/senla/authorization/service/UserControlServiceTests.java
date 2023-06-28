@@ -8,6 +8,7 @@ import com.senla.authorization.model.UserData;
 import com.senla.authorization.service.exceptions.services.users.UserNotFoundException;
 import com.senla.authorization.service.impl.UsersControlServiceImpl;
 import com.senla.authorization.service.mappers.UserMapper;
+import com.senla.common.constants.authorization.EmailStatuses;
 import com.senla.common.exception.repository.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ public class UserControlServiceTests {
     
     @Test
     public void getUserTest() {
-        UserData userData = new UserData(1L, "Login", "Password", null);
+        UserData userData = new UserData(1L, "Login", "Password", "mail1", EmailStatuses.NOT_VERIFIED, null);
         Mockito.when(userDataRepository.getReferenceById(1L)).thenReturn(userData);
 
         UserDataDto user = usersControlService.getUser(1L);
@@ -62,8 +63,8 @@ public class UserControlServiceTests {
     @Test
     public void getAllUsersData() {
         List<UserData> userData = Arrays.asList(
-                new UserData(1L, "Login", "Password", null),
-                new UserData(2L, "Login2", "Password2", null)
+                new UserData(1L, "Login", "Password", "mail2", EmailStatuses.NOT_VERIFIED, null),
+                new UserData(2L, "Login2", "Password2", "mail3", EmailStatuses.NOT_VERIFIED, null)
         );
 
         Mockito.when(userDataRepository.findAll()).thenReturn(userData);
@@ -75,7 +76,7 @@ public class UserControlServiceTests {
     public void addRolesToUserTest() {
         Role role1 = new Role(1L, "ROLE1", null);
         Role role2 = new Role(2L, "ROLE2", null);
-        UserData userData = new UserData(1L, "Login", "Password", new ArrayList<>());
+        UserData userData = new UserData(1L, "Login", "Password", "mail4", EmailStatuses.NOT_VERIFIED, new ArrayList<>());
 
         Mockito.when(userDataRepository.existsById(1L)).thenReturn(true);
         Mockito.when(userDataRepository.getReferenceById(1L)).thenReturn(userData);
@@ -93,7 +94,7 @@ public class UserControlServiceTests {
     @Test
     public void addRolesToUserIfNotAllRolesExistsTest() {
         Role role1 = new Role(1L, "ROLE1", null);
-        UserData userData = new UserData(1L, "Login", "Password", new ArrayList<>());
+        UserData userData = new UserData(1L, "Login", "Password", "mail5", EmailStatuses.NOT_VERIFIED, new ArrayList<>());
 
         Mockito.when(userDataRepository.existsById(1L)).thenReturn(true);
         Mockito.when(userDataRepository.getReferenceById(1L)).thenReturn(userData);
@@ -138,7 +139,7 @@ public class UserControlServiceTests {
                 new Role(1L, "ROLE1", null),
                 new Role(2L, "ROLE2", null)
         );
-        UserData userData = new UserData(1L, "Login", "Password", roles);
+        UserData userData = new UserData(1L, "Login", "Password", "mail6", EmailStatuses.NOT_VERIFIED, roles);
 
         Mockito.when(userDataRepository.existsById(1L)).thenReturn(true);
         Mockito.when(userDataRepository.getReferenceById(1L)).thenReturn(userData);
@@ -154,7 +155,7 @@ public class UserControlServiceTests {
                 new Role(1L, "ROLE1", null),
                 new Role(2L, "ROLE2", null)
         );
-        UserData userData = new UserData(1L, "Login", "Password", roles);
+        UserData userData = new UserData(1L, "Login", "Password", "mail7", EmailStatuses.NOT_VERIFIED, roles);
 
         Mockito.when(userDataRepository.existsById(1L)).thenReturn(true);
         Mockito.when(userDataRepository.getReferenceById(1L)).thenReturn(userData);
