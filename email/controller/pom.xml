@@ -13,6 +13,13 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- SPRING BOOT STARTER WEB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.senla.email</groupId>
             <artifactId>service</artifactId>

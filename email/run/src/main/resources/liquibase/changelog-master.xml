@@ -11,6 +11,20 @@
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="recipient_email" type="varchar(128)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="response_queue_name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="homework-2-create-confirmation-mail-table" author="Vadim Yarosh">
+        <createTable tableName="confirmationmail">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="title" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
@@ -19,6 +33,20 @@
             </column>
             <column name="recipient_email" type="varchar(128)">
                 <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-create-email-confirmation-code-table" author="Vadim Yarosh">
+        <createTable tableName="emailconfirmationcode">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="confirmation_code" type="varchar(64)">
+                <constraints unique="true" nullable="false"/>
             </column>
         </createTable>
     </changeSet>

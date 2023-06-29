@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MailingRequestDto {
+public class EmailConfirmationCodeDto {
 
     private Long id;
     private String recipientEmail;
-    private String responseQueueName;
+    private String confirmationCode;
 
 }

@@ -28,7 +28,31 @@
     </properties>
 
     <dependencies>
-
+        <!-- SPRING BOOT -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+        <!-- SPRING STARTER EUREKA CLIENT -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+        <!-- SPRING TESTS -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot-starter-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- SPRING BOOT RABBITMQ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.senla.common</groupId>

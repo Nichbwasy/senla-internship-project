@@ -8,4 +8,6 @@ public interface MailingRequestService {
 
     List<MailingRequestDto> showMailingRequestsPage(Integer page);
 
+    MailingRequestDto createMailingRequest(MailingRequestDto mailingRequestDto);
+
 }

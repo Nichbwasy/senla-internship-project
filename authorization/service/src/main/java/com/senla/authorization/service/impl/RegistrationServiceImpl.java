@@ -10,8 +10,14 @@ import com.senla.authorization.service.exceptions.services.registration.EmailInU
 import com.senla.authorization.service.exceptions.services.registration.LoginInUseException;
 import com.senla.authorization.service.exceptions.services.registration.PasswordMatchException;
 import com.senla.authorization.service.mappers.UserMapper;
+import com.senla.common.constants.authorization.EmailStatuses;
+import com.senla.common.json.JsonMapper;
+import com.senla.email.dto.MailingRequestDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +28,19 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
     private UserDataRepository userDataRepository;
-
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    @Qualifier("email_request_queue")
+    private Queue requestQueue;
+
+    @Autowired
+    @Qualifier("email_confirmation_queue")
+    private Queue confirmationQueue;
 
     @Override
     @Transactional
@@ -34,7 +50,22 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         UserData user = userMapper.mapRegisterFormToUser(formDto);
         user.setPassword(PasswordEncoder.encodeString(formDto.getPassword()));
+        user.setEmailStatus(EmailStatuses.NOT_VERIFIED);
+
+        sentRequestToEmailService(formDto);
+
         return userMapper.mapToDto(userDataRepository.save(user));
+    }
+
+    private void sentRequestToEmailService(UserRegistrationDataDto formDto) {
+        MailingRequestDto mailingRequestDto = new MailingRequestDto(
+                null,
+                formDto.getEmail(),
+                confirmationQueue.getName()
+        );
+        String json = JsonMapper.objectToJson(mailingRequestDto);
+        rabbitTemplate.convertAndSend(requestQueue.getName(), json);
+        log.info("Request to email service has been sent: {}", json);
     }
 
     private void checkRegisterFormData(UserRegistrationDataDto formDto) {
