@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class EmailConfirmationCodeDto {
 
     private Long id;
-    private String recipientEmail;
+    private String email;
     private String confirmationCode;
 
 }

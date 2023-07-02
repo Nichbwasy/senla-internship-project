@@ -7,6 +7,7 @@ import com.senla.email.dto.MailingRequestDto;
 import com.senla.email.model.EmailConfirmationCode;
 import com.senla.email.model.MailingRequest;
 import com.senla.email.service.MailingRequestService;
+import com.senla.email.service.mail.EmailSender;
 import com.senla.email.service.mapper.MailingRequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,12 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class MailingRequestServiceImpl implements MailingRequestService {
 
+    @Value("${mailing.verification.mail.link}")
+    private String verificationLink;
+    @Value("${mailing.verification.mail.title}")
+    private String verificationTitle;
+    @Value("${mailing.verification.mail.text}")
+    private String verificationText;
     @Value("${mailing.requests.page.size}")
     private Integer MAILING_REQUEST_PAGE_SIZE;
     @Autowired
@@ -33,6 +40,8 @@ public class MailingRequestServiceImpl implements MailingRequestService {
 
     @Autowired
     private EmailConfirmationCodeRepository emailConfirmationCodeRepository;
+    @Autowired
+    private EmailSender emailSender;
 
     @Override
     public List<MailingRequestDto> showMailingRequestsPage(Integer page) {
@@ -53,7 +62,11 @@ public class MailingRequestServiceImpl implements MailingRequestService {
     public MailingRequestDto createMailingRequest(MailingRequestDto mailingRequestDto) {
         MailingRequest request = updateOrCreateRequest(mailingRequestDto);
 
-        generateVerificationCodeForEmail(mailingRequestDto);
+        EmailConfirmationCode confirmationCode = generateVerificationCodeForEmail(mailingRequestDto);
+
+        String mailVerifyLink = verificationLink + confirmationCode.getConfirmationCode();
+        String mailText = String.format(verificationText, confirmationCode.getEmail(), mailVerifyLink);
+        emailSender.sendMail(new String[]{confirmationCode.getEmail()}, verificationTitle, mailText);
 
         return mailingRequestMapper.mapToDto(request);
     }
@@ -73,11 +86,11 @@ public class MailingRequestServiceImpl implements MailingRequestService {
 
     // TODO: The is a possible to generate already existed verification code. If that will happens, DB throws exception.
 
-    private void generateVerificationCodeForEmail(MailingRequestDto mailingRequestDto) {
+    private EmailConfirmationCode generateVerificationCodeForEmail(MailingRequestDto mailingRequestDto) {
         String code = StringGenerator.generateString(64);
         EmailConfirmationCode confirmationCode = null;
-        if (emailConfirmationCodeRepository.existsByRecipientEmail(mailingRequestDto.getRecipientEmail())) {
-            confirmationCode = emailConfirmationCodeRepository.getByRecipientEmail(mailingRequestDto.getRecipientEmail());
+        if (emailConfirmationCodeRepository.existsByEmail(mailingRequestDto.getRecipientEmail())) {
+            confirmationCode = emailConfirmationCodeRepository.getByEmail(mailingRequestDto.getRecipientEmail());
             log.info("Confirmation code for email '{}' has been regenerated.", mailingRequestDto.getRecipientEmail());
         } else {
             confirmationCode = new EmailConfirmationCode(
@@ -87,6 +100,6 @@ public class MailingRequestServiceImpl implements MailingRequestService {
             );
             log.info("Confirmation code for email '{}' has been generated.", mailingRequestDto.getRecipientEmail());
         }
-        emailConfirmationCodeRepository.save(confirmationCode);
+        return emailConfirmationCodeRepository.save(confirmationCode);
     }
 }

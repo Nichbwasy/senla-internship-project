@@ -31,6 +31,7 @@ public class EmailConfirmNotificationServiceImpl implements EmailConfirmNotifica
     private EmailConfirmationCodeRepository emailConfirmationCodeRepository;
 
     @Override
+    @Transactional
     public void confirmEmailVerification(String code) {
         checkIfCodeExists(code);
 
@@ -38,18 +39,18 @@ public class EmailConfirmNotificationServiceImpl implements EmailConfirmNotifica
 
         checkIfRequestExists(confirmationCode);
 
-        MailingRequest request = mailingRequestRepository.getByRecipientEmail(confirmationCode.getRecipientEmail());
+        MailingRequest request = mailingRequestRepository.getByRecipientEmail(confirmationCode.getEmail());
 
         sendNotification(confirmationCode, request);
 
         log.info("Request '{}' and code '{}' will be removed.", request.getId(), confirmationCode.getId());
-        mailingRequestRepository.deleteById(request.getId());
-        emailConfirmationCodeRepository.deleteById(confirmationCode.getId());
+        mailingRequestRepository.delete(request);
+        emailConfirmationCodeRepository.delete(confirmationCode);
     }
 
     private void sendNotification(EmailConfirmationCode confirmationCode, MailingRequest request) {
         EmailConfirmedNotificationMessageDto messageDto = new EmailConfirmedNotificationMessageDto(
-                confirmationCode.getRecipientEmail(),
+                confirmationCode.getEmail(),
                 LocalDateTime.now()
         );
         String json = JsonMapper.objectToJson(messageDto);
@@ -58,10 +59,10 @@ public class EmailConfirmNotificationServiceImpl implements EmailConfirmNotifica
     }
 
     private void checkIfRequestExists(EmailConfirmationCode confirmationCode) {
-        if (!mailingRequestRepository.existsByRecipientEmail(confirmationCode.getRecipientEmail())) {
-            log.error("Request for with email '{}' not found!", confirmationCode.getRecipientEmail());
+        if (!mailingRequestRepository.existsByRecipientEmail(confirmationCode.getEmail())) {
+            log.error("Request for with email '{}' not found!", confirmationCode.getEmail());
             throw new MailingRequestNotFoundException(
-                    String.format("Request for with email '%s' not found!", confirmationCode.getRecipientEmail())
+                    String.format("Request for with email '%s' not found!", confirmationCode.getEmail())
             );
         }
     }

@@ -19,6 +19,18 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- SWAGGER -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <!-- CUSTOM STARTER -->
+        <dependency>
+            <groupId>com.senla</groupId>
+            <artifactId>jwt-security-utils-senla-spring-boot-starter</artifactId>
+            <version>3.0.6</version>
+        </dependency>
 
         <dependency>
             <groupId>com.senla.email</groupId>

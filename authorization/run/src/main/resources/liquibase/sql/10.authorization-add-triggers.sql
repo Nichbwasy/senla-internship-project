@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION remove_user()
 	RETURNS TRIGGER AS $remove_user$
 BEGIN
-	DELETE FROM authorizations.role_user WHERE users_id=OLD.id;
+	DELETE FROM authorizations.role_user WHERE user_id=OLD.id;
 	RETURN NULL;
 END;
 $remove_user$ LANGUAGE PLPGSQL;

@@ -19,8 +19,8 @@ public class EmailConfirmationCode {
 
     @NotNull(message = "Email is mandatory!")
     @Size(min = 3, max = 128, message = "Email must contains from 3 to 128 characters!")
-    @Column(name = "title", length = 128, unique = true, nullable = false)
-    private String recipientEmail;
+    @Column(name = "email", length = 128, unique = true, nullable = false)
+    private String email;
 
     @NotNull(message = "Confirmation code is mandatory!")
     @Size(min = 64, max = 64, message = "Confirmation code must contains 64 characters!")

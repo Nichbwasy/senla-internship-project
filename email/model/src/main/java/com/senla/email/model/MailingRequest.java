@@ -19,7 +19,7 @@ public class MailingRequest {
 
     @NotNull(message = "Recipient email is mandatory!")
     @Size(min = 3, max = 128, message = "Recipient email must contains from 3 to 128 characters!")
-    @Column(name = "title", length = 128, nullable = false, unique = true)
+    @Column(name = "recipient_email", length = 128, nullable = false, unique = true)
     private String recipientEmail;
 
     @NotNull(message = "Response queue name is mandatory!")

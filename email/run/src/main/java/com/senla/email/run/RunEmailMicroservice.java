@@ -10,7 +10,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan(basePackages = {
-        "com.senla.email"
+        "com.senla.email",
+        "com.senla.common.security",
+        "com.senla.starter.jwt.security.utils"
 })
 @EnableJpaRepositories(basePackages = {"com.senla.email.dao"})
 @EntityScan(basePackages = {"com.senla.email.model"})

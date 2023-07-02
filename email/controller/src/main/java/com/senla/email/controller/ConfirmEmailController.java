@@ -4,10 +4,7 @@ import com.senla.email.service.EmailConfirmNotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -17,7 +14,7 @@ public class ConfirmEmailController {
     @Autowired
     private EmailConfirmNotificationService confirmNotificationService;
 
-    @PostMapping("/{code}")
+    @GetMapping("/{code}")
     public ResponseEntity<String> confirmEmailByVerificationCode(@PathVariable String code) {
         log.info("Trying to confirm email with code '{}'...", code);
         confirmNotificationService.confirmEmailVerification(code);

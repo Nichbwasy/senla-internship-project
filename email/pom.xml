@@ -53,6 +53,20 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- SPRING BOOT MAIL -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
+
+        <!-- GSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.senla.common</groupId>
