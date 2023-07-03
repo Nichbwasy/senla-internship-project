@@ -27,7 +27,7 @@ public class AuthorizationWebSecurityConfig {
     public JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter() {
         JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter = new JwtTokenSecurityCommonFilter();
         jwtTokenSecurityCommonFilter.setIgnoredPaths(Arrays.asList(
-                "/authorization", "/authorization/register",
+                "/authorization", "/authorization/register", "/password/restore",
                 "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
         ));
         return jwtTokenSecurityCommonFilter;
@@ -48,7 +48,7 @@ public class AuthorizationWebSecurityConfig {
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests( request -> request
-                        .requestMatchers("/authorization", "/authorization/register",
+                        .requestMatchers("/authorization", "/authorization/register", "/password/restore",
                                 "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico")
                             .permitAll()
                         .requestMatchers("/authorization/authorities", "/authorization/authorities/**")

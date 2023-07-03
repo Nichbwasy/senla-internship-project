@@ -6,7 +6,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class PasswordEncoder {
 
     private final static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

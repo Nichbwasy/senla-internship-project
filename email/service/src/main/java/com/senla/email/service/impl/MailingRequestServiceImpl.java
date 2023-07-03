@@ -55,8 +55,6 @@ public class MailingRequestServiceImpl implements MailingRequestService {
                 .collect(Collectors.toList());
     }
 
-    // TODO: Try add opportunity send a real verification mails to the specified email
-
     @Override
     @Transactional
     public MailingRequestDto createMailingRequest(MailingRequestDto mailingRequestDto) {
@@ -84,7 +82,7 @@ public class MailingRequestServiceImpl implements MailingRequestService {
         return request;
     }
 
-    // TODO: The is a possible to generate already existed verification code. If that will happens, DB throws exception.
+    // TODO: There is a possible to generate already existed verification code. If that will happens, DB throws exception.
 
     private EmailConfirmationCode generateVerificationCodeForEmail(MailingRequestDto mailingRequestDto) {
         String code = StringGenerator.generateString(64);

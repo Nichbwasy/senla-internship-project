@@ -19,23 +19,6 @@
             </column>
         </createTable>
     </changeSet>
-    
-    <changeSet id="homework-2-create-confirmation-mail-table" author="Vadim Yarosh">
-        <createTable tableName="confirmationmail">
-            <column name="id" type="bigserial">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="title" type="varchar(512)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="text" type="varchar(2048)">
-                <constraints/>
-            </column>
-            <column name="recipient_email" type="varchar(128)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
 
     <changeSet id="homework-2-create-email-confirmation-code-table" author="Vadim Yarosh">
         <createTable tableName="emailconfirmationcode">
@@ -46,6 +29,40 @@
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="confirmation_code" type="varchar(64)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-create-restore-password-request-table" author="Vadim Yarosh">
+        <createTable tableName="restorepasswordrequest">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="response_queue_name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="homework-2-create-restore-password-confirmation-code-table" author="Vadim Yarosh">
+        <createTable tableName="restorepasswordconfirmationcode">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(64)">
                 <constraints unique="true" nullable="false"/>
             </column>
         </createTable>
