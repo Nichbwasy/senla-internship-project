@@ -8,6 +8,7 @@ import com.senla.authorization.service.PasswordRestoreService;
 import com.senla.authorization.service.encoders.PasswordEncoder;
 import com.senla.authorization.service.exceptions.services.restore.UserNotFoundPasswordRestoreException;
 import com.senla.authorization.service.mappers.UserMapper;
+import com.senla.common.constants.email.RestorePasswordRequestStatuses;
 import com.senla.common.json.JsonMapper;
 import com.senla.email.dto.RestorePasswordNotificationMessageDto;
 import com.senla.email.dto.RestorePasswordRequestDto;
@@ -64,6 +65,7 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
                 user.getLogin(),
                 user.getEmail(),
                 LocalDateTime.now(),
+                RestorePasswordRequestStatuses.NOT_SEND,
                 passwordRestoreConfirmationQueue.getName()
         );
         String json = JsonMapper.objectToJson(requestDto);

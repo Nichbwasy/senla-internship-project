@@ -15,6 +15,7 @@ public class RestorePasswordRequestDto {
     private String login;
     private String email;
     private LocalDateTime time;
+    private String sendingStatus;
     private String responseQueueName;
 
 

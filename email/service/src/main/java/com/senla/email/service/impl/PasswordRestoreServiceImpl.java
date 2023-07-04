@@ -1,5 +1,6 @@
 package com.senla.email.service.impl;
 
+import com.senla.common.constants.email.RestorePasswordRequestStatuses;
 import com.senla.common.generators.StringGenerator;
 import com.senla.common.json.JsonMapper;
 import com.senla.email.dao.RestorePasswordConfirmationCodeRepository;
@@ -13,16 +14,19 @@ import com.senla.email.service.PasswordRestoreService;
 import com.senla.email.service.exception.consumer.restore.ConfirmationCodeNotFoundRestorePasswordException;
 import com.senla.email.service.exception.consumer.restore.PasswordsNotMatchRestorePasswordException;
 import com.senla.email.service.mail.EmailSender;
-import com.senla.email.service.mapper.RestorePasswordConfirmationCodeMapper;
 import com.senla.email.service.mapper.RestorePasswordRequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -38,6 +42,8 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
     private String restoreMailTitle;
     @Value("${password.restore.mail.text}")
     private String restoreMailText;
+    @Value("${sent.password.restore.mails.count}")
+    private Integer RESTORE_PASSWORD_MAILS_COUNT;
     @Autowired
     private RestorePasswordRequestRepository requestRepository;
 
@@ -59,17 +65,9 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
         RestorePasswordRequest request = requestRepository.save(requestMapper.mapToModel(requestDto));
         log.info("Restore password request has been created: {}", request);
 
-        RestorePasswordConfirmationCode code = createConfirmationCode(request);
-
-        sendEmail(request, code);
+        createConfirmationCode(request);
 
         return requestMapper.mapToDto(request);
-    }
-
-    private void sendEmail(RestorePasswordRequest request, RestorePasswordConfirmationCode code) {
-        String link = restoreMailLink + code.getCode();
-        String text = String.format(restoreMailText, request.getLogin(), link);
-        emailSender.sendMail(new String[]{code.getEmail()}, restoreMailTitle, text);
     }
 
     // TODO: There is a possible to generate already existed verification code. If that will happens, DB throws exception.
@@ -94,8 +92,6 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
         log.info("Confirmation code has been generated for '{}' email.", request.getEmail());
         return confirmationCode;
     }
-
-    // TODO: Confirmation code must contains request id to find it?
 
     @Override
     @Transactional
@@ -138,5 +134,35 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
             log.warn("Passwords doesn't match!");
             throw new PasswordsNotMatchRestorePasswordException("Passwords doesn't match!");
         }
+    }
+
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public void sendPasswordRestoreNotificationMail() {
+        List<RestorePasswordRequest> requests = requestRepository
+                .findAllBySendingStatus(
+                        RestorePasswordRequestStatuses.NOT_SEND,
+                        PageRequest.of(0, RESTORE_PASSWORD_MAILS_COUNT)
+                );
+        log.info("There is found '{}' restore password requests.", requests.size());
+        requests.forEach(r -> {
+            if (!confirmationCodeRepository.existsByEmail(r.getEmail())) {
+                log.warn("Unable to find confirmation code for request '{}'. Request will be removed.", r.getId());
+                requestRepository.delete(r);
+                return;
+            }
+            RestorePasswordConfirmationCode code = confirmationCodeRepository.getByEmail(r.getEmail());
+            sendEmail(r, code);
+            r.setSendingStatus(RestorePasswordRequestStatuses.SENT);
+            log.info("Notification mail was sent for the request '{}'.", r.getId());
+        });
+
+    }
+
+    private void sendEmail(RestorePasswordRequest request, RestorePasswordConfirmationCode code) {
+        String link = restoreMailLink + code.getCode();
+        String text = String.format(restoreMailText, request.getLogin(), link);
+        emailSender.sendMail(new String[]{code.getEmail()}, restoreMailTitle, text);
     }
 }

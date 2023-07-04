@@ -9,4 +9,6 @@ public interface PasswordRestoreService {
 
     String confirmPasswordRestoring(NewPasswordFormDto newPasswordFormDto, String confirmationCode);
 
+    void sendPasswordRestoreNotificationMail();
+
 }

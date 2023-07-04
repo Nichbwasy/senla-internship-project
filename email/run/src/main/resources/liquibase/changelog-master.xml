@@ -48,6 +48,9 @@
             <column name="time" type="timestamp">
                 <constraints nullable="false"/>
             </column>
+            <column name="sending_status" type="varchar(64)" defaultValue="MAIL_NOT_SEND">
+                <constraints nullable="false"/>
+            </column>
             <column name="response_queue_name" type="varchar(128)">
                 <constraints nullable="false"/>
             </column>

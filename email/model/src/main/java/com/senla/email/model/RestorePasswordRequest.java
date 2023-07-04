@@ -1,5 +1,6 @@
 package com.senla.email.model;
 
+import com.senla.common.constants.email.RestorePasswordRequestStatuses;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,11 @@ public class RestorePasswordRequest {
     @NotNull(message = "Time is mandatory!")
     @Column(name = "time", nullable = false)
     private LocalDateTime time;
+
+    @NotNull(message = "Sending status is mandatory!")
+    @Size(max = 64, message = "Sending status can't contains more than 64 characters!")
+    @Column(name = "sending_status", length = 64, nullable = false, columnDefinition = RestorePasswordRequestStatuses.NOT_SEND)
+    private String sendingStatus;
 
     @NotNull(message = "Response queue name is mandatory!")
     @Size(max = 128, message = "Response queue name can't be larger than 128 characters!")
