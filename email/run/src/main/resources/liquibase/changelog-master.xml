@@ -65,6 +65,12 @@
             <column name="code" type="varchar(64)">
                 <constraints unique="true" nullable="false"/>
             </column>
+            <column name="request_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="restore_password_confirmation_code_request_id_fk"
+                             referencedTableName="restorepasswordrequest"
+                             referencedColumnNames="id"/>
+            </column>
         </createTable>
     </changeSet>
 

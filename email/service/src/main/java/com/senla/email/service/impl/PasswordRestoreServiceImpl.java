@@ -46,7 +46,7 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
 
     @Autowired
     private RestorePasswordRequestMapper requestMapper;
-        
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
@@ -59,7 +59,7 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
         RestorePasswordRequest request = requestRepository.save(requestMapper.mapToModel(requestDto));
         log.info("Restore password request has been created: {}", request);
 
-        RestorePasswordConfirmationCode code = createAnConfirmationCode(request);
+        RestorePasswordConfirmationCode code = createConfirmationCode(request);
 
         sendEmail(request, code);
 
@@ -74,24 +74,28 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
 
     // TODO: There is a possible to generate already existed verification code. If that will happens, DB throws exception.
 
-    private RestorePasswordConfirmationCode createAnConfirmationCode(RestorePasswordRequest request) {
+    private RestorePasswordConfirmationCode createConfirmationCode(RestorePasswordRequest request) {
         RestorePasswordConfirmationCode confirmationCode;
         if (confirmationCodeRepository.existsByEmail(request.getEmail())) {
             log.info("Confirmation code already exists for an email '{}'. Code will be regenerate.", request.getEmail());
             confirmationCode = confirmationCodeRepository.getByEmail(request.getEmail());
             confirmationCode.setCode(StringGenerator.generateString(64));
+            confirmationCode.setRequest(request);
         } else {
             log.info("Confirmation code not exists for an email '{}'. New code will be generate.", request.getEmail());
             confirmationCode = new RestorePasswordConfirmationCode(
                     null,
                     request.getEmail(),
-                    StringGenerator.generateString(64)
+                    StringGenerator.generateString(64),
+                    request
             );
             confirmationCodeRepository.save(confirmationCode);
         }
         log.info("Confirmation code has been generated for '{}' email.", request.getEmail());
         return confirmationCode;
     }
+
+    // TODO: Confirmation code must contains request id to find it?
 
     @Override
     @Transactional
@@ -102,11 +106,7 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
 
         RestorePasswordConfirmationCode code = confirmationCodeRepository.getByCode(confirmationCode);
 
-        checkIfRequestExists(code);
-
-        RestorePasswordRequest request = requestRepository.getByEmail(code.getEmail());
-
-        sendNotification(newPasswordFormDto, request);
+        sendNotification(newPasswordFormDto, code.getRequest());
 
         confirmationCodeRepository.delete(code);
         return restoreSuccessMessage;
@@ -132,17 +132,9 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
         log.info("Notification of password restoring has been sent to the '{}' queue.", request.getResponseQueueName());
     }
 
-    private void checkIfRequestExists(RestorePasswordConfirmationCode code) {
-        if (!requestRepository.existsByEmail(code.getEmail())) {
-            log.warn("Restore password request for email '{}' not found!", code.getEmail());
-            throw new ConfirmationCodeNotFoundRestorePasswordException(
-                    String.format("Restore password request for email '%s' not found!", code.getEmail())
-            );
-        }
-    }
 
     private void checkIfPasswordsMatch(NewPasswordFormDto newPasswordFormDto) {
-        if (newPasswordFormDto.getPassword().equals(newPasswordFormDto.getRepeatPassword())) {
+        if (!newPasswordFormDto.getPassword().equals(newPasswordFormDto.getRepeatPassword())) {
             log.warn("Passwords doesn't match!");
             throw new PasswordsNotMatchRestorePasswordException("Passwords doesn't match!");
         }

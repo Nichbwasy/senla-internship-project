@@ -27,7 +27,7 @@ public class EmailWebSecurityConfig {
     public JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter() {
         JwtTokenSecurityCommonFilter jwtTokenSecurityCommonFilter = new JwtTokenSecurityCommonFilter();
         jwtTokenSecurityCommonFilter.setIgnoredPaths(Arrays.asList(
-                "/mailing/confirmation/**",
+                "/mailing/confirmation/**", "/password/restore/**",
                 "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico"
         ));
         return jwtTokenSecurityCommonFilter;
@@ -48,7 +48,7 @@ public class EmailWebSecurityConfig {
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests( request -> request
-                        .requestMatchers("/mailing/confirmation/**",
+                        .requestMatchers("/mailing/confirmation/**", "/password/restore/**",
                                 "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/error", "/favicon.ico")
                             .permitAll()
                         .requestMatchers("/mailing/requests/**")

@@ -246,7 +246,7 @@ public class CarsRefundsServiceTests {
         Timestamp time = new Timestamp(1);
         CreateCarRefundFormDto form = new CreateCarRefundFormDto(1L, compensationDto);
         CarDto carDto = new CarDto(1L, "desc", 100D, null, null, null);
-        UserDataDto userDataDto = new UserDataDto(1L, "login", null);
+        UserDataDto userDataDto = new UserDataDto(1L, "login", "email", "st", null);
         RequestStatus requestStatus = new RequestStatus(1L, "CLOSED");
         Request request = new Request(1L, "CRRNAME1", null, 1L, 1L, time, time, new BigDecimal(0), null, null);
 
@@ -280,7 +280,7 @@ public class CarsRefundsServiceTests {
         Timestamp time = new Timestamp(1);
         CreateCarRefundFormDto form = new CreateCarRefundFormDto(1L, compensationDto);
         CarDto carDto = new CarDto(1L, "desc", 100D, null, null, null);
-        UserDataDto userDataDto = new UserDataDto(1L, "login", null);
+        UserDataDto userDataDto = new UserDataDto(1L, "login", "email", "st", null);
         Request request = new Request(1L, "CRRNAME2", null, 1L, 1L, time, time, new BigDecimal(0), null, null);
 
         Mockito.when(requestRepository.existsById(1L)).thenReturn(true);

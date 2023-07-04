@@ -3,9 +3,7 @@ package com.senla.email.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -26,5 +24,11 @@ public class RestorePasswordConfirmationCode {
     @Size(min = 64, max = 64, message = "Code must contains 64 characters!")
     @Column(name = "code", length = 64, nullable = false, unique = true)
     private String code;
+
+    @NotNull(message = "Password restore request is mandatory!")
+    @OneToOne(targetEntity = RestorePasswordRequest.class, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private RestorePasswordRequest request;
 
 }

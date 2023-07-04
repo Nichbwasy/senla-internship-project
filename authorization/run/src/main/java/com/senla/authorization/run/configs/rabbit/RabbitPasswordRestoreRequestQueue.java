@@ -14,7 +14,7 @@ public class RabbitPasswordRestoreRequestQueue {
 
     @Bean
     @Qualifier("password_restore_confirmation_queue")
-    public Queue passwordRestoreQueue() {
+    public Queue passwordRestoreConfirmationQueue() {
         return new Queue(passwordRestoreConfirmationQueueName, true);
     }
 

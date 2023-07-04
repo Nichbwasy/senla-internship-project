@@ -46,7 +46,7 @@ public class UserDataControllerTests {
 
     @Test
     public void getUserDataByIdTest() throws Exception {
-        UserData user = userDataRepository.save(new UserData(null, "ud_login1", "ud_password1", null));
+        UserData user = userDataRepository.save(new UserData(null, "ud_login1", "ud_password1", "email1", "st1", null));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/" + user.getId()))
                 .andDo(MockMvcResultHandlers.print())
@@ -66,8 +66,8 @@ public class UserDataControllerTests {
 
     @Test
     public void getAllUsersData() throws Exception {
-        userDataRepository.save(new UserData(null, "ud_login2", "ud_password3", null));
-        userDataRepository.save(new UserData(null, "ud_login3", "ud_password3", null));
+        userDataRepository.save(new UserData(null, "ud_login2", "ud_password3", "email2", "st1", null));
+        userDataRepository.save(new UserData(null, "ud_login3", "ud_password3", "email3", "st1", null));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andDo(MockMvcResultHandlers.print())
