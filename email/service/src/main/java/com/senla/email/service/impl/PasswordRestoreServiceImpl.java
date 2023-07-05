@@ -35,15 +35,6 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
 
     @Value("${service.password.restore.success.message}")
     private String restoreSuccessMessage;
-
-    @Value("${password.restore.mail.link}")
-    private String restoreMailLink;
-    @Value("${password.restore.mail.title}")
-    private String restoreMailTitle;
-    @Value("${password.restore.mail.text}")
-    private String restoreMailText;
-    @Value("${sent.password.restore.mails.count}")
-    private Integer RESTORE_PASSWORD_MAILS_COUNT;
     @Autowired
     private RestorePasswordRequestRepository requestRepository;
 
@@ -55,9 +46,6 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    private EmailSender emailSender;
 
     @Override
     @Transactional
@@ -136,33 +124,4 @@ public class PasswordRestoreServiceImpl implements PasswordRestoreService {
         }
     }
 
-    @Override
-    @Transactional
-    @Scheduled(cron = "0 0/5 * * * ?")
-    public void sendPasswordRestoreNotificationMail() {
-        List<RestorePasswordRequest> requests = requestRepository
-                .findAllBySendingStatus(
-                        RestorePasswordRequestStatuses.NOT_SEND,
-                        PageRequest.of(0, RESTORE_PASSWORD_MAILS_COUNT)
-                );
-        log.info("There is found '{}' restore password requests.", requests.size());
-        requests.forEach(r -> {
-            if (!confirmationCodeRepository.existsByEmail(r.getEmail())) {
-                log.warn("Unable to find confirmation code for request '{}'. Request will be removed.", r.getId());
-                requestRepository.delete(r);
-                return;
-            }
-            RestorePasswordConfirmationCode code = confirmationCodeRepository.getByEmail(r.getEmail());
-            sendEmail(r, code);
-            r.setSendingStatus(RestorePasswordRequestStatuses.SENT);
-            log.info("Notification mail was sent for the request '{}'.", r.getId());
-        });
-
-    }
-
-    private void sendEmail(RestorePasswordRequest request, RestorePasswordConfirmationCode code) {
-        String link = restoreMailLink + code.getCode();
-        String text = String.format(restoreMailText, request.getLogin(), link);
-        emailSender.sendMail(new String[]{code.getEmail()}, restoreMailTitle, text);
-    }
 }
