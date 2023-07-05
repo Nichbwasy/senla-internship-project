@@ -11,5 +11,7 @@ public interface UserDataRepository extends JpaRepository<UserData, Long> {
     @Query(value = "select * from userdata where userdata.login like %?1%", nativeQuery = true)
     List<UserData> selectUsersWithLoginMatches(String login);
     Boolean existsByLogin(String login);
+    Boolean existsByEmail(String email);
     UserData findByLogin(String login);
+    UserData getByEmail(String email);
 }

@@ -31,7 +31,7 @@ public class RegistrationServiceTests {
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(false);
         Mockito.when(userDataRepository.save(Mockito.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
-        UserDataDto result = registrationService.registerUser(new UserRegistrationDataDto("Login", "Password", "Password"));
+        UserDataDto result = registrationService.registerUser(new UserRegistrationDataDto("Login", "Password","email1", "Password"));
         Assertions.assertEquals("Login", result.getLogin());
     }
 
@@ -40,7 +40,7 @@ public class RegistrationServiceTests {
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(false);
         Mockito.when(userDataRepository.save(Mockito.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
-        UserRegistrationDataDto form = new UserRegistrationDataDto("Login", "Password", "Password2");
+        UserRegistrationDataDto form = new UserRegistrationDataDto("Login", "Password", "email2", "Password2");
         Assertions.assertThrows(PasswordMatchException.class, () -> registrationService.registerUser(form));
     }
 
@@ -48,7 +48,7 @@ public class RegistrationServiceTests {
     public void registerUserIfAlreadyRegisteredTest() {
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(true);
 
-        UserRegistrationDataDto form = new UserRegistrationDataDto("Login", "Password", "Password");
+        UserRegistrationDataDto form = new UserRegistrationDataDto("Login", "Password", "email3", "Password");
         Assertions.assertThrows(LoginInUseException.class, () -> registrationService.registerUser(form));
     }
 

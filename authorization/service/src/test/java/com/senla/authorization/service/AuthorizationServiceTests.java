@@ -12,6 +12,7 @@ import com.senla.authorization.service.exceptions.services.authorization.UserNot
 import com.senla.authorization.service.exceptions.services.authorization.UserNotRegisteredException;
 import com.senla.authorization.service.impl.AuthorizationServiceImpl;
 import com.senla.authorization.service.jwt.providers.JwtTokenProvider;
+import com.senla.common.constants.authorization.EmailStatuses;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +39,7 @@ public class AuthorizationServiceTests {
     @Test
     public void logInUserTest() {
         String password = PasswordEncoder.encodeString("Password");
-        UserData userData = new UserData(1L, "Login", password, null);
+        UserData userData = new UserData(1L, "Login", password, "mail1", EmailStatuses.NOT_VERIFIED, null);
         UserRefreshToken userRefreshToken = new UserRefreshToken(1L, userData, "OldRefreshToken");
 
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(true);
@@ -57,7 +58,7 @@ public class AuthorizationServiceTests {
     @Test
     public void logInUserRefreshTokenNotExistInDBTest() {
         String password = PasswordEncoder.encodeString("Password");
-        UserData userData = new UserData(1L, "Login", password, null);
+        UserData userData = new UserData(1L, "Login", password, "mail2", EmailStatuses.NOT_VERIFIED, null);
 
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(true);
         Mockito.when(userDataRepository.findByLogin("Login")).thenReturn(userData);
@@ -74,7 +75,7 @@ public class AuthorizationServiceTests {
     @Test
     public void logInUserPasswordsNotMatchTest() {
         String password = PasswordEncoder.encodeString("WrongPassword");
-        UserData userData = new UserData(1L, "Login", password, null);
+        UserData userData = new UserData(1L, "Login", password, "mail3", EmailStatuses.NOT_VERIFIED, null);
 
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(true);
         Mockito.when(userDataRepository.findByLogin("Login")).thenReturn(userData);
@@ -96,7 +97,7 @@ public class AuthorizationServiceTests {
     @Test
     public void logInUserPasswordsTokenProviderExceptionTest() {
         String password = PasswordEncoder.encodeString("Password");
-        UserData userData = new UserData(1L, "Login", password, null);
+        UserData userData = new UserData(1L, "Login", password, "mail4", EmailStatuses.NOT_VERIFIED, null);
 
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(true);
         Mockito.when(userDataRepository.findByLogin("Login")).thenReturn(userData);
@@ -119,7 +120,7 @@ public class AuthorizationServiceTests {
     @Test
     public void loginWithNullPasswordDataTest() {
         String password = PasswordEncoder.encodeString("Password");
-        UserData userData = new UserData(1L, "Login", password, null);
+        UserData userData = new UserData(1L, "Login", password, "mail5", EmailStatuses.NOT_VERIFIED, null);
 
         Mockito.when(userDataRepository.existsByLogin("Login")).thenReturn(true);
         Mockito.when(userDataRepository.findByLogin("Login")).thenReturn(userData);

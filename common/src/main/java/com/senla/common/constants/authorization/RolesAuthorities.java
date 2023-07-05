@@ -1,4 +1,4 @@
-package com.senla.common.constants;
+package com.senla.common.constants.authorization;
 
 public class RolesAuthorities {
 

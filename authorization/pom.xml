@@ -44,6 +44,12 @@
             <artifactId>spring-boot-starter-aop</artifactId>
             <version>${spring-boot-starter-version}</version>
         </dependency>
+        <!-- SPRING BOOT RABBITMQ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>${spring-boot-starter-version}</version>
+        </dependency>
         <!-- SPRING TESTS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

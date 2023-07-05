@@ -43,7 +43,7 @@ public class RegistrationControllerTests {
 
     @Test
     public void registerUserTest() throws Exception{
-        UserRegistrationDataDto form = new UserRegistrationDataDto("register_login1", "password1", "password1");
+        UserRegistrationDataDto form = new UserRegistrationDataDto("register_login1", "password1", "email1", "password1");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/authorization/register")
                     .flashAttr("userRegistrationDataDto", form))
@@ -56,8 +56,8 @@ public class RegistrationControllerTests {
 
     @Test
     public void registerAlreadyRegisteredUserTest() throws Exception{
-        registrationController.registerUser(new UserRegistrationDataDto("register_login2", "password2", "password2"));
-        UserRegistrationDataDto form = new UserRegistrationDataDto("register_login2", "password2", "password2");
+        registrationController.registerUser(new UserRegistrationDataDto("register_login2", "password2", "email2", "password2"));
+        UserRegistrationDataDto form = new UserRegistrationDataDto("register_login2", "password2", "email2", "password2");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/authorization/register")
                         .flashAttr("userRegistrationDataDto", form))

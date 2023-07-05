@@ -1,8 +1,7 @@
 package com.senla.rental.controller.security;
 
 import com.senla.common.clients.RefreshTokensMicroserviceClient;
-import com.senla.common.constants.RolesAuthorities;
-import com.senla.common.constants.UserRoles;
+import com.senla.common.constants.authorization.UserRoles;
 import com.senla.common.security.filters.JwtTokenSecurityCommonFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

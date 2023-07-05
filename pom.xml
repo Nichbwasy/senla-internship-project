@@ -17,6 +17,7 @@
         <module>payment</module>
         <module>server-eureka</module>
         <module>api-gateway</module>
+        <module>email</module>
     </modules>
 
     <properties>

@@ -13,6 +13,8 @@ import java.util.List;
 public class UserDataDto implements Serializable {
     private Long id;
     private String login;
+    private String email;
+    private String emailStatus;
     private List<RoleDto> roles;
 
 }

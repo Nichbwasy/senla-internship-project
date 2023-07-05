@@ -52,7 +52,7 @@ public class AuthorizationControllerTests {
     @Test
     public void logInUserTest() throws Exception {
         String password = PasswordEncoder.encodeString("password1");
-        userDataRepository.save(new UserData(null, "login1", password, new ArrayList<>()));
+        userDataRepository.save(new UserData(null, "login1", "email1", "status1", password, new ArrayList<>()));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/authorization")
                 .flashAttr("logInUserDto", new LogInUserDto("login1", "password1")))

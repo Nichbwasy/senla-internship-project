@@ -62,6 +62,8 @@ public class CatalogServiceImpl implements CatalogService {
         return carClient.getFilteredCars(page, catalogFilterForm);
     }
 
+    // TODO: Add email status checking (User can not request a car wile his email isn't confirmed)
+
     @Override
     @Transactional
     public RequestDto createCarOrderingRequest(String accessToken, CarOrderingRequestDto form) {
