@@ -5,6 +5,11 @@ import com.senla.email.dto.EmailConfirmedNotificationMessageDto;
 
 public interface UserEmailService {
 
+    /**
+     * Verifiers user email via notification received from email microservice
+     * @param messageDto Email microservice notification message
+     * @return Updated user data
+     */
     UserDataDto confirmUserEmail(EmailConfirmedNotificationMessageDto messageDto);
 
 }
